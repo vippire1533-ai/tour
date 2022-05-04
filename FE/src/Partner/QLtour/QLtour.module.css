@@ -1,0 +1,86 @@
+.dstour {
+  width: 85%;
+  background-color: rgb(242, 247, 247);
+  position: relative;
+  float: right;
+  overflow-y: scroll;
+  height: 1000px;
+  padding: 0px 80px;
+}
+
+.dstour::-webkit-scrollbar {
+  width: 6px;
+  background-color: rgb(177, 177, 177);
+}
+.dstour::-webkit-scrollbar-thumb {
+  background-color: rgb(48, 36, 155);
+}
+
+.btnthem button {
+  margin-top: 50px;
+  margin-bottom: 20px;
+  width: 200px;
+  float: right;
+  background-color: rgb(255, 94, 31);
+  color: white;
+}
+
+.table {
+  background-color: rgb(150, 191, 233);
+  outline-style: solid;
+  outline-color:rgb(150, 191, 233); ;
+  margin-top: 50px;
+  text-align: center;
+  width: 100%;
+  border-radius: 4px;
+}
+.table th {
+  width: 11.1%;
+}
+
+.items {
+  border-radius: 4px;
+  background-color: white;
+  margin-top: 10px;
+  display: flex;
+  box-shadow: 0px 2px 2px 2px rgb(185, 183, 183);
+  text-align: center;
+}
+
+.items img {
+  width: 11.1%;
+  
+  
+}
+
+.element {
+  padding: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 30px;
+  width: 11.1%;
+  height: 60px;
+  margin-left: 2px;
+}
+
+.option {
+  width: 11.2%;
+  padding-top: 20px;
+}
+.xoa img {
+  width: 30px;
+}
+.sua img {
+  margin-top: 10px;
+  width: 20px;
+}
+.hinhanh{
+  height: 100px;
+}
+
+/* hiệu ứng */
+
+.btnthem button:hover {
+  background-color: rgb(244, 91, 15);
+}
