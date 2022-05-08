@@ -1,9 +1,9 @@
-const config = {
-  database: process.env.REACT_APP_DATABASE,
-  server: process.env.REACT_APP_SERVER,
-  driver: "msnodesqlv8",
-  options: {
-    trustedConnection: true,
-  },
-};
+const config ={
+    database : "Tour",
+    server : "DESKTOP-2KADCFT\\SQLEXPRESS",
+    driver: "msnodesqlv8",
+    options:{
+        trustedConnection: true
+    },
+}
 export default config;
