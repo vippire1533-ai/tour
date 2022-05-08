@@ -1,10 +1,8 @@
 class loaitour {
-    constructor(NaLOAI,TENLOAI){
-      
-      this.MALOAI=MALOAI;
-      this.TENLOAI=TENLOAI;
-      
-    }
+  constructor(MA_LOAI, TEN_LOAI) {
+    this.MA_LOAI = MA_LOAI;
+    this.TEN_LOAI = TEN_LOAI;
   }
-  
-  export default loaitour;
+}
+
+export default loaitour;
