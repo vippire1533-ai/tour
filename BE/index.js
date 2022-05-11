@@ -1,13 +1,10 @@
-import express, { request, response } from "express";
-import cors from "cors";
-// import TourRoutes from "./routes/route.js";
-import router from "./routes/route.js";
-import dbconnect from "./data/dbconnect.js";
-import sql from "mssql/msnodesqlv8";
-import Category from "./data/Category";
 import bodyParser from "body-parser";
-import https from "https";
+import cors from "cors";
+import express from "express";
 import fs from "fs";
+import https from "https";
+import dbconnect from "./data/dbconnect.js";
+import router from "./routes/route.js";
 
 // app.use("/",TourRoutes);
 const app = express();
@@ -20,7 +17,7 @@ app.use(bodyParser.json());
 app.use('/api', router);
 
 router.use((request, response, next) => {
-  console.log('middleware');
+  console.log(`${ request.method } ${ request.url }`);
   next();
 });
 
@@ -104,45 +101,46 @@ router.route('/dondatve/:id').delete((req, res) => {
     console.log('Delete Failed', error);
   });
 });
-//Route vé
-// router.route('/veproducts').get((request,response) =>{
-//     dbconnect.GetAllDatave().then(result =>{
-//         response.send(result[0])
-//     }) 
-// })
-// router.route('/veproducts/:id').get((request,response) =>{
-//     console.log(request.params.id)
-//     dbconnect.GetDatave(request.params.id).then(result =>{
-//         response.send(result[0])
-//     })
-// })
 
-// router.route('/veproducts').post((request,response) =>{
-//     let listve = {...request.body}
+// Route vé
+router.route('/veproducts').get((request, response) => {
+  dbconnect.GetAllDatave().then(result => {
+    response.send(result[0]);
+  });
+});
+router.route('/veproducts/:id').get((request, response) => {
+  console.log(request.params.id);
+  dbconnect.GetDatave(request.params.id).then(result => {
+    response.send(result[0]);
+  });
+});
 
-//     dbconnect.addve(listve).then(result =>{
-//         response.status(206).send(result);
-//     }).catch((err) =>{
-//         console.log('Add failed',err);
-//     })
-// })
-// router.route('/veproducts/:id').put((request,response) =>{
-//     let eventid = request.params.id;
-//     let data = request.body[0];
-//     dbconnect.updateVe(eventid,data).then(result =>{
-//         response.status(207).send(result)
-//     }).catch((err)=>{
-//         console.log('Update failed',err);
-//     })
-// })
-// router.route('/veproducts/:id').delete((req,res)=>{
-//     let eventid = req.params.id
-//     dbconnect.deleteVe(eventid).then(result =>{
-//         res.status(208).send(result);
-//     }).catch((error)=>{
-//         console.log('Delete Failed',error);
-//     })
-// })
+router.route('/veproducts').post((request, response) => {
+  let listve = { ...request.body };
+
+  dbconnect.addve(listve).then(result => {
+    response.status(206).send(result);
+  }).catch((err) => {
+    console.log('Add failed', err);
+  });
+});
+router.route('/veproducts/:id').put((request, response) => {
+  let eventid = request.params.id;
+  let data = request.body[0];
+  dbconnect.updateVe(eventid, data).then(result => {
+    response.status(207).send(result);
+  }).catch((err) => {
+    console.log('Update failed', err);
+  });
+});
+router.route('/veproducts/:id').delete((req, res) => {
+  let eventid = req.params.id;
+  dbconnect.deleteVe(eventid).then(result => {
+    res.status(208).send(result);
+  }).catch((error) => {
+    console.log('Delete Failed', error);
+  });
+});
 
 const sslServer = https.createServer(
   {

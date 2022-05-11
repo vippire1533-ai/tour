@@ -81,79 +81,80 @@ async function updateTour(CategoryMATOUR, Category) {
   }
 }
 
-// ĐẶT VÉ 
-// async function GetAllDatave(){
-//         try {
-//                 let pool = await sql.connect(config);
-//                 let products = await pool.request().query("select * from VeTour");
-//                 return products.recordsets;
-//         } catch (error) {
-//                 console.log(error);
-//         }
-// }
+// ĐẶT VÉ;
+async function GetAllDatave() {
+  try {
+    let pool = await sql.connect(config);
+    let products = await pool.request().query("select * from VeTour");
+    return products.recordsets;
+  } catch (error) {
+    console.log(error);
+  }
+}
 
-// async function GetDatave(listveMAVE){
-//         try {                           
-//                 let pool = await sql.connect(config);
-//                 let product = await pool.request()
-//                         .input('VeTour',sql.Int,listveMAVE)
-//                         .query("SELECT * FROM Tour where VeTour = @VeTour")
-//                 return product.recordsets;
+async function GetDatave(listveMAVE) {
+  try {
+    let pool = await sql.connect(config);
+    let product = await pool.request()
+      .input('VeTour', sql.Int, listveMAVE)
+      .query("SELECT * FROM Tour where VeTour = @VeTour");
+    return product.recordsets;
 
-//         } catch (error) {
-//                 console.log(error);
-//         }
-// }
-// async function addve(listve){
-//         try {
-//                 let pool = await sql.connect(config);
-//                 let insertvetour = await pool.request()
-//                 .input('MATOUR',sql.Int,listve.MATOUR)
-//                 .input('MADATVE',sql.Int,listve.MADATVE)
-//                 .input('NGAYCOHIEULUC',sql.DateTime,listve.NGAYCOHIEULUC)
-//                 .input('LOAIVE',sql.Int,listve.LOAIVE)
-//                 .input('NGAYTAO',sql.DateTime,listve.NGAYTAO)
-//                 .input('GIAVE',sql.Int,listve.GIAVE)
-//                 .input('TENKH',sql.NVarChar,listve.TENKH)
-//                 .execute('InserVe');
-//         return insertvetour.recordsets;
-//         } 
-//         catch (err) {
-//                 console.log(err);
-//         }
-// }
-// async function deleteVe(listveMAVE){
-//         try {                           
-//                 let pool = await sql.connect(config);
-//                 let deleteVe = await pool.request()
-//                         .input('MAVE',sql.Int,listveMAVE)
-//                         .execute ('DeleteVe');
-//                 return deleteVe.recordsets;
+  } catch (error) {
+    console.log(error);
+  }
+}
 
-//         } catch (error) {
-//                 console.log(error);
-//         }
-// }
-// async function updateVe (
+async function addve(listve) {
+  try {
+    let pool = await sql.connect(config);
+    let insertvetour = await pool.request()
+      .input('MATOUR', sql.Int, listve.MATOUR)
+      .input('MADATVE', sql.Int, listve.MADATVE)
+      .input('NGAYCOHIEULUC', sql.DateTime, listve.NGAYCOHIEULUC)
+      .input('LOAIVE', sql.Int, listve.LOAIVE)
+      .input('NGAYTAO', sql.DateTime, listve.NGAYTAO)
+      .input('GIAVE', sql.Int, listve.GIAVE)
+      .input('TENKH', sql.NVarChar, listve.TENKH)
+      .execute('InserVe');
+    return insertvetour.recordsets;
+  }
+  catch (err) {
+    console.log(err);
+  }
+}
 
-//         listve){
-//         try {
-//                 let pool = await sql.connect(config);
-//                 let updateveproducts = await pool.request()
-//                 .input('MAVE',sql.Int,listveMAVE)
-//                 .input('MATOUR',sql.Int,listve.MATOUR)
-//                 .input('MADATVE',sql.Int,listve.MADATVE)
-//                 .input('NGAYCOHIEULUC',sql.DateTime,listve.NGAYCOHIEULUC)
-//                 .input('LOAIVE',sql.Int,listve.LOAIVE)
-//                 .input('NGAYTAO',sql.DateTime,listve.NGAYTAO)
-//                 .input('GIAVE',sql.Int,listve.GIAVE)
-//                 .input('TENKH',sql.NVarChar,listve.TENKH)
-//                 .execute('UpdateVe');
-//         return updateveproducts.recordsets;
-//         } catch (error) {
-//                 console.log('Update Failed',error);
-//         }
-// }
+async function deleteVe(listveMAVE) {
+  try {
+    let pool = await sql.connect(config);
+    let deleteVe = await pool.request()
+      .input('MAVE', sql.Int, listveMAVE)
+      .execute('DeleteVe');
+    return deleteVe.recordsets;
+
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function updateVe(listve) {
+  try {
+    let pool = await sql.connect(config);
+    let updateveproducts = await pool.request()
+      .input('MAVE', sql.Int, listveMAVE)
+      .input('MATOUR', sql.Int, listve.MATOUR)
+      .input('MADATVE', sql.Int, listve.MADATVE)
+      .input('NGAYCOHIEULUC', sql.DateTime, listve.NGAYCOHIEULUC)
+      .input('LOAIVE', sql.Int, listve.LOAIVE)
+      .input('NGAYTAO', sql.DateTime, listve.NGAYTAO)
+      .input('GIAVE', sql.Int, listve.GIAVE)
+      .input('TENKH', sql.NVarChar, listve.TENKH)
+      .execute('UpdateVe');
+    return updateveproducts.recordsets;
+  } catch (error) {
+    console.log('Update Failed', error);
+  }
+}
 //  Loai Tour
 async function Getloaitour() {
   try {
@@ -165,7 +166,6 @@ async function Getloaitour() {
     console.log(error);
   }
 }
-
 
 async function addloaitour(listloaitour) {
   try {
@@ -238,14 +238,14 @@ export default {
   GetDatas,
   Getloaitour,
   GetDonDatVe,
-  //     GetAllDatave:GetAllDatave,
-  //     GetDatave:GetDatave,
+  GetAllDatave,
+  GetDatave,
   addTour,
   deleteTour,
   updateTour,
-  //     addve:addve,
-  //     updateVe : updateVe,
-  //     deleteVe:deleteVe,
+  addve,
+  updateVe,
+  deleteVe,
   addloaitour,
   deleteLoaiTour,
   addDonDatVe,
