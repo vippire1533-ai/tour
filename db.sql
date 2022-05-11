@@ -507,7 +507,7 @@ end
 GO
   -- Loại Tour
   -- Insert LoaiTour
-  create procedure InserLoaiTour (
+  create procedure InsertLoaiTour (
     @MALOAI int,
     @TENLOAI nvarchar(50)
   ) As Begin
@@ -527,7 +527,7 @@ end
 GO
   -- Loai Ve
   -- InsertLoaiVe
-  create procedure InserLoaiVe (
+  create procedure InsertLoaiVe (
     @MALOAI int,
     @TENLOAI nvarchar(20)
   ) As Begin
