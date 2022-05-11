@@ -17,6 +17,12 @@ const Right = () => {
 
   useEffect(() => {
     getDatas();
+    // setProducttour([
+    //   {MATOUR:"1", TENTOUR:"e", GIATOUR:"1000", DIEMDEN:"anc", HINHANH:"https://deviet.vn/wp-content/uploads/2019/04/ban-do-vuong-quoc-anh.jpg"},
+    //   {MATOUR:"1", TENTOUR:"e", GIATOUR:"1000", DIEMDEN:"anc", HINHANH:"https://deviet.vn/wp-content/uploads/2019/04/ban-do-vuong-quoc-anh.jpg"},
+    //   {MATOUR:"1", TENTOUR:"e", GIATOUR:"1000", DIEMDEN:"anc", HINHANH:"https://deviet.vn/wp-content/uploads/2019/04/ban-do-vuong-quoc-anh.jpg"},
+    //   {MATOUR:"1", TENTOUR:"e", GIATOUR:"1000", DIEMDEN:"anc", HINHANH:"https://deviet.vn/wp-content/uploads/2019/04/ban-do-vuong-quoc-anh.jpg"}
+    // ])
   }, []);
   const getDatas = async () => {
     const respone = await axios.get("/api/products").then((res) => {
