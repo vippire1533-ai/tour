@@ -1,10 +1,10 @@
-import bodyParser from "body-parser";
-import cors from "cors";
-import express from "express";
-import fs from "fs";
-import https from "https";
-import dbconnect from "./data/dbconnect.js";
-import router from "./routes/route.js";
+import bodyParser from 'body-parser';
+import cors from 'cors';
+import express from 'express';
+import fs from 'fs';
+import https from 'https';
+import dbconnect from './data/dbconnect.js';
+import router from './routes/route.js';
 
 // app.use("/",TourRoutes);
 const app = express();
@@ -22,20 +22,20 @@ router.use((request, response, next) => {
 });
 
 router.route('/products').get((request, response) => {
-  dbconnect.GetDatas().then(result => {
+  dbconnect.GetDatas().then((result) => {
     response.send(result[0]);
   });
 });
 router.route('/products/:id').get((request, response) => {
   console.log(request.params.id);
-  dbconnect.GetData(request.params.id).then(result => {
+  dbconnect.GetData(request.params.id).then((result) => {
     response.send(result[0]);
   });
 });
 router.route('/products').post((request, response) => {
   let Category = { ...request.body };
 
-  dbconnect.addTour(Category).then(result => {
+  dbconnect.addTour(Category).then((result) => {
     response.status(201).send(result);
   });
 });
@@ -43,111 +43,155 @@ router.route('/products/:id').put((request, response) => {
   let eventid = request.params.id;
   let data = request.body[0];
 
-  dbconnect.updateTour(eventid, data).then(result => {
-    response.status(202).send(result);
-  }).catch((err) => {
-    console.log(err);
-  });
+  dbconnect
+    .updateTour(eventid, data)
+    .then((result) => {
+      response.status(202).send(result);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 });
 router.route('/products/:id').delete((req, res) => {
   let eventid = req.params.id;
-  dbconnect.deleteTour(eventid).then(result => {
+  dbconnect.deleteTour(eventid).then((result) => {
     res.status(204).send(result);
   });
 });
 //Route loai tour
 router.route('/loaitour').get((request, response) => {
-  dbconnect.Getloaitour().then(result => {
+  dbconnect.Getloaitour().then((result) => {
     response.send(result[0]);
   });
 });
 router.route('/loaitour').post((request, response) => {
   let listve = { ...request.body };
 
-  dbconnect.addloaitour(listve).then(result => {
-    response.status(206).send(result);
-  }).catch((err) => {
-    console.log('Add failed', err);
-  });
+  dbconnect
+    .addloaitour(listve)
+    .then((result) => {
+      response.status(206).send(result);
+    })
+    .catch((err) => {
+      console.log('Add failed', err);
+    });
 });
 router.route('/loaitour/:id').delete((req, res) => {
   let eventid = req.params.id;
-  dbconnect.deleteLoaiTour(eventid).then(result => {
-    res.status(208).send(result);
-  }).catch((error) => {
-    console.log('Delete Failed', error);
-  });
+  dbconnect
+    .deleteLoaiTour(eventid)
+    .then((result) => {
+      res.status(208).send(result);
+    })
+    .catch((error) => {
+      console.log('Delete Failed', error);
+    });
 });
 //Route đơn đặt vé
 router.route('/dondatve').get((request, response) => {
-  dbconnect.GetDonDatVe().then(result => {
+  dbconnect.GetDonDatVe().then((result) => {
     response.send(result[0]);
   });
 });
 router.route('/dondatve').post((request, response) => {
   let listve = { ...request.body };
 
-  dbconnect.addDonDatVe(listve).then(result => {
-    response.status(206).send(result);
-  }).catch((err) => {
-    console.log('Add failed', err);
-  });
+  dbconnect
+    .addDonDatVe(listve)
+    .then((result) => {
+      response.status(206).send(result);
+    })
+    .catch((err) => {
+      console.log('Add failed', err);
+    });
 });
 router.route('/dondatve/:id').delete((req, res) => {
   let eventid = req.params.id;
-  dbconnect.deleteDonDatVe(eventid).then(result => {
-    res.status(208).send(result);
-  }).catch((error) => {
-    console.log('Delete Failed', error);
-  });
+  dbconnect
+    .deleteDonDatVe(eventid)
+    .then((result) => {
+      res.status(208).send(result);
+    })
+    .catch((error) => {
+      console.log('Delete Failed', error);
+    });
 });
 
 // Route vé
-router.route('/veproducts').get((request, response) => {
-  dbconnect.GetAllDatave().then(result => {
-    response.send(result[0]);
-  });
+router.route('/veproducts').get((req, response) => {
+  dbconnect
+    .getAllTickets()
+    .then((result) => {
+      response.send(result);
+    })
+    .catch((err) => {
+      response.status(500).json({
+        message: err.message,
+      });
+    });
 });
+
 router.route('/veproducts/:id').get((request, response) => {
-  console.log(request.params.id);
-  dbconnect.GetDatave(request.params.id).then(result => {
-    response.send(result[0]);
-  });
+  dbconnect
+    .getTicketByMaVe(request.params.id)
+    .then((result) => {
+      response.send(result);
+    })
+    .catch((err) => {
+      response.status(500).json({
+        message: err.message,
+      });
+    });
 });
 
 router.route('/veproducts').post((request, response) => {
-  let listve = { ...request.body };
+  const listve = { ...request.body };
+  dbconnect
+    .addve(listve)
+    .then((result) => {
+      response.status(201).json({
+        result,
+        message: 'Tạo vé thành công',
+      });
+    })
+    .catch((err) => {
+      response.status(500).json({
+        message: err.message,
+      });
+    });
+});
 
-  dbconnect.addve(listve).then(result => {
-    response.status(206).send(result);
-  }).catch((err) => {
-    console.log('Add failed', err);
-  });
-});
 router.route('/veproducts/:id').put((request, response) => {
-  let eventid = request.params.id;
-  let data = request.body[0];
-  dbconnect.updateVe(eventid, data).then(result => {
-    response.status(207).send(result);
-  }).catch((err) => {
-    console.log('Update failed', err);
-  });
+  const eventId = request.params.id;
+  const data = request.body[0];
+  dbconnect
+    .updateVe(eventId, data)
+    .then((result) => {
+      response.status(207).send(result);
+    })
+    .catch((err) => {
+      console.log('Update failed', err);
+    });
 });
+
 router.route('/veproducts/:id').delete((req, res) => {
-  let eventid = req.params.id;
-  dbconnect.deleteVe(eventid).then(result => {
-    res.status(208).send(result);
-  }).catch((error) => {
-    console.log('Delete Failed', error);
-  });
+  const eventId = req.params.id;
+  dbconnect
+    .deleteVe(eventId)
+    .then((result) => {
+      res.status(208).send(result);
+    })
+    .catch((error) => {
+      console.log('Delete Failed', error);
+    });
 });
 
 const sslServer = https.createServer(
   {
     key: fs.readFileSync('cetificate/key.pem'),
-    cert: fs.readFileSync('cetificate/cert.pem')
+    cert: fs.readFileSync('cetificate/cert.pem'),
   },
-  app
+  app,
 );
 
 sslServer.listen(8000, () => console.log('Secure server on port 8000'));

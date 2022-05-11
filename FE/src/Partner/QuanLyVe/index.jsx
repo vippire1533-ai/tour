@@ -10,6 +10,8 @@ import ButtonAction from './ButtonAction';
 import { columns } from './configColumn';
 import styles from './styles.module.css';
 import axios from 'axios';
+import LoadingSpinner from '../../components/LoadingSpinner';
+import AlertPopup from '../../components/AlertPopup';
 
 const { confirm } = Modal;
 
@@ -19,21 +21,8 @@ const QuanLyVe = () => {
   const [modalOkTitle, setModalOkTitle] = useState('Ok');
   const [modalCancelTitle, setModalCancelTitle] = useState('Cancel');
   const [dataSource, setDataSource] = useState([]);
-
-  const today = new Date();
-  let tomorrow = new Date();
-  tomorrow.setDate(today.getDate() + 1);
-  const data = [
-    {
-      MAVE: '1',
-      MATOUR: '1',
-      MAKH: '1',
-      NGAYCOHIEULUC: new Date(),
-      LOAIVE: '1',
-      NGAYTAO: tomorrow.toLocaleString(),
-      GIAVE: '10000',
-    },
-  ];
+  const [isShowLoadingSpinner, setIsShowLoadingSpinner] = useState(false);
+  const [isShowAlertPopup, setIsShowAlertPopup] = useState(true);
 
   const handleNewTicket = () => {
     setModalTitle('Tạo Vé');
@@ -139,6 +128,14 @@ const QuanLyVe = () => {
 
   return (
     <>
+      {isShowLoadingSpinner && <LoadingSpinner />}
+      {isShowAlertPopup && (
+        <AlertPopup
+          type='success'
+          title='Test Success'
+          message='Test Success'
+        />
+      )}
       <Menutop />
       <Menuleft />
       <div className={styles.ticket__wrapper}>
