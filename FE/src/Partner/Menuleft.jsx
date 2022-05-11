@@ -20,7 +20,7 @@ const Menuleft = () =>{
               <a href="/admin/loaitour">loại Tour</a>
             </li>
             <li>
-              <a>Vé</a>
+              <a href="/admin/quan-ly-ve">Quản Lý Vé</a>
             </li>
             <li>
               <a>Loại vé</a>
