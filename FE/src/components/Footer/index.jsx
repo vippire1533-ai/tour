@@ -7,6 +7,7 @@ import { Partner, ABOUT, FOLLOW, PRODUCT, OTHER } from "./setting";
 const Footer = () => {
   return (
     <>
+    <div style={{clear:'both'}}></div>
       <div className="ft-wraper">
         <div className="ft-content">
           <div className="ft-gr">

@@ -24,6 +24,7 @@ import PageRegister from "../components/Register";
 import QLdondatve from '../Partner/QLdondatve/QLdondatve';
 import Login from '../Partner/login';
 import Register from '../Partner/register';
+import Payment from '../components/Payment/Payment';
 
 
 
@@ -50,7 +51,7 @@ const Routers = () => {
                     <Route exact path="/the-thao" element={<PageSport/>} />
                     <Route exact path="/san-choi" element={<PagePlayground/>} />
                     <Route exact path="/activities" element={<Tour/>} />
-                    
+                    <Route exact path="/payment/:id" element={<Payment/>} />
                     <Route exact path="/list" element={<DStour/>} />
                     <Route exact path="/" element={<Home/>} />
                     <Route exact path="/order/:id" element={<Order/>}/>
