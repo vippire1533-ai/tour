@@ -1,35 +1,28 @@
-import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { Modal, Table } from 'antd';
 import cx from 'classnames';
-import React, { useState, useEffect } from 'react';
-import { FaPen, FaTimes } from 'react-icons/fa';
+import React, { useEffect, useState } from 'react';
 import { FiPlus } from 'react-icons/fi';
+import { useDispatch, useSelector } from 'react-redux';
+import AlertPopup from '../../components/AlertPopup';
+import LoadingSpinner from '../../components/LoadingSpinner';
 import Menuleft from '../Menuleft';
 import Menutop from '../Menutop';
+import * as quanLyVeActions from './../../Redux/Action/quanLyVeActions';
 import ButtonAction from './ButtonAction';
-import { columns } from './configColumn';
 import styles from './styles.module.css';
-import axios from 'axios';
-import LoadingSpinner from '../../components/LoadingSpinner';
-import AlertPopup from '../../components/AlertPopup';
-
-const { confirm } = Modal;
+import { createColumnConfigurations } from './configColumn';
 
 const QuanLyVe = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [modalTitle, setModalTitle] = useState('Basic Modal');
   const [modalOkTitle, setModalOkTitle] = useState('Ok');
   const [modalCancelTitle, setModalCancelTitle] = useState('Cancel');
-  const [dataSource, setDataSource] = useState([]);
-  const [isShowLoadingSpinner, setIsShowLoadingSpinner] = useState(false);
-  const [isShowAlertPopup, setIsShowAlertPopup] = useState(true);
+  const [columnConfigurations, setColumnConfigurations] = useState([]);
 
-  const handleNewTicket = () => {
-    setModalTitle('Tạo Vé');
-    setModalOkTitle('Tạo Vé');
-    setModalCancelTitle('Hủy');
-    setIsModalVisible(true);
-  };
+  const dispatch = useDispatch();
+  const tickets = useSelector((state) => state.quanLyVeState.tickets);
+  const { isLoading, isShowModal } = useSelector((state) => state.appState);
+  console.log(isShowModal);
 
   const handleOk = () => {
     setIsModalVisible(false);
@@ -39,101 +32,19 @@ const QuanLyVe = () => {
     setIsModalVisible(false);
   };
 
-  const showConfirm = (data) => {
-    confirm({
-      title: 'Bạn có thực sự muốn xóa vé này hay không?',
-      icon: <ExclamationCircleOutlined />,
-      onOk() {
-        setIsModalVisible(false);
-      },
-      onCancel() {
-        setIsModalVisible(false);
-      },
-      centered: true,
-      cancelText: 'Hủy',
-    });
-  };
-
-  const columnConfigurations = [
-    ...columns,
-    {
-      title: '',
-      render: (_, record) => {
-        const handleUpdateTicket = () => {
-          setModalTitle('Cập Nhật Vé');
-          setModalOkTitle('Cập Nhật');
-          setModalCancelTitle('Hủy');
-          setIsModalVisible(true);
-        };
-
-        const handleDeleteTicket = () => {
-          showConfirm(record);
-        };
-
-        const isValid = new Date(record.NGAYTAO) - new Date() >= 0;
-        return (
-          <>
-            {isValid ? (
-              <div className={styles.actions}>
-                <ButtonAction
-                  icon={<FaPen />}
-                  placement='bottom'
-                  tooltipTitle='Cập nhật vé'
-                  buttonShape='default'
-                  buttonType='primary'
-                  handleClick={handleUpdateTicket}
-                />
-                <ButtonAction
-                  icon={<FaTimes />}
-                  placement='bottom'
-                  tooltipTitle='Xóa vé'
-                  buttonShape='default'
-                  buttonType='danger'
-                  handleClick={handleDeleteTicket}
-                />
-              </div>
-            ) : (
-              <ButtonAction
-                icon={<FaPen />}
-                placement='bottom'
-                tooltipTitle='Xóa vé'
-                buttonShape='default'
-                buttonType='danger'
-                handleClick={handleDeleteTicket}
-              />
-            )}
-          </>
-        );
-      },
-    },
-  ];
-
   useEffect(() => {
-    const parseTime = (data) => {
-      return data.map((item) => ({
-        ...item,
-        NGAYTAO: new Date(item.NGAYTAO).toLocaleString(),
-      }));
-    };
-    const getDataSource = async () => {
-      const url = '/api/veproducts';
-      try {
-        const { data } = await axios.get(url);
-        setDataSource(parseTime(data));
-      } catch (error) {}
-    };
-
-    getDataSource();
+    dispatch(quanLyVeActions.getAllTickets());
+    setColumnConfigurations(createColumnConfigurations(tickets, dispatch));
   }, []);
 
   return (
     <>
-      {isShowLoadingSpinner && <LoadingSpinner />}
-      {isShowAlertPopup && (
+      {isLoading && <LoadingSpinner />}
+      {isShowModal && (
         <AlertPopup
+          title='Thành Công'
+          message='Thao tác thành công'
           type='success'
-          title='Test Success'
-          message='Test Success'
         />
       )}
       <Menutop />
@@ -149,7 +60,6 @@ const QuanLyVe = () => {
               buttonType='success'
               buttonShape='round'
               buttonSize='large'
-              handleClick={handleNewTicket}
             >
               <span className={styles.ticket__content__new__content}>
                 Tạo Vé
@@ -157,7 +67,7 @@ const QuanLyVe = () => {
             </ButtonAction>
           </div>
           <Table
-            dataSource={dataSource}
+            dataSource={tickets}
             columns={columnConfigurations}
             pagination={{
               position: ['bottomLeft'],

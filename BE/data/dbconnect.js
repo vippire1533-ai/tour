@@ -89,22 +89,24 @@ async function getAllTickets() {
   try {
     const pool = await sql.connect(config);
     const query = `
-    SELECT  
-          VT.MAVE, 
-          LV.TENLOAI as LOAIVE,
-          (SELECT DISTINCT LT1.TENLOAI FROM LoaiTour LT1 WHERE LT1.MALOAI = LT.MALOAI) as TENTOUR, 
-          VT.NGAYCOHIEULUC, 
-          KH.HOTEN, 
-          VT.GIAVE 
+    SELECT 
+        VT.MAVE, 
+        LV.TENLOAI AS LOAIVE, 
+        LT.TENLOAI AS LOAITOUR, 
+        VT.NGAYCOHIEULUC, 
+        KH.MAKH, KH.HOTEN, 
+        VT.GIAVE,
+        CASE
+          WHEN KH.MAKH IS NOT NULL THEN N'booked'
+          WHEN KH.MAKH IS NULL AND VT.NGAYCOHIEULUC >= GETDATE() THEN N'active'
+          ELSE N'expired'
+        END AS TINHTRANG
     FROM  
-          VeTour VT, 
-          LoaiTour LT, 
-          LoaiVe LV, 
-          KhachHang KH 
-    WHERE 
-          VT.MATOUR = LT.MALOAI and 
-          VT.LOAIVE = LV.MALOAI and 
-          VT.MAKH = KH.MAKH
+        VeTour VT	INNER JOIN LoaiTour LT ON  LT.MALOAI = VT.MATOUR
+        INNER JOIN LoaiVe LV ON  LV.MALOAI = VT.LOAIVE
+        LEFT JOIN KhachHang KH ON KH.MAKH = VT.MAKH
+    ORDER BY 
+        VT.MAVE ASC
     `;
     const products = await pool.request().query(query);
     return products.recordset;
@@ -117,24 +119,26 @@ async function getTicketByMaVe(maVe) {
   try {
     const pool = await sql.connect(config);
     const queryString = `
-    SELECT  
-          VT.MAVE, 
-          LV.TENLOAI as LOAIVE,
-          (SELECT DISTINCT LT1.TENLOAI FROM LoaiTour LT1 WHERE LT1.MALOAI = LT.MALOAI) as TENTOUR, 
-          VT.NGAYCOHIEULUC, 
-          KH.HOTEN, 
-          VT.GIAVE 
+    SELECT 
+        VT.MAVE, 
+        LV.TENLOAI AS LOAIVE, 
+        LT.TENLOAI AS LOAITOUR, 
+        VT.NGAYCOHIEULUC, 
+        KH.MAKH, KH.HOTEN, 
+        VT.GIAVE,
+        CASE
+          WHEN KH.MAKH IS NOT NULL THEN N'Đã Được Đặt'
+          WHEN KH.MAKH IS NULL AND VT.NGAYCOHIEULUC >= GETDATE() THEN N'Còn Hiệu Lực'
+          ELSE N'Đã Hết Hạn'
+        END AS TINHTRANG
     FROM  
-          VeTour VT, 
-          LoaiTour LT, 
-          LoaiVe LV, 
-          KhachHang KH 
-    WHERE 
-          VT.MAVE = @VeTour and
-          VT.MATOUR = LT.MALOAI and 
-          VT.LOAIVE = LV.MALOAI and 
-          VT.MAKH = KH.MAKH
-    ORDER BY VT.MAVE
+        VeTour VT	INNER JOIN LoaiTour LT ON  LT.MALOAI = VT.MATOUR
+        INNER JOIN LoaiVe LV ON  LV.MALOAI = VT.LOAIVE
+        LEFT JOIN KhachHang KH ON KH.MAKH = VT.MAKH
+    WHERE
+        VT.MAVE = @VeTour
+    ORDER BY 
+        VT.MAVE ASC
     `;
     const product = await pool
       .request()

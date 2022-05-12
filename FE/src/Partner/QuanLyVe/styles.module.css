@@ -43,3 +43,9 @@
 .ticket__content__new__content{
   padding-left: 12px;
 }
+
+.ticket__content__table__actions{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
