@@ -1,4 +1,4 @@
-import { Modal, Table } from 'antd';
+import { DatePicker, Input, Modal, Select, Table, Typography } from 'antd';
 import cx from 'classnames';
 import React, { useEffect, useState } from 'react';
 import { FiPlus } from 'react-icons/fi';
@@ -7,10 +7,14 @@ import AlertPopup from '../../components/AlertPopup';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import Menuleft from '../Menuleft';
 import Menutop from '../Menutop';
+import * as quanLyLoaiTourActions from './../../Redux/Action/quanLyLoaiTourActions';
+import * as quanLyLoaiVeActions from './../../Redux/Action/quanLyLoaiVeActions';
 import * as quanLyVeActions from './../../Redux/Action/quanLyVeActions';
 import ButtonAction from './ButtonAction';
-import styles from './styles.module.css';
 import { createColumnConfigurations } from './configColumn';
+import styles from './styles.module.css';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 
 const QuanLyVe = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -18,23 +22,102 @@ const QuanLyVe = () => {
   const [modalOkTitle, setModalOkTitle] = useState('Ok');
   const [modalCancelTitle, setModalCancelTitle] = useState('Cancel');
   const [columnConfigurations, setColumnConfigurations] = useState([]);
+  const [isUpdateTicket, setsIUpdateTicket] = useState(false);
 
   const dispatch = useDispatch();
   const tickets = useSelector((state) => state.quanLyVeState.tickets);
   const { isLoading, isShowModal } = useSelector((state) => state.appState);
-  console.log(isShowModal);
+  const { tourTypes } = useSelector((state) => state.quanLyLoaiTourState);
+  const { ticketTypes } = useSelector((state) => state.quanLyLoaiVeState);
 
-  const handleOk = () => {
-    setIsModalVisible(false);
+  const formik = useFormik({
+    initialValues: {
+      MATOUR: '',
+      LOAIVE: '',
+      GIAVE: '',
+      NGAYCOHIEULUC: '',
+    },
+    validationSchema: Yup.object({
+      MATOUR: Yup.string()
+        .required('Loại Tour không được để trống!')
+        .typeError('Loại Tour không được để trống!'),
+      LOAIVE: Yup.string()
+        .required('Loại Vé không được để trống!')
+        .typeError('Loại Vé không được để trống!'),
+      GIAVE: Yup.number()
+        .moreThan(-1, 'Giá vé phải lớn hơn hoặc bằng 0')
+        .required('Vui lòng nhập giá vé!')
+        .typeError('Giá vé phải là số!'),
+      NGAYCOHIEULUC: Yup.date()
+        .required('Vui lòng chọn ngày có hiệu lực!')
+        .min(
+          new Date(),
+          `Vui lòng chọn ngày có hiệu lực từ ngày ${
+            new Date().getDate() + 1
+          } trở đi!`,
+        ),
+    }),
+  });
+
+  const setModalInfo = (title, okText, cancelText) => {
+    setModalTitle(title);
+    setModalOkTitle(okText);
+    setModalCancelTitle(cancelText);
+  };
+
+  const handleCreateNewTicket = () => {
+    setModalInfo('Tạo Vé', 'Hoàn Tất', 'Hủy');
+    setIsModalVisible(true);
+  };
+
+  const showUpdateModal = () => {
+    setModalInfo('Cập Nhật Vé', 'Cập Nhật', 'Hủy');
+    setIsModalVisible(true);
+    setsIUpdateTicket(true);
+  };
+
+  const handleOk = async () => {
+    const error = await formik.validateForm();
+    if (Object.keys(error).length) {
+      formik.setTouched(error);
+    } else {
+      const payload = {
+        ...formik.values,
+        NGAYCOHIEULUC: formik.values.NGAYCOHIEULUC._d,
+      };
+      const updatePayload = {
+        MATOUR: formik.values.MATOUR,
+        LOAIVE: formik.values.LOAIVE,
+        GIAVE: formik.values.GIAVE,
+        NGAYCOHIEULUC: formik.values.NGAYCOHIEULUC._d,
+        MAVE: formik.values.MAVE,
+        NGAYTAO: formik.values.NGAYTAO,
+        MAVE: formik.values.MAVE,
+      };
+      dispatch(
+        isUpdateTicket
+          ? quanLyVeActions.updateTicket(updatePayload)
+          : quanLyVeActions.createTicket(payload),
+      );
+      formik.resetForm();
+      setsIUpdateTicket(false);
+      setIsModalVisible(false);
+    }
   };
 
   const handleCancel = () => {
+    formik.resetForm();
     setIsModalVisible(false);
+    setsIUpdateTicket(false);
   };
 
   useEffect(() => {
     dispatch(quanLyVeActions.getAllTickets());
-    setColumnConfigurations(createColumnConfigurations(tickets, dispatch));
+    dispatch(quanLyLoaiVeActions.getAllTicketTypes());
+    dispatch(quanLyLoaiTourActions.getAllTourTypes());
+    setColumnConfigurations(
+      createColumnConfigurations(tickets, dispatch, showUpdateModal, formik),
+    );
   }, []);
 
   return (
@@ -60,6 +143,7 @@ const QuanLyVe = () => {
               buttonType='success'
               buttonShape='round'
               buttonSize='large'
+              handleClick={handleCreateNewTicket}
             >
               <span className={styles.ticket__content__new__content}>
                 Tạo Vé
@@ -82,7 +166,105 @@ const QuanLyVe = () => {
             onCancel={handleCancel}
             okText={modalOkTitle}
             cancelText={modalCancelTitle}
-          ></Modal>
+          >
+            <form>
+              <div className={styles['form-group']}>
+                <label htmlFor='MATOUR' className={styles['form-label']}>
+                  Loại Tour
+                </label>
+                <Select
+                  id='MATOUR'
+                  placeholder='Chọn loại tour'
+                  className={styles['form-control']}
+                  value={formik.values.MATOUR || undefined}
+                  onChange={(value) => formik.setFieldValue('MATOUR', value)}
+                >
+                  {tourTypes.map((type) => (
+                    <Select.Option value={type.MALOAI} key={type.MALOAI}>
+                      {type.TENLOAI}
+                    </Select.Option>
+                  ))}
+                </Select>
+                {formik.touched.MATOUR && formik.errors.MATOUR ? (
+                  <Typography.Text
+                    type='danger'
+                    className={styles['error-message']}
+                  >
+                    {formik.errors.MATOUR}
+                  </Typography.Text>
+                ) : null}
+              </div>
+              <div className={styles['form-group']}>
+                <label htmlFor='LOAIVE' className={styles['form-label']}>
+                  Loại Vé
+                </label>
+                <Select
+                  id='LOAIVE'
+                  placeholder='Chọn loại vé'
+                  className={styles['form-control']}
+                  value={formik.values.LOAIVE || undefined}
+                  onChange={(value) => formik.setFieldValue('LOAIVE', value)}
+                >
+                  {ticketTypes.map((type) => (
+                    <Select.Option value={type.MALOAI} key={type.MALOAI}>
+                      {type.TENLOAI}
+                    </Select.Option>
+                  ))}
+                </Select>
+                {formik.touched.LOAIVE && formik.errors.LOAIVE ? (
+                  <Typography.Text
+                    type='danger'
+                    className={styles['error-message']}
+                  >
+                    {formik.errors.LOAIVE}
+                  </Typography.Text>
+                ) : null}
+              </div>
+              <div className={styles['form-group']}>
+                <label htmlFor='NGAYCOHIEULUC' className={styles['form-label']}>
+                  Ngày Có Hiệu Lực
+                </label>
+                <DatePicker
+                  id='NGAYCOHIEULUC'
+                  placeholder='Ngày có hiệu lực'
+                  className={styles['form-control']}
+                  format='DD/MM/YYYY'
+                  value={formik.values.NGAYCOHIEULUC}
+                  onChange={(value) =>
+                    formik.setFieldValue('NGAYCOHIEULUC', value)
+                  }
+                />
+                {formik.touched.NGAYCOHIEULUC && formik.errors.NGAYCOHIEULUC ? (
+                  <Typography.Text
+                    type='danger'
+                    className={styles['error-message']}
+                  >
+                    {formik.errors.NGAYCOHIEULUC}
+                  </Typography.Text>
+                ) : null}
+              </div>
+              <div className={styles['form-group']}>
+                <label htmlFor='GIAVE' className={styles['form-label']}>
+                  Giá Vé
+                </label>
+                <Input
+                  id='GIAVE'
+                  addonBefore='Giá Vé'
+                  placeholder='Nhập giá vé'
+                  className={styles['form-control']}
+                  {...formik.getFieldProps('GIAVE')}
+                />
+                {formik.touched.GIAVE && formik.errors.GIAVE ? (
+                  <Typography.Text
+                    type='danger'
+                    className={styles['error-message']}
+                  >
+                    {formik.errors.GIAVE}
+                  </Typography.Text>
+                ) : null}
+              </div>
+            </form>
+          </Modal>
         </div>
       </div>
     </>

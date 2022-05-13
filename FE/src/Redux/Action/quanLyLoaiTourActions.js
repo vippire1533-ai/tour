@@ -1,15 +1,15 @@
 import axios from 'axios';
-import * as quanLyLoaiVeActionTypes from './../Constants/quanLyLoaiVeActionTypes';
+import * as quanLyLoaiTourActionsType from './../Constants/quanLyLoaiTourActionTypes';
 
-export const getAllTicketTypes = () => {
-  const api = '/api/ticketTypes';
+export const getAllTourTypes = () => {
   return async (dispatch) => {
+    const api = '/api/tourTypes';
     try {
       const { data } = await axios.get(api);
       dispatch({
-        type: quanLyLoaiVeActionTypes.SET_TICKET_TYPES,
+        type: quanLyLoaiTourActionsType.SET_TOUR_TYPES,
         payload: {
-          ticketTypes: data
+          tourTypes: data
         }
       });
       return data;

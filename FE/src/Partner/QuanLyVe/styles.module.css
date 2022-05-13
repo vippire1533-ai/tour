@@ -4,8 +4,6 @@
   clear: both;
 }
 
-
-
 .actions {
   display: flex;
   gap: 10px;
@@ -33,19 +31,38 @@
   font-size: 36px;
 }
 
-.ticket__content__new{
+.ticket__content__new {
   padding-bottom: 16px;
   display: flex;
   align-items: center;
   justify-content: flex-end;
 }
 
-.ticket__content__new__content{
+.ticket__content__new__content {
   padding-left: 12px;
 }
 
-.ticket__content__table__actions{
+.ticket__content__table__actions {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.form-group {
+  padding-bottom: 14px;
+}
+
+.form-control {
+  width: 100%;
+}
+
+.form-label {
+  display: inline-block;
+  padding-bottom: 8px;
+  font-weight: bold;
+}
+
+.error-message{
+  display: inline-block;
+  padding-top: 8px;
 }

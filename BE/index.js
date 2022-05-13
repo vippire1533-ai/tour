@@ -27,7 +27,6 @@ router.route('/products').get((request, response) => {
   });
 });
 router.route('/products/:id').get((request, response) => {
-  console.log(request.params.id);
   dbconnect.GetData(request.params.id).then((result) => {
     response.send(result[0]);
   });
@@ -102,7 +101,8 @@ router.route('/dondatve').post((request, response) => {
       response.status(206).send(result);
     })
     .catch((err) => {
-      console.log('Add failed', err);
+      console.log(err);
+      response.status(500).send(err);
     });
 });
 router.route('/dondatve/:id').delete((req, res) => {
@@ -110,7 +110,7 @@ router.route('/dondatve/:id').delete((req, res) => {
   dbconnect
     .deleteDonDatVe(eventid)
     .then((result) => {
-      res.status(208).send(result);
+      res.status(204).send(result);
     })
     .catch((error) => {
       console.log('Delete Failed', error);
@@ -155,22 +155,22 @@ router.route('/veproducts').post((request, response) => {
       });
     })
     .catch((err) => {
-      response.status(500).json({
-        message: err.message,
-      });
+      console.log(err);
+      response.status(500).send(err);
     });
 });
 
 router.route('/veproducts/:id').put((request, response) => {
-  const eventId = request.params.id;
-  const data = request.body[0];
+  const ticketId = request.params.id;
+  const data = request.body;
   dbconnect
-    .updateVe(eventId, data)
+    .updateVe(ticketId, data)
     .then((result) => {
-      response.status(207).send(result);
+      response.status(200).send(result);
     })
     .catch((err) => {
-      console.log('Update failed', err);
+      console.log(err);
+      response.status(500).send(err);
     });
 });
 
@@ -179,11 +179,34 @@ router.route('/veproducts/:id').delete((req, res) => {
   dbconnect
     .deleteVe(eventId)
     .then((result) => {
-      res.status(208).send(result);
+      res.status(204).send(result);
     })
     .catch((error) => {
-      console.log('Delete Failed', error);
+      console.log(error);
+      res.status(500).send(error);
     });
+});
+
+// Tour Type Routes
+router.route('/tourTypes').get(async (req, res) => {
+  try {
+    const result = await dbconnect.getAllTourTypes();
+    res.status(200).send(result);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send(error);
+  }
+});
+
+// Ticket Type Routes
+router.route('/ticketTypes').get(async (req, res) => {
+  try {
+    const result = await dbconnect.getAllTicketTypes();
+    res.status(200).send(result);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send(error);
+  }
 });
 
 const sslServer = https.createServer(

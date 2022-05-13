@@ -92,8 +92,11 @@ async function getAllTickets() {
     SELECT 
         VT.MAVE, 
         LV.TENLOAI AS LOAIVE, 
+        (SELECT LV1.MALOAI FROM LoaiVe LV1 WHERE LV1.MALOAI = LV.MALOAI) AS MALOAIVE,
         LT.TENLOAI AS LOAITOUR, 
+        (SELECT LT1.MALOAI FROM LoaiTour LT1 WHERE LT1.MALOAI = LT.MALOAI) AS MALOAITOUR,
         VT.NGAYCOHIEULUC, 
+        VT.NGAYTAO,
         KH.MAKH, KH.HOTEN, 
         VT.GIAVE,
         CASE
@@ -122,8 +125,11 @@ async function getTicketByMaVe(maVe) {
     SELECT 
         VT.MAVE, 
         LV.TENLOAI AS LOAIVE, 
+        (SELECT LV1.MALOAI FROM LoaiVe LV1 WHERE LV1.MALOAI = LV.MALOAI) AS MALOAIVE,
         LT.TENLOAI AS LOAITOUR, 
+        (SELECT LT1.MALOAI FROM LoaiTour LT1 WHERE LT1.MALOAI = LT.MALOAI) AS MALOAITOUR,
         VT.NGAYCOHIEULUC, 
+        VT.NGAYTAO,
         KH.MAKH, KH.HOTEN, 
         VT.GIAVE,
         CASE
@@ -146,7 +152,6 @@ async function getTicketByMaVe(maVe) {
       .query(queryString);
     return product.recordset;
   } catch (error) {
-    console.log(error);
     throw error;
   }
 }
@@ -159,12 +164,13 @@ async function addve(listve) {
       .input('MATOUR', sql.Int, listve.MATOUR)
       .input('NGAYCOHIEULUC', sql.DateTime, new Date(listve.NGAYCOHIEULUC))
       .input('LOAIVE', sql.Int, listve.LOAIVE)
-      .input('NGAYTAO', sql.DateTime, listve.NGAYTAO)
-      .input('GIAVE', sql.Int, listve.GIAVE)
+      .input('NGAYTAO', sql.DateTime, new Date())
+      .input('GIAVE', sql.Int, +listve.GIAVE)
       .input('TENKH', sql.NVarChar, listve.TENKH)
       .execute('InsertVe');
     return insertvetour.recordsets;
   } catch (err) {
+    console.log(err);
     throw err;
   }
 }
@@ -178,41 +184,42 @@ async function deleteVe(listveMAVE) {
       .execute('DeleteVe');
     return deleteVe.recordsets;
   } catch (error) {
-    console.log(error);
+    throw error;
   }
 }
 
-async function updateVe(listve) {
+async function updateVe(ticketId, data) {
   try {
-    let pool = await sql.connect(config);
-    let updateveproducts = await pool
+    console.log(ticketId, data);
+    const pool = await sql.connect(config);
+    const updateveproducts = await pool
       .request()
-      .input('MAVE', sql.Int, listveMAVE)
-      .input('MATOUR', sql.Int, listve.MATOUR)
-      .input('MADATVE', sql.Int, listve.MADATVE)
-      .input('NGAYCOHIEULUC', sql.DateTime, listve.NGAYCOHIEULUC)
-      .input('LOAIVE', sql.Int, listve.LOAIVE)
-      .input('NGAYTAO', sql.DateTime, listve.NGAYTAO)
-      .input('GIAVE', sql.Int, listve.GIAVE)
-      .input('TENKH', sql.NVarChar, listve.TENKH)
+      .input('MAVE', sql.Int, +ticketId)
+      .input('MATOUR', sql.Int, +data.MATOUR)
+      .input('NGAYCOHIEULUC', sql.DateTime, new Date(data.NGAYCOHIEULUC))
+      .input('LOAIVE', sql.Int, data.LOAIVE)
+      .input('NGAYTAO', sql.DateTime, new Date(data.NGAYTAO))
+      .input('GIAVE', sql.Int, +data.GIAVE)
+      .input('TENKH', sql.NVarChar, data.TENKH)
       .execute('UpdateVe');
     return updateveproducts.recordsets;
   } catch (error) {
-    console.log('Update Failed', error);
+    throw error;
   }
 }
 //  Loai Tour
-async function Getloaitour() {
+async function getAllTourTypes() {
   try {
-    let pool = await sql.connect(config);
-    let products = await pool.request().query('select * FROM LoaiTour');
-    return products.recordsets;
+    const pool = await sql.connect(config);
+    const query = `SELECT * FROM LoaiTour`;
+    const products = await pool.request().query(query);
+    return products.recordset;
   } catch (error) {
-    console.log(error);
+    throw error;
   }
 }
 
-async function addloaitour(listloaitour) {
+async function addTourType(listloaitour) {
   try {
     let pool = await sql.connect(config);
     let insertproduct = await pool
@@ -225,7 +232,7 @@ async function addloaitour(listloaitour) {
     console.log(err);
   }
 }
-async function deleteLoaiTour(listloaitourMALOAI) {
+async function deleteTourType(listloaitourMALOAI) {
   try {
     let pool = await sql.connect(config);
     let deleteTour = await pool
@@ -264,6 +271,7 @@ async function addDonDatVe(listdondatve) {
     console.log(err);
   }
 }
+
 async function deleteDonDatVe(listdondatveMADATVE) {
   try {
     let pool = await sql.connect(config);
@@ -273,14 +281,25 @@ async function deleteDonDatVe(listdondatveMADATVE) {
       .execute('DeleteLoaiTour');
     return deleteTour.recordsets;
   } catch (error) {
-    console.log(error);
+    throw error;
   }
 }
+
+const getAllTicketTypes = async () => {
+  try {
+    const pool = await sql.connect(config);
+    const query = `SELECT * FROM LoaiVe`;
+    const data = await pool.request().query(query);
+    return data.recordset;
+  } catch (error) {
+    throw error;
+  }
+};
 
 export default {
   GetData,
   GetDatas,
-  Getloaitour,
+  getAllTourTypes,
   GetDonDatVe,
   getAllTickets,
   getTicketByMaVe,
@@ -290,9 +309,10 @@ export default {
   addve,
   updateVe,
   deleteVe,
-  addloaitour,
-  deleteLoaiTour,
+  addTourType,
+  deleteTourType,
   addDonDatVe,
   deleteDonDatVe,
+  getAllTicketTypes,
   sql,
 };

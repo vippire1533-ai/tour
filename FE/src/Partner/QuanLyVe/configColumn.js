@@ -4,6 +4,8 @@ import { FaPen, FaTimes, FaEye } from 'react-icons/fa';
 import classes from './styles.module.css';
 import * as quanLyVeActions from './../../Redux/Action/quanLyVeActions';
 import * as appActions from './../../Redux/Action/appActions';
+import moment from 'moment';
+import NumberFormat from 'react-number-format';
 
 export const TAG_CONFIG = {
   active: {
@@ -35,7 +37,12 @@ const constructFilterObj = (data, field) => {
   return Array.from(items).map((item) => ({ text: item, value: item }));
 };
 
-export const createColumnConfigurations = (data, dispatch) => {
+export const createColumnConfigurations = (
+  data,
+  dispatch,
+  showUpdateModal,
+  formik,
+) => {
   return [
     {
       title: 'Mã Vé',
@@ -69,11 +76,27 @@ export const createColumnConfigurations = (data, dispatch) => {
       title: 'Giá Vé',
       dataIndex: 'GIAVE',
       key: 'GIAVE',
-      render: (value) => `${ value }`.toLocaleString(),
+      render: (value) => (
+        <NumberFormat
+          thousandSeparator={true}
+          displayType={'text'}
+          thousandsGroupStyle='thousand'
+          value={value}
+        />
+      ),
       sorter: (item1, item2) => +item1['GIAVE'] - +item2['GIAVE'],
     },
     {
       title: 'Ngày Tạo Vé',
+      dataIndex: 'NGAYTAO',
+      key: 'NGAYTAO',
+      render: (value) => new Date(value).toLocaleString(),
+      sorter: (item1, item2) =>
+        new Date(item1['NGAYTAO']).getTime() -
+        new Date(item2['NGAYTAO']).getTime(),
+    },
+    {
+      title: 'Hiệu Lực Tới Ngày',
       dataIndex: 'NGAYCOHIEULUC',
       key: 'NGAYCOHIEULUC',
       render: (value) => new Date(value).toLocaleString(),
@@ -125,7 +148,18 @@ export const createColumnConfigurations = (data, dispatch) => {
               dispatch(quanLyVeActions.deleteTicket(record.MAVE));
             },
             okText: 'Xóa',
-            cancelText: 'Hủy'
+            cancelText: 'Hủy',
+          });
+        };
+
+        const showUpdateTickerModal = () => {
+          showUpdateModal();
+          formik.setValues({
+            ...record,
+            MATOUR: record.MALOAITOUR,
+            LOAIVE: record.MALOAIVE,
+            GIAVE: record.GIAVE,
+            NGAYCOHIEULUC: moment(record.NGAYCOHIEULUC),
           });
         };
         const BtnUpDateTicket = () => (
@@ -134,6 +168,7 @@ export const createColumnConfigurations = (data, dispatch) => {
             tooltipTitle='Cập nhật vé'
             placement='bottom'
             buttonType='primary'
+            handleClick={showUpdateTickerModal}
           />
         );
         const BtnDeleteTicket = () => (
