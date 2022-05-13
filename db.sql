@@ -392,16 +392,15 @@ end
 GO
 -- Loại Tour
 	-- Insert LoaiTour
-create procedure InserLoaiTour
+create procedure InsertLoaiTour
 (
-@MALOAI int,
 @TENLOAI nvarchar(50)
 )
 As 
 Begin
-Insert into LoaiTour(MALOAI,TENLOAI)
+Insert into LoaiTour(TENLOAI)
 Values
-(@MALOAI,@TENLOAI)
+(,@TENLOAI)
 End
 GO
 	-- DeleteLoaiTour
@@ -417,16 +416,15 @@ GO
 
 -- Loai Ve
 	-- InsertLoaiVe
-create procedure InserLoaiVe
+create procedure InsertLoaiVe
 (
-@MALOAI int,
 @TENLOAI nvarchar(20)
 )
 As 
 Begin
-Insert into LoaiVe(MALOAI,TENLOAI)
+Insert into LoaiVe(TENLOAI)
 Values
-(@MALOAI,@TENLOAI)
+(@TENLOAI)
 End
 GO
 	-- DeleteLoaiVe
