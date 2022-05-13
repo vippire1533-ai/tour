@@ -1,6 +1,9 @@
 USE [master]
 GO
-DROP DATABASE IF EXISTS Tour
+IF EXISTS(SELECT 1 FROM sys.databases WHERE name = 'Tour')
+BEGIN
+	DROP DATABASE Tour;
+END
 GO
 /****** Object:  Database [Tour]    Script Date: 5/4/2022 1:54:42 PM ******/
 CREATE DATABASE [Tour]
@@ -363,7 +366,6 @@ CREATE PROCEDURE UpdateVe
 (
 @MAVE int,
 @MATOUR int,
-@MADATVE int,
 @NGAYCOHIEULUC DATETIME,
 @LOAIVE int,
 @NGAYTAO DATETIME,
@@ -372,12 +374,12 @@ CREATE PROCEDURE UpdateVe
 )
 as 
 begin
-Update VeTour set	MATOUR=MATOUR,
-					NGAYCOHIEULUC=NGAYCOHIEULUC,
-					LOAIVE=LOAIVE,
-					NGAYTAO=NGAYTAO,
-					GIAVE=GIAVE,
-					TENKH=TENKH
+Update VeTour set	MATOUR=@MATOUR,
+					NGAYCOHIEULUC=@NGAYCOHIEULUC,
+					LOAIVE=@LOAIVE,
+					NGAYTAO=@NGAYTAO,
+					GIAVE=@GIAVE,
+					TENKH=@TENKH
 					where MAVE=@MAVE
 end
 GO
@@ -392,16 +394,15 @@ end
 GO
 -- Loại Tour
 	-- Insert LoaiTour
-create procedure InserLoaiTour
+create procedure InsertLoaiTour
 (
-@MALOAI int,
 @TENLOAI nvarchar(50)
 )
 As 
 Begin
-Insert into LoaiTour(MALOAI,TENLOAI)
+Insert into LoaiTour(TENLOAI)
 Values
-(@MALOAI,@TENLOAI)
+(@TENLOAI)
 End
 GO
 	-- DeleteLoaiTour
@@ -417,16 +418,15 @@ GO
 
 -- Loai Ve
 	-- InsertLoaiVe
-create procedure InserLoaiVe
+create procedure InsertLoaiVe
 (
-@MALOAI int,
 @TENLOAI nvarchar(20)
 )
 As 
 Begin
-Insert into LoaiVe(MALOAI,TENLOAI)
+Insert into LoaiVe(TENLOAI)
 Values
-(@MALOAI,@TENLOAI)
+(@TENLOAI)
 End
 GO
 	-- DeleteLoaiVe
