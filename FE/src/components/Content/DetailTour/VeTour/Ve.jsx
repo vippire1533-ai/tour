@@ -21,6 +21,8 @@ const Ve = () => {
   const [peoplePopup, setPeoplePopup] = useState(false)
   const [timePopup, setTimePopup] = useState(false)
 
+  const [day, setDay] = useState('Chọn Ngày')
+
   const [singleproducttour, setSingleproducttour] = useState([]);
 
   const [countLarge, setCountLarge] = useState(1)
@@ -48,6 +50,15 @@ const Ve = () => {
   }
   const setPriceSum = (value) => {
     setPrice(value)
+  }
+  const hanleDay = (value) => {
+    setDay(value)
+  }
+  const hanleDayPopup = (value) => {
+    setDayPop(value)
+  }
+  const hanleTimePopup = (value) => {
+    setTimePopup(value)
   }
   return (
     <div className={classes.container}>
@@ -112,11 +123,11 @@ const Ve = () => {
                     <DateRangeIcon />
                     <div>
                       <p style={{ margin: '0', color: 'rgba(3,18,26,1.00)', fontSize: '16px', fontWeight: '700' }}>Ngày tham quan</p>
-                      <p style={{ margin: '0', color: 'rgba(104,113,118,1.00)', fontSize: '12px', fontWeight: '500' }}>Chọn Ngày</p>
+                      <p style={{ margin: '0', color: 'rgba(104,113,118,1.00)', fontSize: '12px', fontWeight: '500' }}>{day}</p>
                     </div>
                     <KeyboardArrowDownIcon style={{ color: '#0d99f4' }} fontSize="large" />
                   </div>
-                  {dayPopup && <DateTour />}
+                  {dayPopup && <DateTour setDay={hanleDay} setDayPopup={hanleDayPopup} setPeoplePopup={ChangePeoplePopup} />}
                 </div>
                 <div style={{ position: 'relative' }}>
                   <div className={classes.item} onClick={() => {
@@ -153,7 +164,7 @@ const Ve = () => {
               </div>
               <div >
                 <button className={classes.datve} onClick={() => {
-                  dispatch(setSumPrice({price:price,soluongnguoilon:countLarge,soluongtreem:countSmall}))
+                  dispatch(setSumPrice({ price: price, soluongnguoilon: countLarge, soluongtreem: countSmall }))
                   navigate("/order/" + MATOUR)
                 }}>
                   Đặt ngay

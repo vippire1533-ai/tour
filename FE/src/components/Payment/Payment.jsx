@@ -37,7 +37,7 @@ function Payment() {
                 backgroundColor: '#f7f9fa'
             }}>
                 <Box component={'div'} sx={{
-                    width: "63%",
+                    width: "960px",
                     margin: 'auto',
                     padding: '20px 0 40px 0',
 

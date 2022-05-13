@@ -1,8 +1,17 @@
 import { Box, Typography } from '@mui/material'
 import { padding } from '@mui/system'
 import React from 'react'
-
-function DateTour() {
+import classes from "./Date.module.css";
+import img from './borderblue.png';
+import { useState } from 'react'
+function DateTour({ setDay, setDayPopup, setPeoplePopup }) {
+    const [position, setPosition] = useState()
+    const handleDay = (day, position) => {
+        setDay(day);
+        setDayPopup(false);
+        setPeoplePopup(true)
+        setPosition(position)
+    }
     return (
         <Box component={'div'}
             sx={{
@@ -16,7 +25,7 @@ function DateTour() {
                 backgroundColor: 'white',
                 zIndex: '999',
                 padding: '40px 16px',
-                display:'flex',
+                display: 'flex',
             }}
         >
             <Box component={'div'}
@@ -36,53 +45,53 @@ function DateTour() {
                     <Typography variant="overline" display="block" sx={{ width: '32px', textAlign: 'center' }}>T5</Typography>
                     <Typography variant="overline" display="block" sx={{ width: '32px', textAlign: 'center' }}>T6</Typography>
                     <Typography variant="overline" display="block" sx={{ width: '32px', textAlign: 'center' }}>T7</Typography>
-                    <Typography variant="overline" display="block" sx={{ width: '32px', textAlign: 'center',color:'red' }}>CN</Typography>
+                    <Typography variant="overline" display="block" sx={{ width: '32px', textAlign: 'center', color: 'red' }}>CN</Typography>
                 </Box>
                 <Box component={'div'} sx={{ marginTop: '15px' }}>
                     <Box component={'div'} sx={{ display: 'flex', justifyContent: 'space-between', textAlign: 'center' }}>
-                        <Typography variant="h6" display="block" sx={{ width: '32px', textAlign: 'center', fontSize: '16px', color: 'black' }}></Typography>
-                        <Typography variant="h6" display="block" sx={{ width: '32px', textAlign: 'center', fontSize: '16px', color: 'black' }}></Typography>
-                        <Typography variant="h6" display="block" sx={{ width: '32px', textAlign: 'center', fontSize: '16px', color: 'black' }}>1<Typography variant="overline" display="block" sx={{ fontSize: "11px", color: 'rgba(104,113,118,1.00)' }}>650K</Typography></Typography>
-                        <Typography variant="h6" display="block" sx={{ width: '32px', textAlign: 'center', fontSize: '16px', color: 'black' }}>2<Typography variant="overline" display="block" sx={{ fontSize: "11px", color: 'rgba(104,113,118,1.00)' }}>650K</Typography></Typography>
-                        <Typography variant="h6" display="block" sx={{ width: '32px', textAlign: 'center', fontSize: '16px', color: 'black' }}>3<Typography variant="overline" display="block" sx={{ fontSize: "11px", color: 'rgba(104,113,118,1.00)' }}>650K</Typography></Typography>
-                        <Typography variant="h6" display="block" sx={{ width: '32px', textAlign: 'center', fontSize: '16px', color: 'black' }}>4<Typography variant="overline" display="block" sx={{ fontSize: "11px", color: 'rgba(104,113,118,1.00)' }}>650K</Typography></Typography>
-                        <Typography variant="h6" display="block" sx={{ width: '32px', textAlign: 'center', fontSize: '16px', color: 'red' }}>5<Typography variant="overline" display="block" sx={{ fontSize: "11px", color: 'rgba(104,113,118,1.00)' }}>650K</Typography></Typography>
+                        <Typography variant="h6" display="block" className={classes.day}></Typography>
+                        <Typography variant="h6" display="block" className={classes.day}></Typography>
+                        <Typography variant="h6" display="block" onClick={() => { handleDay('Thứ 4, 1 tháng 06 2022', { 'x': '115px', 'y': '115px' }) }} className={classes.day}>1<Typography variant="overline" display="block" className={classes.ten}>650K</Typography></Typography>
+                        <Typography variant="h6" display="block" onClick={() => { handleDay('Thứ 5, 2 tháng 06 2022') }} className={classes.day}>2<Typography variant="overline" display="block" className={classes.ten}>650K</Typography></Typography>
+                        <Typography variant="h6" display="block" onClick={() => { handleDay('Thứ 6, 3 tháng 06 2022') }} className={classes.day}>3<Typography variant="overline" display="block" className={classes.ten}>650K</Typography></Typography>
+                        <Typography variant="h6" display="block" onClick={() => { handleDay('Thứ 7, 4 tháng 06 2022') }} className={classes.day}>4<Typography variant="overline" display="block" className={classes.ten}>650K</Typography></Typography>
+                        <Typography variant="h6" display="block" onClick={() => { handleDay('Chủ nhật, 5 tháng 06 2022') }} className={classes.dayCN}>5<Typography variant="overline" display="block" className={classes.ten}>650K</Typography></Typography>
                     </Box>
                     <Box component={'div'} sx={{ display: 'flex', justifyContent: 'space-between', textAlign: 'center' }}>
-                        <Typography variant="h6" display="block" sx={{ width: '32px', textAlign: 'center', fontSize: '16px', color: 'black' }}>6<Typography variant="overline" display="block" sx={{ fontSize: "11px", color: 'rgba(104,113,118,1.00)' }}>650K</Typography></Typography>
-                        <Typography variant="h6" display="block" sx={{ width: '32px', textAlign: 'center', fontSize: '16px', color: 'black' }}>7<Typography variant="overline" display="block" sx={{ fontSize: "11px", color: 'rgba(104,113,118,1.00)' }}>650K</Typography></Typography>
-                        <Typography variant="h6" display="block" sx={{ width: '32px', textAlign: 'center', fontSize: '16px', color: 'black' }}>8<Typography variant="overline" display="block" sx={{ fontSize: "11px", color: 'rgba(104,113,118,1.00)' }}>650K</Typography></Typography>
-                        <Typography variant="h6" display="block" sx={{ width: '32px', textAlign: 'center', fontSize: '16px', color: 'black' }}>9<Typography variant="overline" display="block" sx={{ fontSize: "11px", color: 'rgba(104,113,118,1.00)' }}>650K</Typography></Typography>
-                        <Typography variant="h6" display="block" sx={{ width: '32px', textAlign: 'center', fontSize: '16px', color: 'black' }}>10<Typography variant="overline" display="block" sx={{ fontSize: "11px", color: 'rgba(104,113,118,1.00)' }}>650K</Typography></Typography>
-                        <Typography variant="h6" display="block" sx={{ width: '32px', textAlign: 'center', fontSize: '16px', color: 'black' }}>11<Typography variant="overline" display="block" sx={{ fontSize: "11px", color: 'rgba(104,113,118,1.00)' }}>650K</Typography></Typography>
-                        <Typography variant="h6" display="block" sx={{ width: '32px', textAlign: 'center', fontSize: '16px', color: 'red' }}>12<Typography variant="overline" display="block" sx={{ fontSize: "11px", color: 'rgba(104,113,118,1.00)' }}>650K</Typography></Typography>
+                        <Typography variant="h6" display="block" onClick={() => { handleDay('Thứ 2, 6 tháng 06 2022') }} className={classes.day}>6<Typography variant="overline" display="block" className={classes.ten}>650K</Typography></Typography>
+                        <Typography variant="h6" display="block" onClick={() => { handleDay('Thứ 3, 7 tháng 06 2022') }} className={classes.day}>7<Typography variant="overline" display="block" className={classes.ten}>650K</Typography></Typography>
+                        <Typography variant="h6" display="block" onClick={() => { handleDay('Thứ 4, 8 tháng 06 2022') }} className={classes.day}>8<Typography variant="overline" display="block" className={classes.ten}>650K</Typography></Typography>
+                        <Typography variant="h6" display="block" onClick={() => { handleDay('Thứ 5, 9 tháng 06 2022') }} className={classes.day}>9<Typography variant="overline" display="block" className={classes.ten}>650K</Typography></Typography>
+                        <Typography variant="h6" display="block" onClick={() => { handleDay('Thứ 6, 10 tháng 06 2022') }} className={classes.day}>10<Typography variant="overline" display="block" className={classes.ten}>650K</Typography></Typography>
+                        <Typography variant="h6" display="block" onClick={() => { handleDay('Thứ 7, 11 tháng 06 2022') }} className={classes.day}>11<Typography variant="overline" display="block" className={classes.ten}>650K</Typography></Typography>
+                        <Typography variant="h6" display="block" onClick={() => { handleDay('Chủ nhật, 12 tháng 06 2022') }} className={classes.dayCN}>12<Typography variant="overline" display="block" className={classes.ten}>650K</Typography></Typography>
                     </Box>
                     <Box component={'div'} sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                        <Typography variant="h6" display="block" sx={{ width: '32px', textAlign: 'center', fontSize: '16px', color: 'black' }}>13<Typography variant="overline" display="block" sx={{ fontSize: "11px", color: 'rgba(104,113,118,1.00)' }}>650K</Typography></Typography>
-                        <Typography variant="h6" display="block" sx={{ width: '32px', textAlign: 'center', fontSize: '16px', color: 'black' }}>14<Typography variant="overline" display="block" sx={{ fontSize: "11px", color: 'rgba(104,113,118,1.00)' }}>650K</Typography></Typography>
-                        <Typography variant="h6" display="block" sx={{ width: '32px', textAlign: 'center', fontSize: '16px', color: 'black' }}>15<Typography variant="overline" display="block" sx={{ fontSize: "11px", color: 'rgba(104,113,118,1.00)' }}>650K</Typography></Typography>
-                        <Typography variant="h6" display="block" sx={{ width: '32px', textAlign: 'center', fontSize: '16px', color: 'black' }}>16<Typography variant="overline" display="block" sx={{ fontSize: "11px", color: 'rgba(104,113,118,1.00)' }}>650K</Typography></Typography>
-                        <Typography variant="h6" display="block" sx={{ width: '32px', textAlign: 'center', fontSize: '16px', color: 'black' }}>17<Typography variant="overline" display="block" sx={{ fontSize: "11px", color: 'rgba(104,113,118,1.00)' }}>650K</Typography></Typography>
-                        <Typography variant="h6" display="block" sx={{ width: '32px', textAlign: 'center', fontSize: '16px', color: 'black' }}>18<Typography variant="overline" display="block" sx={{ fontSize: "11px", color: 'rgba(104,113,118,1.00)' }}>650K</Typography></Typography>
-                        <Typography variant="h6" display="block" sx={{ width: '32px', textAlign: 'center', fontSize: '16px', color: 'red' }}>19<Typography variant="overline" display="block" sx={{ fontSize: "11px", color: 'rgba(104,113,118,1.00)' }}>650K</Typography></Typography>
+                        <Typography variant="h6" display="block" onClick={() => { handleDay('Thứ 2, 13 tháng 06 2022') }} className={classes.day}>13<Typography variant="overline" display="block" className={classes.ten}>650K</Typography></Typography>
+                        <Typography variant="h6" display="block" onClick={() => { handleDay('Thứ 3, 14 tháng 06 2022') }} className={classes.day}>14<Typography variant="overline" display="block" className={classes.ten}>650K</Typography></Typography>
+                        <Typography variant="h6" display="block" onClick={() => { handleDay('Thứ 4, 15 tháng 06 2022') }} className={classes.day}>15<Typography variant="overline" display="block" className={classes.ten}>650K</Typography></Typography>
+                        <Typography variant="h6" display="block" onClick={() => { handleDay('Thứ 5, 16 tháng 06 2022') }} className={classes.day}>16<Typography variant="overline" display="block" className={classes.ten}>650K</Typography></Typography>
+                        <Typography variant="h6" display="block" onClick={() => { handleDay('Thứ 6, 17 tháng 06 2022') }} className={classes.day}>17<Typography variant="overline" display="block" className={classes.ten}>650K</Typography></Typography>
+                        <Typography variant="h6" display="block" onClick={() => { handleDay('Thứ 7, 18 tháng 06 2022') }} className={classes.day}>18<Typography variant="overline" display="block" className={classes.ten}>650K</Typography></Typography>
+                        <Typography variant="h6" display="block" onClick={() => { handleDay('Chủ nhật, 19 tháng 06 2022') }} className={classes.dayCN}>19<Typography variant="overline" display="block" className={classes.ten}>650K</Typography></Typography>
                     </Box>
                     <Box component={'div'} sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                        <Typography variant="h6" display="block" sx={{ width: '32px', textAlign: 'center', fontSize: '16px', color: 'black' }}>20<Typography variant="overline" display="block" sx={{ fontSize: "11px", color: 'rgba(104,113,118,1.00)' }}>650K</Typography></Typography>
-                        <Typography variant="h6" display="block" sx={{ width: '32px', textAlign: 'center', fontSize: '16px', color: 'black' }}>21<Typography variant="overline" display="block" sx={{ fontSize: "11px", color: 'rgba(104,113,118,1.00)' }}>650K</Typography></Typography>
-                        <Typography variant="h6" display="block" sx={{ width: '32px', textAlign: 'center', fontSize: '16px', color: 'black' }}>22<Typography variant="overline" display="block" sx={{ fontSize: "11px", color: 'rgba(104,113,118,1.00)' }}>650K</Typography></Typography>
-                        <Typography variant="h6" display="block" sx={{ width: '32px', textAlign: 'center', fontSize: '16px', color: 'black' }}>23<Typography variant="overline" display="block" sx={{ fontSize: "11px", color: 'rgba(104,113,118,1.00)' }}>650K</Typography></Typography>
-                        <Typography variant="h6" display="block" sx={{ width: '32px', textAlign: 'center', fontSize: '16px', color: 'black' }}>24<Typography variant="overline" display="block" sx={{ fontSize: "11px", color: 'rgba(104,113,118,1.00)' }}>650K</Typography></Typography>
-                        <Typography variant="h6" display="block" sx={{ width: '32px', textAlign: 'center', fontSize: '16px', color: 'black' }}>25<Typography variant="overline" display="block" sx={{ fontSize: "11px", color: 'rgba(104,113,118,1.00)' }}>650K</Typography></Typography>
-                        <Typography variant="h6" display="block" sx={{ width: '32px', textAlign: 'center', fontSize: '16px', color: 'red' }}>26<Typography variant="overline" display="block" sx={{ fontSize: "11px", color: 'rgba(104,113,118,1.00)' }}>650K</Typography></Typography>
+                        <Typography variant="h6" display="block" onClick={() => { handleDay('Thứ 2, 20 tháng 06 2022') }} className={classes.day}>20<Typography variant="overline" display="block" className={classes.ten}>650K</Typography></Typography>
+                        <Typography variant="h6" display="block" onClick={() => { handleDay('Thứ 3, 21 tháng 06 2022') }} className={classes.day}>21<Typography variant="overline" display="block" className={classes.ten}>650K</Typography></Typography>
+                        <Typography variant="h6" display="block" onClick={() => { handleDay('Thứ 4, 22 tháng 06 2022') }} className={classes.day}>22<Typography variant="overline" display="block" className={classes.ten}>650K</Typography></Typography>
+                        <Typography variant="h6" display="block" onClick={() => { handleDay('Thứ 5, 23 tháng 06 2022') }} className={classes.day}>23<Typography variant="overline" display="block" className={classes.ten}>650K</Typography></Typography>
+                        <Typography variant="h6" display="block" onClick={() => { handleDay('Thứ 6, 24 tháng 06 2022') }} className={classes.day}>24<Typography variant="overline" display="block" className={classes.ten}>650K</Typography></Typography>
+                        <Typography variant="h6" display="block" onClick={() => { handleDay('Thứ 7, 25 tháng 06 2022') }} className={classes.day}>25<Typography variant="overline" display="block" className={classes.ten}>650K</Typography></Typography>
+                        <Typography variant="h6" display="block" onClick={() => { handleDay('Chủ nhật, 26 tháng 06 2022') }} className={classes.dayCN}>26<Typography variant="overline" display="block" className={classes.ten}>650K</Typography></Typography>
                     </Box>
                     <Box component={'div'} sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                        <Typography variant="h6" display="block" sx={{ width: '32px', textAlign: 'center', fontSize: '16px', color: 'black' }}>27<Typography variant="overline" display="block" sx={{ fontSize: "11px", color: 'rgba(104,113,118,1.00)' }}>650K</Typography></Typography>
-                        <Typography variant="h6" display="block" sx={{ width: '32px', textAlign: 'center', fontSize: '16px', color: 'black' }}>29<Typography variant="overline" display="block" sx={{ fontSize: "11px", color: 'rgba(104,113,118,1.00)' }}>650K</Typography></Typography>
-                        <Typography variant="h6" display="block" sx={{ width: '32px', textAlign: 'center', fontSize: '16px', color: 'black' }}>30<Typography variant="overline" display="block" sx={{ fontSize: "11px", color: 'rgba(104,113,118,1.00)' }}>650K</Typography></Typography>
-                        <Typography variant="h6" display="block" sx={{ width: '32px', textAlign: 'center', fontSize: '16px', color: 'black' }}></Typography>
-                        <Typography variant="h6" display="block" sx={{ width: '32px', textAlign: 'center', fontSize: '16px', color: 'black' }}></Typography>
-                        <Typography variant="h6" display="block" sx={{ width: '32px', textAlign: 'center', fontSize: '16px', color: 'black' }}></Typography>
-                        <Typography variant="h6" display="block" sx={{ width: '32px', textAlign: 'center', fontSize: '16px', color: 'black' }}></Typography>
+                        <Typography variant="h6" display="block" onClick={() => { handleDay('Thứ 2, 27 tháng 06 2022') }} className={classes.day}>27<Typography variant="overline" display="block" className={classes.ten}>650K</Typography></Typography>
+                        <Typography variant="h6" display="block" onClick={() => { handleDay('Thứ 3, 28 tháng 06 2022') }} className={classes.day}>28<Typography variant="overline" display="block" className={classes.ten}>650K</Typography></Typography>
+                        <Typography variant="h6" display="block" onClick={() => { handleDay('Thứ 4, 29 tháng 06 2022') }} className={classes.day}>29<Typography variant="overline" display="block" className={classes.ten}>650K</Typography></Typography>
+                        <Typography variant="h6" display="block" onClick={() => { handleDay('Thứ 5, 30 tháng 06 2022') }} className={classes.day}>30</Typography>
+                        <Typography variant="h6" display="block" onClick={() => { handleDay('') }} className={classes.day}></Typography>
+                        <Typography variant="h6" display="block" onClick={() => { handleDay('') }} className={classes.day}></Typography>
+                        <Typography variant="h6" display="block" onClick={() => { handleDay('') }} className={classes.day}></Typography>
 
                     </Box>
                 </Box>
@@ -105,58 +114,64 @@ function DateTour() {
                     <Typography variant="overline" display="block" sx={{ width: '32px', textAlign: 'center' }}>T5</Typography>
                     <Typography variant="overline" display="block" sx={{ width: '32px', textAlign: 'center' }}>T6</Typography>
                     <Typography variant="overline" display="block" sx={{ width: '32px', textAlign: 'center' }}>T7</Typography>
-                    <Typography variant="overline" display="block" sx={{ width: '32px', textAlign: 'center',color:'red' }}>CN</Typography>
+                    <Typography variant="overline" display="block" sx={{ width: '32px', textAlign: 'center', color: 'red' }}>CN</Typography>
                 </Box>
                 <Box component={'div'} sx={{ marginTop: '15px' }}>
                     <Box component={'div'} sx={{ display: 'flex', justifyContent: 'space-between', textAlign: 'center' }}>
-                        <Typography variant="h6" display="block" sx={{ width: '32px', textAlign: 'center', fontSize: '16px', color: 'black' }}></Typography>
-                        <Typography variant="h6" display="block" sx={{ width: '32px', textAlign: 'center', fontSize: '16px', color: 'black' }}></Typography>
-                        <Typography variant="h6" display="block" sx={{ width: '32px', textAlign: 'center', fontSize: '16px', color: 'black' }}></Typography>
-                        <Typography variant="h6" display="block" sx={{ width: '32px', textAlign: 'center', fontSize: '16px', color: 'black' }}></Typography>
-                        <Typography variant="h6" display="block" sx={{ width: '32px', textAlign: 'center', fontSize: '16px', color: 'black' }}>1<Typography variant="overline" display="block" sx={{ fontSize: "11px", color: 'rgba(104,113,118,1.00)' }}>650K</Typography></Typography>
-                        <Typography variant="h6" display="block" sx={{ width: '32px', textAlign: 'center', fontSize: '16px', color: 'black' }}>2<Typography variant="overline" display="block" sx={{ fontSize: "11px", color: 'rgba(104,113,118,1.00)' }}>650K</Typography></Typography>
-                        <Typography variant="h6" display="block" sx={{ width: '32px', textAlign: 'center', fontSize: '16px', color: 'red' }}>3<Typography variant="overline" display="block" sx={{ fontSize: "11px", color: 'rgba(104,113,118,1.00)' }}>650K</Typography></Typography>
+                        <Typography variant="h6" display="block" onClick={() => { handleDay('') }} className={classes.day}></Typography>
+                        <Typography variant="h6" display="block" onClick={() => { handleDay('') }} className={classes.day}></Typography>
+                        <Typography variant="h6" display="block" onClick={() => { handleDay('') }} className={classes.day}></Typography>
+                        <Typography variant="h6" display="block" onClick={() => { handleDay('') }} className={classes.day}></Typography>
+                        <Typography variant="h6" display="block" onClick={() => { handleDay('Thứ 6, 1 tháng 07 2022') }} className={classes.day}>1<Typography variant="overline" display="block" className={classes.ten}>650K</Typography></Typography>
+                        <Typography variant="h6" display="block" onClick={() => { handleDay('Thứ 7, 2 tháng 07 2022') }} className={classes.day}>2<Typography variant="overline" display="block" className={classes.ten}>650K</Typography></Typography>
+                        <Typography variant="h6" display="block" onClick={() => { handleDay('Chủ nhật, 3 tháng 07 2022') }} className={classes.dayCN}>3<Typography variant="overline" display="block" className={classes.ten}>650K</Typography></Typography>
                     </Box>
                     <Box component={'div'} sx={{ display: 'flex', justifyContent: 'space-between', textAlign: 'center' }}>
-                        <Typography variant="h6" display="block" sx={{ width: '32px', textAlign: 'center', fontSize: '16px', color: 'black' }}>4<Typography variant="overline" display="block" sx={{ fontSize: "11px", color: 'rgba(104,113,118,1.00)' }}>650K</Typography></Typography>
-                        <Typography variant="h6" display="block" sx={{ width: '32px', textAlign: 'center', fontSize: '16px', color: 'black' }}>5<Typography variant="overline" display="block" sx={{ fontSize: "11px", color: 'rgba(104,113,118,1.00)' }}>650K</Typography></Typography>
-                        <Typography variant="h6" display="block" sx={{ width: '32px', textAlign: 'center', fontSize: '16px', color: 'black' }}>6<Typography variant="overline" display="block" sx={{ fontSize: "11px", color: 'rgba(104,113,118,1.00)' }}>650K</Typography></Typography>
-                        <Typography variant="h6" display="block" sx={{ width: '32px', textAlign: 'center', fontSize: '16px', color: 'black' }}>7<Typography variant="overline" display="block" sx={{ fontSize: "11px", color: 'rgba(104,113,118,1.00)' }}>650K</Typography></Typography>
-                        <Typography variant="h6" display="block" sx={{ width: '32px', textAlign: 'center', fontSize: '16px', color: 'black' }}>8<Typography variant="overline" display="block" sx={{ fontSize: "11px", color: 'rgba(104,113,118,1.00)' }}>650K</Typography></Typography>
-                        <Typography variant="h6" display="block" sx={{ width: '32px', textAlign: 'center', fontSize: '16px', color: 'black' }}>9<Typography variant="overline" display="block" sx={{ fontSize: "11px", color: 'rgba(104,113,118,1.00)' }}>650K</Typography></Typography>
-                        <Typography variant="h6" display="block" sx={{ width: '32px', textAlign: 'center', fontSize: '16px', color: 'red' }}>10<Typography variant="overline" display="block" sx={{ fontSize: "11px", color: 'rgba(104,113,118,1.00)' }}>650K</Typography></Typography>
+                        <Typography variant="h6" display="block" onClick={() => { handleDay('Thứ 2, 4 tháng 07 2022') }} className={classes.day}>4<Typography variant="overline" display="block" className={classes.ten}>650K</Typography></Typography>
+                        <Typography variant="h6" display="block" onClick={() => { handleDay('Thứ 3, 5 tháng 07 2022') }} className={classes.day}>5<Typography variant="overline" display="block" className={classes.ten}>650K</Typography></Typography>
+                        <Typography variant="h6" display="block" onClick={() => { handleDay('Thứ 4, 6 tháng 07 2022') }} className={classes.day}>6<Typography variant="overline" display="block" className={classes.ten}>650K</Typography></Typography>
+                        <Typography variant="h6" display="block" onClick={() => { handleDay('Thứ 5, 7 tháng 07 2022') }} className={classes.day}>7<Typography variant="overline" display="block" className={classes.ten}>650K</Typography></Typography>
+                        <Typography variant="h6" display="block" onClick={() => { handleDay('Thứ 6, 8 tháng 07 2022') }} className={classes.day}>8<Typography variant="overline" display="block" className={classes.ten}>650K</Typography></Typography>
+                        <Typography variant="h6" display="block" onClick={() => { handleDay('Thứ 7, 9 tháng 07 2022') }} className={classes.day}>9<Typography variant="overline" display="block" className={classes.ten}>650K</Typography></Typography>
+                        <Typography variant="h6" display="block" onClick={() => { handleDay('Chủ nhật, 10 tháng 07 2022') }} className={classes.dayCN}>10<Typography variant="overline" display="block" className={classes.ten}>650K</Typography></Typography>
                     </Box>
                     <Box component={'div'} sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                        <Typography variant="h6" display="block" sx={{ width: '32px', textAlign: 'center', fontSize: '16px', color: 'black' }}>11<Typography variant="overline" display="block" sx={{ fontSize: "11px", color: 'rgba(104,113,118,1.00)' }}>650K</Typography></Typography>
-                        <Typography variant="h6" display="block" sx={{ width: '32px', textAlign: 'center', fontSize: '16px', color: 'black' }}>12<Typography variant="overline" display="block" sx={{ fontSize: "11px", color: 'rgba(104,113,118,1.00)' }}>650K</Typography></Typography>
-                        <Typography variant="h6" display="block" sx={{ width: '32px', textAlign: 'center', fontSize: '16px', color: 'black' }}>13<Typography variant="overline" display="block" sx={{ fontSize: "11px", color: 'rgba(104,113,118,1.00)' }}>650K</Typography></Typography>
-                        <Typography variant="h6" display="block" sx={{ width: '32px', textAlign: 'center', fontSize: '16px', color: 'black' }}>14<Typography variant="overline" display="block" sx={{ fontSize: "11px", color: 'rgba(104,113,118,1.00)' }}>650K</Typography></Typography>
-                        <Typography variant="h6" display="block" sx={{ width: '32px', textAlign: 'center', fontSize: '16px', color: 'black' }}>15<Typography variant="overline" display="block" sx={{ fontSize: "11px", color: 'rgba(104,113,118,1.00)' }}>650K</Typography></Typography>
-                        <Typography variant="h6" display="block" sx={{ width: '32px', textAlign: 'center', fontSize: '16px', color: 'black' }}>16<Typography variant="overline" display="block" sx={{ fontSize: "11px", color: 'rgba(104,113,118,1.00)' }}>650K</Typography></Typography>
-                        <Typography variant="h6" display="block" sx={{ width: '32px', textAlign: 'center', fontSize: '16px', color: 'red' }}>17<Typography variant="overline" display="block" sx={{ fontSize: "11px", color: 'rgba(104,113,118,1.00)' }}>650K</Typography></Typography>
+                        <Typography variant="h6" display="block" onClick={() => { handleDay('Thứ 2, 11 tháng 07 2022') }} className={classes.day}>11<Typography variant="overline" display="block" className={classes.ten}>650K</Typography></Typography>
+                        <Typography variant="h6" display="block" onClick={() => { handleDay('Thứ 3, 12 tháng 07 2022') }} className={classes.day}>12<Typography variant="overline" display="block" className={classes.ten}>650K</Typography></Typography>
+                        <Typography variant="h6" display="block" onClick={() => { handleDay('Thứ 4, 13 tháng 07 2022') }} className={classes.day}>13<Typography variant="overline" display="block" className={classes.ten}>650K</Typography></Typography>
+                        <Typography variant="h6" display="block" onClick={() => { handleDay('Thứ 5, 14 tháng 07 2022') }} className={classes.day}>14<Typography variant="overline" display="block" className={classes.ten}>650K</Typography></Typography>
+                        <Typography variant="h6" display="block" onClick={() => { handleDay('Thứ 6, 15 tháng 07 2022') }} className={classes.day}>15<Typography variant="overline" display="block" className={classes.ten}>650K</Typography></Typography>
+                        <Typography variant="h6" display="block" onClick={() => { handleDay('Thứ 7, 16 tháng 07 2022') }} className={classes.day}>16<Typography variant="overline" display="block" className={classes.ten}>650K</Typography></Typography>
+                        <Typography variant="h6" display="block" onClick={() => { handleDay('Chủ nhật, 17 tháng 07 2022') }} className={classes.dayCN}>17<Typography variant="overline" display="block" className={classes.ten}>650K</Typography></Typography>
                     </Box>
                     <Box component={'div'} sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                        <Typography variant="h6" display="block" sx={{ width: '32px', textAlign: 'center', fontSize: '16px', color: 'black' }}>18<Typography variant="overline" display="block" sx={{ fontSize: "11px", color: 'rgba(104,113,118,1.00)' }}>650K</Typography></Typography>
-                        <Typography variant="h6" display="block" sx={{ width: '32px', textAlign: 'center', fontSize: '16px', color: 'black' }}>19<Typography variant="overline" display="block" sx={{ fontSize: "11px", color: 'rgba(104,113,118,1.00)' }}>650K</Typography></Typography>
-                        <Typography variant="h6" display="block" sx={{ width: '32px', textAlign: 'center', fontSize: '16px', color: 'black' }}>20<Typography variant="overline" display="block" sx={{ fontSize: "11px", color: 'rgba(104,113,118,1.00)' }}>650K</Typography></Typography>
-                        <Typography variant="h6" display="block" sx={{ width: '32px', textAlign: 'center', fontSize: '16px', color: 'black' }}>21<Typography variant="overline" display="block" sx={{ fontSize: "11px", color: 'rgba(104,113,118,1.00)' }}>650K</Typography></Typography>
-                        <Typography variant="h6" display="block" sx={{ width: '32px', textAlign: 'center', fontSize: '16px', color: 'black' }}>22<Typography variant="overline" display="block" sx={{ fontSize: "11px", color: 'rgba(104,113,118,1.00)' }}>650K</Typography></Typography>
-                        <Typography variant="h6" display="block" sx={{ width: '32px', textAlign: 'center', fontSize: '16px', color: 'black' }}>23<Typography variant="overline" display="block" sx={{ fontSize: "11px", color: 'rgba(104,113,118,1.00)' }}>650K</Typography></Typography>
-                        <Typography variant="h6" display="block" sx={{ width: '32px', textAlign: 'center', fontSize: '16px', color: 'red' }}>24<Typography variant="overline" display="block" sx={{ fontSize: "11px", color: 'rgba(104,113,118,1.00)' }}>650K</Typography></Typography>
+                        <Typography variant="h6" display="block" onClick={() => { handleDay('Thứ 2, 18 tháng 07 2022') }} className={classes.day}>18<Typography variant="overline" display="block" className={classes.ten}>650K</Typography></Typography>
+                        <Typography variant="h6" display="block" onClick={() => { handleDay('Thứ 3, 19 tháng 07 2022') }} className={classes.day}>19<Typography variant="overline" display="block" className={classes.ten}>650K</Typography></Typography>
+                        <Typography variant="h6" display="block" onClick={() => { handleDay('Thứ 4, 20 tháng 07 2022') }} className={classes.day}>20<Typography variant="overline" display="block" className={classes.ten}>650K</Typography></Typography>
+                        <Typography variant="h6" display="block" onClick={() => { handleDay('Thứ 5, 21 tháng 07 2022') }} className={classes.day}>21<Typography variant="overline" display="block" className={classes.ten}>650K</Typography></Typography>
+                        <Typography variant="h6" display="block" onClick={() => { handleDay('Thứ 6, 22 tháng 07 2022') }} className={classes.day}>22<Typography variant="overline" display="block" className={classes.ten}>650K</Typography></Typography>
+                        <Typography variant="h6" display="block" onClick={() => { handleDay('Thứ 7, 23 tháng 07 2022') }} className={classes.day}>23<Typography variant="overline" display="block" className={classes.ten}>650K</Typography></Typography>
+                        <Typography variant="h6" display="block" onClick={() => { handleDay('Chủ nhật, 24 tháng 07 2022') }} className={classes.dayCN}>24<Typography variant="overline" display="block" className={classes.ten}>650K</Typography></Typography>
                     </Box>
                     <Box component={'div'} sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                        <Typography variant="h6" display="block" sx={{ width: '32px', textAlign: 'center', fontSize: '16px', color: 'black' }}>25<Typography variant="overline" display="block" sx={{ fontSize: "11px", color: 'rgba(104,113,118,1.00)' }}>650K</Typography></Typography>
-                        <Typography variant="h6" display="block" sx={{ width: '32px', textAlign: 'center', fontSize: '16px', color: 'black' }}>26<Typography variant="overline" display="block" sx={{ fontSize: "11px", color: 'rgba(104,113,118,1.00)' }}>650K</Typography></Typography>
-                        <Typography variant="h6" display="block" sx={{ width: '32px', textAlign: 'center', fontSize: '16px', color: 'black' }}>27<Typography variant="overline" display="block" sx={{ fontSize: "11px", color: 'rgba(104,113,118,1.00)' }}>650K</Typography></Typography>
-                        <Typography variant="h6" display="block" sx={{ width: '32px', textAlign: 'center', fontSize: '16px', color: 'black' }}>28<Typography variant="overline" display="block" sx={{ fontSize: "11px", color: 'rgba(104,113,118,1.00)' }}>650K</Typography></Typography>
-                        <Typography variant="h6" display="block" sx={{ width: '32px', textAlign: 'center', fontSize: '16px', color: 'black' }}>29<Typography variant="overline" display="block" sx={{ fontSize: "11px", color: 'rgba(104,113,118,1.00)' }}>650K</Typography></Typography>
-                        <Typography variant="h6" display="block" sx={{ width: '32px', textAlign: 'center', fontSize: '16px', color: 'black' }}>30<Typography variant="overline" display="block" sx={{ fontSize: "11px", color: 'rgba(104,113,118,1.00)' }}>650K</Typography></Typography>
-                        <Typography variant="h6" display="block" sx={{ width: '32px', textAlign: 'center', fontSize: '16px', color: 'red' }}>31<Typography variant="overline" display="block" sx={{ fontSize: "11px", color: 'rgba(104,113,118,1.00)' }}>650K</Typography></Typography>
+                        <Typography variant="h6" display="block" onClick={() => { handleDay('Thứ 2, 25 tháng 07 2022') }} className={classes.day}>25<Typography variant="overline" display="block" className={classes.ten}>650K</Typography></Typography>
+                        <Typography variant="h6" display="block" onClick={() => { handleDay('Thứ 3, 26 tháng 07 2022') }} className={classes.day}>26<Typography variant="overline" display="block" className={classes.ten}>650K</Typography></Typography>
+                        <Typography variant="h6" display="block" onClick={() => { handleDay('Thứ 4, 27 tháng 07 2022') }} className={classes.day}>27<Typography variant="overline" display="block" className={classes.ten}>650K</Typography></Typography>
+                        <Typography variant="h6" display="block" onClick={() => { handleDay('Thứ 5, 28 tháng 07 2022') }} className={classes.day}>28<Typography variant="overline" display="block" className={classes.ten}>650K</Typography></Typography>
+                        <Typography variant="h6" display="block" onClick={() => { handleDay('Thứ 6, 29 tháng 07 2022') }} className={classes.day}>29<Typography variant="overline" display="block" className={classes.ten}>650K</Typography></Typography>
+                        <Typography variant="h6" display="block" onClick={() => { handleDay('Thứ 7, 30 tháng 07 2022') }} className={classes.day}>30<Typography variant="overline" display="block" className={classes.ten}>650K</Typography></Typography>
+                        <Typography variant="h6" display="block" onClick={() => { handleDay('Chủ nhật, 31 tháng 07 2022') }} className={classes.dayCN}>31<Typography variant="overline" display="block" className={classes.ten}>650K</Typography></Typography>
 
                     </Box>
                 </Box>
 
             </Box>
+            {position && <Box component={'img'} src={img} sx={{
+                position: 'absolute',
+                top: position.x,
+                left: position.y,
+            }}></Box>}
+
         </Box>
     )
 }
