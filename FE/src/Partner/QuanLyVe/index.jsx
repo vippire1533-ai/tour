@@ -115,10 +115,13 @@ const QuanLyVe = () => {
     dispatch(quanLyVeActions.getAllTickets());
     dispatch(quanLyLoaiVeActions.getAllTicketTypes());
     dispatch(quanLyLoaiTourActions.getAllTourTypes());
+  }, []);
+
+  useEffect(() => {
     setColumnConfigurations(
       createColumnConfigurations(tickets, dispatch, showUpdateModal, formik),
     );
-  }, []);
+  }, [tickets]);
 
   return (
     <>

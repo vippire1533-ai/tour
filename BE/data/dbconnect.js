@@ -105,8 +105,8 @@ async function getAllTickets() {
           ELSE N'expired'
         END AS TINHTRANG
     FROM  
-        VeTour VT	INNER JOIN LoaiTour LT ON  LT.MALOAI = VT.MATOUR
-        INNER JOIN LoaiVe LV ON  LV.MALOAI = VT.LOAIVE
+        VeTour VT	LEFT JOIN LoaiTour LT ON  LT.MALOAI = VT.MATOUR
+        LEFT JOIN LoaiVe LV ON  LV.MALOAI = VT.LOAIVE
         LEFT JOIN KhachHang KH ON KH.MAKH = VT.MAKH
     ORDER BY 
         VT.MAVE ASC
@@ -138,8 +138,8 @@ async function getTicketByMaVe(maVe) {
           ELSE N'Đã Hết Hạn'
         END AS TINHTRANG
     FROM  
-        VeTour VT	INNER JOIN LoaiTour LT ON  LT.MALOAI = VT.MATOUR
-        INNER JOIN LoaiVe LV ON  LV.MALOAI = VT.LOAIVE
+        VeTour VT	LEFT JOIN LoaiTour LT ON  LT.MALOAI = VT.MATOUR
+        LEFT JOIN LoaiVe LV ON  LV.MALOAI = VT.LOAIVE
         LEFT JOIN KhachHang KH ON KH.MAKH = VT.MAKH
     WHERE
         VT.MAVE = @VeTour
@@ -190,7 +190,6 @@ async function deleteVe(listveMAVE) {
 
 async function updateVe(ticketId, data) {
   try {
-    console.log(ticketId, data);
     const pool = await sql.connect(config);
     const updateveproducts = await pool
       .request()
@@ -219,17 +218,16 @@ async function getAllTourTypes() {
   }
 }
 
-async function addTourType(listloaitour) {
+async function addTourType(payload) {
   try {
-    let pool = await sql.connect(config);
-    let insertproduct = await pool
+    const pool = await sql.connect(config);
+    const insertproduct = await pool
       .request()
-      .input('MALOAI', sql.Int, listloaitour.MALOAI)
-      .input('TENLOAI', sql.NVarChar, listloaitour.TENLOAI)
+      .input('TENLOAI', sql.NVarChar, payload.TENLOAI)
       .execute('InsertLoaiTour');
     return insertproduct.recordsets;
   } catch (err) {
-    console.log(err);
+    throw err;
   }
 }
 async function deleteTourType(listloaitourMALOAI) {
@@ -296,6 +294,46 @@ const getAllTicketTypes = async () => {
   }
 };
 
+const createTicketType = async (payload) => {
+  try {
+    const pool = await sql.connect(config);
+    const data = await pool
+      .request()
+      .input('TENLOAI', sql.NVarChar, payload.TENLOAI)
+      .execute('InsertLoaiVe');
+    return data.recordset;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const updateTicketType = async (maLoaiVe, payload) => {
+  try {
+    const pool = await sql.connect(config);
+    const data = await pool
+      .request()
+      .input('MALOAI', sql.Int, +maLoaiVe)
+      .input('TENLOAI', sql.NVarChar, payload.TENLOAI)
+      .execute('UpdateLoaiVe');
+    return data.recordset;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const deleteTicketType = async (maLoaiVe) => {
+  try {
+    const pool = await sql.connect(config);
+    const data = await pool
+      .request()
+      .input('MALOAI', sql.Int, +maLoaiVe)
+      .execute('DeleteLoaiVe');
+    return data.recordset;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export default {
   GetData,
   GetDatas,
@@ -314,5 +352,8 @@ export default {
   addDonDatVe,
   deleteDonDatVe,
   getAllTicketTypes,
+  createTicketType,
+  deleteTicketType,
+  updateTicketType,
   sql,
 };

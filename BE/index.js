@@ -188,26 +188,71 @@ router.route('/veproducts/:id').delete((req, res) => {
 });
 
 // Tour Type Routes
-router.route('/tourTypes').get(async (req, res) => {
-  try {
-    const result = await dbconnect.getAllTourTypes();
-    res.status(200).send(result);
-  } catch (error) {
-    console.log(error);
-    res.status(500).send(error);
-  }
-});
+router
+  .route('/tourTypes')
+  .get(async (req, res) => {
+    try {
+      const result = await dbconnect.getAllTourTypes();
+      res.status(200).send(result);
+    } catch (error) {
+      console.log(error);
+      res.status(500).send(error);
+    }
+  })
+  .post(async (req, res) => {
+    try {
+      const result = await dbconnect.addTourType(req.body);
+      return res.status(201).send(result);
+    } catch (error) {
+      console.log(error);
+      res.status(500).send(error);
+    }
+  });
 
 // Ticket Type Routes
-router.route('/ticketTypes').get(async (req, res) => {
-  try {
-    const result = await dbconnect.getAllTicketTypes();
-    res.status(200).send(result);
-  } catch (error) {
-    console.log(error);
-    res.status(500).send(error);
-  }
-});
+router
+  .route('/ticketTypes/:id')
+  .delete(async (req, res) => {
+    const { id } = req.params;
+    try {
+      const data = await dbconnect.deleteTicketType(id);
+      return res.status(204).send(data);
+    } catch (error) {
+      console.log(error);
+      res.status(500).send(error);
+    }
+  })
+  .put(async (req, res) => {
+    const { id } = req.params;
+    try {
+      const data = await dbconnect.updateTicketType(id, req.body);
+      return res.status(204).send(data);
+    } catch (error) {
+      console.log(error);
+      res.status(500).send(error);
+    }
+  });
+
+router
+  .route('/ticketTypes')
+  .get(async (req, res) => {
+    try {
+      const result = await dbconnect.getAllTicketTypes();
+      res.status(200).send(result);
+    } catch (error) {
+      console.log(error);
+      res.status(500).send(error);
+    }
+  })
+  .post(async (req, res) => {
+    try {
+      const result = await dbconnect.createTicketType(req.body);
+      res.status(201).send(result);
+    } catch (error) {
+      console.log(error);
+      res.status(500).send(error);
+    }
+  });
 
 const sslServer = https.createServer(
   {

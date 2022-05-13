@@ -4,7 +4,7 @@ import axios from 'axios';
 
 const BASE_URL = '/api/veproducts';
 
-const fakeProcessing = (dispatch) => {
+export const fakeProcessing = (dispatch) => {
   dispatch(appActions.showModal());
   setTimeout(() => {
     dispatch(appActions.hideLoading());
