@@ -16,7 +16,7 @@ function Payment() {
     const { id } = useParams();
     const [singleOderproducttour, setSingleOderproducttour] = useState([]);
     const booking = useSelector(state => state.tourlist.booking)
-
+    const tongTien = booking.soluongtreem * 500000 + booking.soluongnguoilon * 650000 + 100000
     useEffect(() => {
         getData(id);
     }, [id]);
@@ -27,8 +27,30 @@ function Payment() {
             console.log(res.data);
         });
     };
-    console.log("data =>", singleOderproducttour);
+    const hanlePayment = () => {
+        let date = new Date();
+        let objApi = {
+            MAKHACHHANH: '1',
+            MATOUR: singleOderproducttour[0].MATOUR,
+            NGAYDAT: date,
+            TINHTRANGTHANHTOAN: 'Ai biết',
+            SOLUONGVEDAT: booking.soluongtreem + booking.soluongnguoilon,
+            TONGTIEN: tongTien
+        };
+        console.log('dpi dat ve',objApi);
+        // return async () => {
+        //     try {
+        //         const result = await axios({
+        //             url: 'apidatve',
+        //             method: 'POST',
+        //             data: objApi,
+        //         });
 
+        //     } catch (err) {
+        //         console.log("loi~ dat ve'");
+        //     }
+        // }
+    }
     return (
         <Fragment>
             <Header />
@@ -60,7 +82,7 @@ function Payment() {
                             }}>
                                 <p style={{ textAlign: 'center', margin: '0', padding: '15px 32px 10px 32px' }}><img src="https://ik.imagekit.io/tvlk/image/imageResource/2018/07/16/1531738663636-5a904b0e24addce76efebf72eb8e5cb0.png?tr=q-75" width="110" height="20" alt="" /></p>
                                 <p style={{ padding: "16px 24px", fontSize: "14px", margin: '0', backgroundColor: 'white', color: '#073e68' }}>Thẻ thanh toán</p>
-                               
+
                             </Box>
                             <Box component={'div'} sx={{
                                 minWidth: '446px',
@@ -141,7 +163,7 @@ function Payment() {
                                         <hr />
                                         <div className={classes.chitietgia} style={{ marginTop: '20px' }}>
                                             <p>Tổng giá tiền</p>
-                                            <p><NumberFormat thousandSeparator={true} displayType={'text'} thousandsGroupStyle="thousand" value={booking.soluongtreem * 500000 + booking.soluongnguoilon * 650000 + 100000} /> VND</p>
+                                            <p><NumberFormat thousandSeparator={true} displayType={'text'} thousandsGroupStyle="thousand" value={tongTien} /> VND</p>
                                         </div>
                                     </div>
 
@@ -150,7 +172,7 @@ function Payment() {
                                     <p>Bằng việc nhấn thanh toán, bạn đồng ý <span>Điều khoản & điều kiện</span> và <span>Chính sách quyền riêng tư.</span></p>
                                 </div>
                                 <div className={classes.thanhtoan}>
-                                    <button><PunchClockIcon style={{ fontSize: '16px', marginRight: '20px' }} /><span>Thanh toán Thẻ thanh toán</span></button>
+                                    <button onClick={hanlePayment}><PunchClockIcon  style={{ fontSize: '16px', marginRight: '20px' }} /><span>Thanh toán Thẻ thanh toán</span></button>
                                 </div>
                             </Box>
 
