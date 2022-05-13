@@ -12,7 +12,6 @@ function Apply({ countLarge, countSmall, setCountLarge, setCountSmall, setPrice,
     <Box component={'div'}
       sx={{
         width: '457px',
-        height: '184px',
         boxShadow: "0px 1px 2px rgb(3,18,26,0.2)",
         position: 'absolute',
         top: '55px',
@@ -72,7 +71,9 @@ function Apply({ countLarge, countSmall, setCountLarge, setCountSmall, setPrice,
         </Box>
         <Box component={'div'}>
 
-          <span style={{ color: 'rgb(1, 148, 243)', fontWeight: '700', cursor: 'pointer' }} onClick={() => setPeoplePopup(false)}>Xong</span>
+          <span style={{ color: 'rgb(1, 148, 243)', fontWeight: '700', cursor: 'pointer' }} onClick={() => {
+            setPeoplePopup(false)
+            }}>Xong</span>
         </Box>
       </Box>
     </Box>
