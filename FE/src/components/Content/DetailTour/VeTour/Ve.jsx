@@ -21,7 +21,7 @@ const Ve = () => {
   const [peoplePopup, setPeoplePopup] = useState(false)
   const [timePopup, setTimePopup] = useState(false)
 
-  const [day, setDay] = useState('Chọn Ngày')
+  const [day, setDay] = useState({ day: 'Chọn Ngày', position: {} })
 
   const [singleproducttour, setSingleproducttour] = useState([]);
 
@@ -123,11 +123,11 @@ const Ve = () => {
                     <DateRangeIcon />
                     <div>
                       <p style={{ margin: '0', color: 'rgba(3,18,26,1.00)', fontSize: '16px', fontWeight: '700' }}>Ngày tham quan</p>
-                      <p style={{ margin: '0', color: 'rgba(104,113,118,1.00)', fontSize: '12px', fontWeight: '500' }}>{day}</p>
+                      <p style={{ margin: '0', color: 'rgba(104,113,118,1.00)', fontSize: '12px', fontWeight: '500' }}>{day.day}</p>
                     </div>
                     <KeyboardArrowDownIcon style={{ color: '#0d99f4' }} fontSize="large" />
                   </div>
-                  {dayPopup && <DateTour setDay={hanleDay} setDayPopup={hanleDayPopup} setPeoplePopup={ChangePeoplePopup} />}
+                  {dayPopup && <DateTour day={day} setDay={hanleDay} setDayPopup={hanleDayPopup} setPeoplePopup={ChangePeoplePopup} />}
                 </div>
                 <div style={{ position: 'relative' }}>
                   <div className={classes.item} onClick={() => {
@@ -142,7 +142,7 @@ const Ve = () => {
                     </div>
                     <KeyboardArrowDownIcon style={{ color: '#0d99f4' }} fontSize="large" />
                   </div>
-                  {peoplePopup && <Apply countLarge={countLarge} countSmall={countSmall} setCountLarge={ChangeCountLarge} setCountSmall={ChangeCountSmall} setPrice={setPriceSum} setPeoplePopup={ChangePeoplePopup}/>}
+                  {peoplePopup && <Apply countLarge={countLarge} countSmall={countSmall} setCountLarge={ChangeCountLarge} setCountSmall={ChangeCountSmall} setPrice={setPriceSum} setPeoplePopup={ChangePeoplePopup} />}
                 </div>
                 <div style={{ position: 'relative' }}>
                   <div className={classes.item} onClick={() => {

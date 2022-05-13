@@ -4,7 +4,7 @@ import "slick-carousel/slick/slick-theme.css";
 import "./Explore_world.css";
 
 const Explore_world = () => {
-  const settings = {
+  const settings = { 
     dots: false,
     infinite: true,
     speed: 500,
