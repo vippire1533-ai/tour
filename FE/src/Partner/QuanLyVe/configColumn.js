@@ -1,11 +1,11 @@
-import { Tag, Modal } from 'antd';
-import ButtonAction from './ButtonAction';
-import { FaPen, FaTimes, FaEye } from 'react-icons/fa';
-import classes from './styles.module.css';
-import * as quanLyVeActions from './../../Redux/Action/quanLyVeActions';
-import * as appActions from './../../Redux/Action/appActions';
+import { Modal, Tag } from 'antd';
 import moment from 'moment';
+import { FaEye, FaPen, FaTimes } from 'react-icons/fa';
 import NumberFormat from 'react-number-format';
+import * as appActions from './../../Redux/Action/appActions';
+import * as quanLyVeActions from './../../Redux/Action/quanLyVeActions';
+import ButtonAction from './ButtonAction';
+import classes from './styles.module.css';
 
 export const TAG_CONFIG = {
   active: {
@@ -18,6 +18,10 @@ export const TAG_CONFIG = {
   },
   expired: {
     title: 'Đã quá hạn',
+    color: 'yellow',
+  },
+  cancelled: {
+    title: 'Đã bị xóa',
     color: 'red',
   },
 };
@@ -34,7 +38,18 @@ const constructFilterObj = (data, field) => {
     return acc;
   }, []);
   const items = new Set(values);
-  return Array.from(items).map((item) => ({ text: item, value: item }));
+  return Array.from(items).map((item) => {
+    const count = data.reduce((acc, record) => {
+      return record[field] === item ? acc + 1 : acc;
+    }, 0);
+    return { text: `${ item } (${ count })`, value: item };
+  });
+};
+
+const countTicketByTinhTrang = (data, tinhTrang) => {
+  return data.reduce((acc, record) => {
+    return record['TINHTRANG'] === tinhTrang ? acc + 1 : acc;
+  }, 0);
 };
 
 export const createColumnConfigurations = (
@@ -114,16 +129,20 @@ export const createColumnConfigurations = (
       },
       filters: [
         {
-          text: 'Đã được đặt',
+          text: `Đã được đặt (${ countTicketByTinhTrang(data, 'booked') })`,
           value: 'booked',
         },
         {
-          text: 'Đã quá hạn',
+          text: `Đã quá hạn (${ countTicketByTinhTrang(data, 'expired') })`,
           value: 'expired',
         },
         {
-          text: 'Còn hiệu lực',
+          text: `Còn hiệu lực (${ countTicketByTinhTrang(data, 'active') })`,
           value: 'active',
+        },
+        {
+          text: `Đã bị xóa (${ countTicketByTinhTrang(data, 'cancelled') })`,
+          value: 'cancelled',
         },
       ],
       onFilter: (value, record) => {
@@ -190,15 +209,11 @@ export const createColumnConfigurations = (
         );
         return (
           <div className={classes.ticket__content__table__actions}>
-            {record.TINHTRANG === 'active' ? (
+            {record.TINHTRANG === 'active' && (
               <>
                 <BtnUpDateTicket />
                 <BtnDeleteTicket />
               </>
-            ) : record.TINHTRANG === 'booked' ? (
-              <BtnShowInfo />
-            ) : (
-              <BtnDeleteTicket />
             )}
           </div>
         );

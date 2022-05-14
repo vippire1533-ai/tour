@@ -100,6 +100,7 @@ async function getAllTickets() {
         KH.MAKH, KH.HOTEN, 
         VT.GIAVE,
         CASE
+          WHEN VT.DABIXOA = 1 THEN N'cancelled'
           WHEN KH.MAKH IS NOT NULL THEN N'booked'
           WHEN KH.MAKH IS NULL AND VT.NGAYCOHIEULUC >= GETDATE() THEN N'active'
           ELSE N'expired'
@@ -133,9 +134,10 @@ async function getTicketByMaVe(maVe) {
         KH.MAKH, KH.HOTEN, 
         VT.GIAVE,
         CASE
-          WHEN KH.MAKH IS NOT NULL THEN N'Đã Được Đặt'
-          WHEN KH.MAKH IS NULL AND VT.NGAYCOHIEULUC >= GETDATE() THEN N'Còn Hiệu Lực'
-          ELSE N'Đã Hết Hạn'
+          WHEN VT.DABIXOA = 1 THEN N'cancelled'
+          WHEN KH.MAKH IS NOT NULL THEN N'booked'
+          WHEN KH.MAKH IS NULL AND VT.NGAYCOHIEULUC >= GETDATE() THEN N'active'
+          ELSE N'expired'
         END AS TINHTRANG
     FROM  
         VeTour VT	LEFT JOIN LoaiTour LT ON  LT.MALOAI = VT.MATOUR
@@ -175,12 +177,12 @@ async function addve(listve) {
   }
 }
 
-async function deleteVe(listveMAVE) {
+async function deleteVe(maVe) {
   try {
-    let pool = await sql.connect(config);
-    let deleteVe = await pool
+    const pool = await sql.connect(config);
+    const deleteVe = await pool
       .request()
-      .input('MAVE', sql.Int, listveMAVE)
+      .input('MAVE', sql.Int, +maVe)
       .execute('DeleteVe');
     return deleteVe.recordsets;
   } catch (error) {
