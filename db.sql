@@ -188,6 +188,7 @@ CREATE TABLE [dbo].[VeTour](
 	[NGAYTAO] [datetime] NULL,
 	[GIAVE] [int] NULL,
 	[TENKH] [nvarchar](50) null,
+	[DABIXOA] [bit] DEFAULT 0, 
  CONSTRAINT [PK_VeTour] PRIMARY KEY CLUSTERED 
 (
 	[MAVE] ASC
@@ -389,7 +390,7 @@ CREATE PROCEDURE DeleteVe
 )
 as
 begin
-	delete from VeTour where MAVE=@MAVE
+	update VeTour set DABIXOA = 1 WHERE MAVE = @MAVE
 end
 GO
 -- Loại Tour
@@ -443,7 +444,6 @@ GO
 	-- InsertDonDatVe
 CREATE PROCEDURE InsertDonDatVe
 (
-@MADATVE int,
 @MANGUOIDAT int,
 @NGAYDAT datetime,
 @TINHTRANGTHANHTOAN nvarchar(20),
@@ -465,6 +465,13 @@ As
 Begin
 Delete From DonDatTour where MADONDAT=@MADATVE
 end
+GO
+-- Update Loai Ve
+CREATE PROCEDURE UpdateLoaiVe (@MALOAI int, @TENLOAI nvarchar(20))
+AS
+BEGIN
+	UPDATE LoaiVe SET TENLOAI = @TENLOAI WHERE MALOAI = @MALOAI
+END
 GO
 USE [master]
 GO
