@@ -69,7 +69,7 @@ router.route('/loaitour').post((request, response) => {
   dbconnect
     .addloaitour(listve)
     .then((result) => {
-      response.status(206).send(result);
+      response.status(201).send(result);
     })
     .catch((err) => {
       console.log('Add failed', err);
@@ -188,6 +188,28 @@ router.route('/veproducts/:id').delete((req, res) => {
 });
 
 // Tour Type Routes
+router
+  .route('/tourTypes/:id')
+  .delete(async (req, res) => {
+    try {
+      const { id } = req.params.id;
+      const result = dbconnect.deleteTourType(id);
+      return res.status(204).send(result);
+    } catch (error) {
+      console.log(error);
+      res.status(500).send(error);
+    }
+  })
+  .put(async (req, res) => {
+    try {
+      const { id } = req.params;
+      const result = dbconnect.updateTourType(id, req.body);
+      res.status(200).send(result);
+    } catch (error) {
+      res.status(500).send(error);
+    }
+  });
+
 router
   .route('/tourTypes')
   .get(async (req, res) => {

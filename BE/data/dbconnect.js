@@ -230,12 +230,34 @@ async function addTourType(payload) {
     throw err;
   }
 }
-async function deleteTourType(listloaitourMALOAI) {
+
+const updateTourType = async (maLoaiTour, payload) => {
+  try {
+    const pool = await sql.connect(config);
+    const query = `
+      UPDATE LoaiTour
+      SET
+        TENLOAI = @TENLOAI
+      WHERE 
+        MALOAI = @MALOAI
+    `;
+    const result = await pool
+      .request()
+      .input('MALOAI', sql.Int, +maLoaiTour)
+      .input('TENLOAI', sql.NVarChar, payload.TENLOAI)
+      .query(query);
+    return result.recordset;
+  } catch (error) {
+    throw error;
+  }
+};
+
+async function deleteTourType(maLoaiTour) {
   try {
     let pool = await sql.connect(config);
     let deleteTour = await pool
       .request()
-      .input('MALOAI', sql.Int, listloaitourMALOAI)
+      .input('MALOAI', sql.Int, +maLoaiTour)
       .execute('DeleteLoaiTour');
     return deleteTour.recordsets;
   } catch (error) {
@@ -355,5 +377,6 @@ export default {
   createTicketType,
   deleteTicketType,
   updateTicketType,
+  updateTourType,
   sql,
 };
