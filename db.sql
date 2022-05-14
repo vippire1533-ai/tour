@@ -66,6 +66,8 @@ CREATE TABLE [dbo].[DonDatTour](
 	[TINHTRANGTHANHTOAN] [nvarchar](20) NULL,
 	[SOLUONGVEDAT] [int] NULL,
 	[TONGTIEN] [int] NULL,
+	[MA_VE] [int] NULL,
+	[TINH_TRANG_DON] nvarchar(50) default null,
  CONSTRAINT [PK_DonDatVe_1] PRIMARY KEY CLUSTERED 
 (
 	[MADONDAT] ASC
@@ -168,6 +170,7 @@ CREATE TABLE [dbo].[Tour](
 	[DIEMDI] [nvarchar](50) NULL,
 	[DIEMDEN] [nvarchar](50) NULL,
 	[NGAYTAO] [datetime] NULL,
+	[TINH] [nvarchar](50) NULL default '',
  CONSTRAINT [PK_Tour] PRIMARY KEY CLUSTERED 
 (
 	[MATOUR] ASC
@@ -188,13 +191,14 @@ CREATE TABLE [dbo].[VeTour](
 	[NGAYTAO] [datetime] NULL,
 	[GIAVE] [int] NULL,
 	[TENKH] [nvarchar](50) null,
-	[DABIXOA] [bit] DEFAULT 0, 
+	[TRANG_THAI_VE] [nvarchar](50) DEFAULT 'active', 
  CONSTRAINT [PK_VeTour] PRIMARY KEY CLUSTERED 
 (
 	[MAVE] ASC
 )
 )
 GO
+-- Insert
 INSERT [dbo].[LoaiTour] ([TENLOAI]) VALUES ( N'Du lịch')
 INSERT [dbo].[LoaiTour] ([TENLOAI]) VALUES (N'Thể thao')
 INSERT [dbo].[LoaiTour] ([TENLOAI]) VALUES (N'Giải trí')
@@ -203,12 +207,12 @@ INSERT [dbo].[LoaiVe] ([TENLOAI]) VALUES (N'Giải Trí')
 INSERT [dbo].[LoaiVe] ([TENLOAI]) VALUES (N'Thể Thao')
 INSERT [dbo].[LoaiVe] ([TENLOAI]) VALUES (N'Tour')
 GO
- 
-INSERT [dbo].[Tour] VALUES (1, N'ăn tối trên sông Sài Gòn', N'ăn tối thực đơn 5 món, du ngoạn trên sông 3 giờ', 500000, N'Ăn tối, ngắm sông', N'https://tausaigon.com.vn/upload/images/bufftet%20%C4%83n%20t%E1%BB%91i%20tr%C3%AAn%20s%C3%B4ng%20S%C3%A0i%20G%C3%B2n.jpg', CAST(N'2022-04-04T00:00:00.000' AS DateTime), N'quận 1', N'bến nhà rồng, quận 1', CAST(N'2022-04-12T00:00:00.000' AS DateTime))
-INSERT [dbo].[Tour] VALUES (1, N'ăn tối trên sông Sài Gòn', N'ăn tối thực đơn 5 món, du ngoạn trên sông 3 giờ', 1500000, N'Ăn tối, ngắm sông', N'https://1.bp.blogspot.com/-MH6XJmf-C7o/Xtcnba5LYAI/AAAAAAAAnsc/WEnMYmNctqUianS48uuC6Ehq-HWpdzggQCLcBGAsYHQ/s1600/hinh-anh-tphcm%2B%25281%2529.jpg', CAST(N'2022-05-05T00:00:00.000' AS DateTime), N'quận 2', N'bến nhà rồng, quận 2', CAST(N'2022-04-13T00:00:00.000' AS DateTime))
-INSERT [dbo].[Tour] VALUES (3, N'Thăm nhà thành', N'vui ', 150000, N'ăn uống tham quan', N'https://photo-cms-tpo.zadn.vn/w890/Uploaded/2022/lkyqski002/2016_12_12/9b_GNSK.jpg', CAST(N'2022-06-05T17:00:00.000' AS DateTime), N'360 tân hương', N'45 gò vấp', NULL)
-GO
 
+INSERT [dbo].[Tour](MALOAI,TENTOUR,GTTOUR,GIATOUR,NOIDUNGTOUR,HINHANH,NGAYDI,DIEMDI,DIEMDEN,NGAYTAO,TINH) VALUES (1, N'ăn tối trên sông Sài Gòn', N'ăn tối thực đơn 5 món, du ngoạn trên sông 3 giờ', 500000, N'Ăn tối, ngắm sông', N'https://tausaigon.com.vn/upload/images/bufftet%20%C4%83n%20t%E1%BB%91i%20tr%C3%AAn%20s%C3%B4ng%20S%C3%A0i%20G%C3%B2n.jpg', CAST(N'2022-04-04T00:00:00.000' AS DateTime), N'quận 1', N'bến nhà rồng, quận 1', CAST(N'2022-04-12T00:00:00.000' AS DateTime), 'hcm')
+INSERT [dbo].[Tour](MALOAI,TENTOUR,GTTOUR,GIATOUR,NOIDUNGTOUR,HINHANH,NGAYDI,DIEMDI,DIEMDEN,NGAYTAO,TINH) VALUES (1, N'ăn tối trên sông Sài Gòn', N'ăn tối thực đơn 5 món, du ngoạn trên sông 3 giờ', 1500000, N'Ăn tối, ngắm sông', N'https://1.bp.blogspot.com/-MH6XJmf-C7o/Xtcnba5LYAI/AAAAAAAAnsc/WEnMYmNctqUianS48uuC6Ehq-HWpdzggQCLcBGAsYHQ/s1600/hinh-anh-tphcm%2B%25281%2529.jpg', CAST(N'2022-05-05T00:00:00.000' AS DateTime), N'quận 2', N'bến nhà rồng, quận 2', CAST(N'2022-04-13T00:00:00.000' AS DateTime), 'phu-quoc')
+INSERT [dbo].[Tour](MALOAI,TENTOUR,GTTOUR,GIATOUR,NOIDUNGTOUR,HINHANH,NGAYDI,DIEMDI,DIEMDEN,NGAYTAO,TINH) VALUES (3, N'Thăm nhà thành', N'vui ', 150000, N'ăn uống tham quan', N'https://photo-cms-tpo.zadn.vn/w890/Uploaded/2022/lkyqski002/2016_12_12/9b_GNSK.jpg', CAST(N'2022-06-05T17:00:00.000' AS DateTime), N'360 tân hương', N'45 gò vấp', NULL, 'phu-quoc')
+GO
+-- Foreign Key
 ALTER TABLE [dbo].[BinhLuan]  WITH CHECK ADD  CONSTRAINT [FK_BinhLuan_KhachHang] FOREIGN KEY([MAKH])
 REFERENCES [dbo].[KhachHang] ([MAKH])
 ON DELETE SET NULL
@@ -237,6 +241,7 @@ ON UPDATE CASCADE
 GO
 ALTER TABLE [dbo].[ChiTietTag] CHECK CONSTRAINT [FK_ChiTietTag_Tour]
 GO
+-- Contraint DonDatTour
 ALTER TABLE [dbo].[DonDatTour]  WITH CHECK ADD  CONSTRAINT [FK_DonDatTour_Tour] FOREIGN KEY([MATOUR])
 REFERENCES [dbo].[Tour] ([MATOUR])
 ON DELETE SET NULL
@@ -244,6 +249,7 @@ ON UPDATE CASCADE
 GO
 ALTER TABLE [dbo].[DonDatTour] CHECK CONSTRAINT [FK_DonDatTour_Tour]
 GO
+
 ALTER TABLE [dbo].[DonDatTour]  WITH CHECK ADD  CONSTRAINT [FK_DonDatVe_KhachHang] FOREIGN KEY([MAKHACHHANG])
 REFERENCES [dbo].[KhachHang] ([MAKH])
 ON DELETE SET NULL
@@ -251,6 +257,16 @@ ON UPDATE CASCADE
 GO
 ALTER TABLE [dbo].[DonDatTour] CHECK CONSTRAINT [FK_DonDatVe_KhachHang]
 GO
+
+ALTER TABLE [dbo].[DonDatTour]  WITH CHECK ADD  CONSTRAINT [FK_DonDatVe_VeTour] FOREIGN KEY([MA_VE])
+REFERENCES [dbo].[VeTour] ([MAVE])
+ON DELETE SET NULL
+ON UPDATE CASCADE
+GO
+ALTER TABLE [dbo].[DonDatTour] CHECK CONSTRAINT [FK_DonDatVe_VeTour]
+GO
+
+-- Contraint Tour
 ALTER TABLE [dbo].[Tour]  WITH CHECK ADD  CONSTRAINT [FK_Tour_LoaiTour] FOREIGN KEY([MALOAI])
 REFERENCES [dbo].[LoaiTour] ([MALOAI])
 ON DELETE SET NULL
@@ -260,8 +276,6 @@ ALTER TABLE [dbo].[Tour] CHECK CONSTRAINT [FK_Tour_LoaiTour]
 GO
 ALTER TABLE [dbo].[VeTour]  WITH CHECK ADD  CONSTRAINT [FK_VeTour_KhachHang] FOREIGN KEY([MAKH])
 REFERENCES [dbo].[KhachHang] ([MAKH])
-ON DELETE SET NULL
-ON UPDATE CASCADE
 GO
 ALTER TABLE [dbo].[VeTour] CHECK CONSTRAINT [FK_VeTour_KhachHang]
 GO
@@ -274,8 +288,6 @@ ALTER TABLE [dbo].[VeTour] CHECK CONSTRAINT [FK_VeTour_LoaiVe]
 GO
 ALTER TABLE [dbo].[VeTour]  WITH CHECK ADD  CONSTRAINT [FK_VeTour_Tour] FOREIGN KEY([MATOUR])
 REFERENCES [dbo].[Tour] ([MATOUR])
-ON DELETE SET NULL
-ON UPDATE CASCADE
 GO
 ALTER TABLE [dbo].[VeTour] CHECK CONSTRAINT [FK_VeTour_Tour]
 GO
@@ -384,13 +396,14 @@ Update VeTour set	MATOUR=@MATOUR,
 					where MAVE=@MAVE
 end
 GO
-CREATE PROCEDURE DeleteVe
+CREATE PROCEDURE SetTinhTrangVe
 (
-@MAVE int
+@MAVE int,
+@TINH_TRANG_VE nvarchar(50)
 )
 as
 begin
-	update VeTour set DABIXOA = 1 WHERE MAVE = @MAVE
+	update VeTour set TRANG_THAI_VE = @TINH_TRANG_VE WHERE MAVE = @MAVE
 end
 GO
 -- Loại Tour
