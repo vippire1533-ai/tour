@@ -212,6 +212,8 @@ INSERT [dbo].[Tour](MALOAI,TENTOUR,GTTOUR,GIATOUR,NOIDUNGTOUR,HINHANH,NGAYDI,DIE
 INSERT [dbo].[Tour](MALOAI,TENTOUR,GTTOUR,GIATOUR,NOIDUNGTOUR,HINHANH,NGAYDI,DIEMDI,DIEMDEN,NGAYTAO,TINH) VALUES (1, N'ăn tối trên sông Sài Gòn', N'ăn tối thực đơn 5 món, du ngoạn trên sông 3 giờ', 1500000, N'Ăn tối, ngắm sông', N'https://1.bp.blogspot.com/-MH6XJmf-C7o/Xtcnba5LYAI/AAAAAAAAnsc/WEnMYmNctqUianS48uuC6Ehq-HWpdzggQCLcBGAsYHQ/s1600/hinh-anh-tphcm%2B%25281%2529.jpg', CAST(N'2022-05-05T00:00:00.000' AS DateTime), N'quận 2', N'bến nhà rồng, quận 2', CAST(N'2022-04-13T00:00:00.000' AS DateTime), 'phu-quoc')
 INSERT [dbo].[Tour](MALOAI,TENTOUR,GTTOUR,GIATOUR,NOIDUNGTOUR,HINHANH,NGAYDI,DIEMDI,DIEMDEN,NGAYTAO,TINH) VALUES (3, N'Thăm nhà thành', N'vui ', 150000, N'ăn uống tham quan', N'https://photo-cms-tpo.zadn.vn/w890/Uploaded/2022/lkyqski002/2016_12_12/9b_GNSK.jpg', CAST(N'2022-06-05T17:00:00.000' AS DateTime), N'360 tân hương', N'45 gò vấp', NULL, 'phu-quoc')
 GO
+INSERT [dbo].[KhachHang] values('admin', '1234', 'Nguyen Admin', 'Nam', 'admin@gmail.com', 'HCM', '1', 0)
+GO
 -- Foreign Key
 ALTER TABLE [dbo].[BinhLuan]  WITH CHECK ADD  CONSTRAINT [FK_BinhLuan_KhachHang] FOREIGN KEY([MAKH])
 REFERENCES [dbo].[KhachHang] ([MAKH])
