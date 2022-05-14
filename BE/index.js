@@ -88,9 +88,14 @@ router.route('/loaitour/:id').delete((req, res) => {
 });
 //Route đơn đặt vé
 router.route('/dondatve').get((request, response) => {
-  dbconnect.GetDonDatVe().then((result) => {
-    response.send(result[0]);
-  });
+  dbconnect
+    .GetDonDatVe()
+    .then((result) => {
+      response.send(result);
+    })
+    .catch((err) => {
+      res.status(500).send(err);
+    });
 });
 router.route('/dondatve').post((request, response) => {
   let listve = { ...request.body };
@@ -105,17 +110,34 @@ router.route('/dondatve').post((request, response) => {
       response.status(500).send(err);
     });
 });
-router.route('/dondatve/:id').delete((req, res) => {
-  let eventid = req.params.id;
-  dbconnect
-    .deleteDonDatVe(eventid)
-    .then((result) => {
-      res.status(204).send(result);
-    })
-    .catch((error) => {
-      console.log('Delete Failed', error);
-    });
-});
+router
+  .route('/dondatve/:id')
+  .delete((req, res) => {
+    let eventid = req.params.id;
+    dbconnect
+      .declineDonDatVe(eventid)
+      .then((result) => {
+        res.status(204).send(result);
+      })
+      .catch((error) => {
+        console.log('Delete Failed', error);
+        res.status(500).send(error);
+      });
+  })
+  .put(async (req, res) => {
+    try {
+      const id = req.params.id;
+      const resutl = await dbconnect.acceptOrder(
+        id,
+        req.body.maKH,
+        req.body.danhSachCacVe,
+      );
+      res.status(200).send(resutl);
+    } catch (error) {
+      console.log(error);
+      res.status(500).send(error);
+    }
+  });
 
 // Route vé
 router.route('/veproducts').get((req, response) => {
@@ -275,6 +297,35 @@ router
       res.status(500).send(error);
     }
   });
+
+// Tours
+
+router.route('/tours').get(async (req, res) => {
+  try {
+    const result = await dbconnect.getAllTours();
+    res.status(200).send(result);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
+// Find Ticket By DonDatTour
+
+router.get('/getTicktByDDT', async (req, res) => {
+  try {
+    const { maTour, maLoaiVe, ngayDat, soLuong } = req.query;
+    const result = await dbconnect.findTickerByDonDatTour(
+      maTour,
+      maLoaiVe,
+      ngayDat,
+      soLuong,
+    );
+    res.status(200).send(result);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send(error);
+  }
+});
 
 const sslServer = https.createServer(
   {

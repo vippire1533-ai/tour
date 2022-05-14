@@ -66,3 +66,15 @@
   display: inline-block;
   padding-top: 8px;
 }
+
+.table,
+.th,
+.td {
+  padding: 12px;
+  border: 1px solid #ccc;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}

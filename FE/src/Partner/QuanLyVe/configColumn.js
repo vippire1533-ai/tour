@@ -1,6 +1,7 @@
 import { Modal, Tag } from 'antd';
 import moment from 'moment';
 import { FaEye, FaPen, FaTimes } from 'react-icons/fa';
+import { GrReturn } from 'react-icons/gr';
 import NumberFormat from 'react-number-format';
 import * as appActions from './../../Redux/Action/appActions';
 import * as quanLyVeActions from './../../Redux/Action/quanLyVeActions';
@@ -8,19 +9,23 @@ import ButtonAction from './ButtonAction';
 import classes from './styles.module.css';
 
 export const TAG_CONFIG = {
-  active: {
+  'Còn hiệu lực': {
     title: 'Còn hiệu lực',
     color: 'green',
   },
-  booked: {
+  'Đã được đặt': {
     title: 'Đã được đặt',
     color: 'blue',
   },
-  expired: {
+  'Đã quá hạn': {
     title: 'Đã quá hạn',
     color: 'yellow',
   },
-  cancelled: {
+  'Đã bị hủy': {
+    title: 'Đã bị hủy',
+    color: 'blue',
+  },
+  'Đã bị xóa': {
     title: 'Đã bị xóa',
     color: 'red',
   },
@@ -64,15 +69,29 @@ export const createColumnConfigurations = (
       dataIndex: 'MAVE',
       key: 'MAVE',
       sorter: (item1, item2) => +item1['MAVE'] - +item2['MAVE'],
+      align: 'center',
+    },
+    {
+      title: 'Tên Tour',
+      dataIndex: 'TENTOUR',
+      key: 'TENTOUR',
+      filters: constructFilterObj(data, 'TENTOUR'),
+      sorter: (item1, item2) =>
+        item1['TENTOUR'].localeCompare(item2['TENTOUR']),
+      onFilter: (value, record) => record['TENTOUR'] === value,
+      ellipsis: true,
+      align: 'center',
     },
     {
       title: 'Loại Tour',
-      dataIndex: 'LOAITOUR',
-      key: 'LOAITOUR',
-      filters: constructFilterObj(data, 'LOAITOUR'),
+      dataIndex: 'TEN_LOAI_TOUR',
+      key: 'TEN_LOAI_TOUR',
+      filters: constructFilterObj(data, 'TEN_LOAI_TOUR'),
       sorter: (item1, item2) =>
-        item1['LOAITOUR'].localeCompare(item2['LOAITOUR']),
-      onFilter: (value, record) => record['LOAITOUR'] === value,
+        item1['TEN_LOAI_TOUR'].localeCompare(item2['TEN_LOAI_TOUR']),
+      onFilter: (value, record) => record['TEN_LOAI_TOUR'] === value,
+      ellipsis: true,
+      align: 'center',
     },
     {
       title: 'Loại Vé',
@@ -81,11 +100,15 @@ export const createColumnConfigurations = (
       filters: constructFilterObj(data, 'LOAIVE'),
       sorter: (item1, item2) => item1['LOAIVE'].localeCompare(item2['LOAIVE']),
       onFilter: (value, record) => record['LOAIVE'] === value,
+      ellipsis: true,
+      align: 'center',
     },
     {
       title: 'Khách Hàng',
       dataIndex: 'HOTEN',
       key: 'HOTEN',
+      ellipsis: true,
+      align: 'center',
     },
     {
       title: 'Giá Vé',
@@ -100,12 +123,13 @@ export const createColumnConfigurations = (
         />
       ),
       sorter: (item1, item2) => +item1['GIAVE'] - +item2['GIAVE'],
+      align: 'center',
     },
     {
       title: 'Ngày Tạo Vé',
       dataIndex: 'NGAYTAO',
       key: 'NGAYTAO',
-      render: (value) => new Date(value).toLocaleString(),
+      render: (value) => moment(value).format('DD-MM-YYYY'),
       sorter: (item1, item2) =>
         new Date(item1['NGAYTAO']).getTime() -
         new Date(item2['NGAYTAO']).getTime(),
@@ -114,7 +138,7 @@ export const createColumnConfigurations = (
       title: 'Hiệu Lực Tới Ngày',
       dataIndex: 'NGAYCOHIEULUC',
       key: 'NGAYCOHIEULUC',
-      render: (value) => new Date(value).toLocaleString(),
+      render: (value) => moment(value).format('DD-MM-YYYY'),
       sorter: (item1, item2) =>
         new Date(item1['NGAYCOHIEULUC']).getTime() -
         new Date(item2['NGAYCOHIEULUC']).getTime(),
@@ -129,25 +153,33 @@ export const createColumnConfigurations = (
       },
       filters: [
         {
-          text: `Đã được đặt (${ countTicketByTinhTrang(data, 'booked') })`,
-          value: 'booked',
+          text: `Đã được đặt (${ countTicketByTinhTrang(data, 'Đã được đặt') })`,
+          value: 'Đã được đặt',
         },
         {
-          text: `Đã quá hạn (${ countTicketByTinhTrang(data, 'expired') })`,
-          value: 'expired',
+          text: `Đã quá hạn (${ countTicketByTinhTrang(data, 'Đã quá hạn') })`,
+          value: 'Đã quá hạn',
         },
         {
-          text: `Còn hiệu lực (${ countTicketByTinhTrang(data, 'active') })`,
-          value: 'active',
+          text: `Còn hiệu lực (${ countTicketByTinhTrang(
+            data,
+            'Còn hiệu lực',
+          ) })`,
+          value: 'Còn hiệu lực',
         },
         {
-          text: `Đã bị xóa (${ countTicketByTinhTrang(data, 'cancelled') })`,
-          value: 'cancelled',
+          text: `Đã bị xóa (${ countTicketByTinhTrang(data, 'Đã bị xóa') })`,
+          value: 'Đã bị xóa',
+        },
+        {
+          text: `Đã bị hủy (${ countTicketByTinhTrang(data, 'Đã bị hủy') })`,
+          value: 'Đã bị hủy',
         },
       ],
       onFilter: (value, record) => {
         return record.TINHTRANG === value;
       },
+      align: 'center',
     },
     {
       title: 'Hành Động',
@@ -161,7 +193,6 @@ export const createColumnConfigurations = (
                 Bạn có chắc muốn xóa vé <b>{record.MAVE}</b> hay không?
               </span>
             ),
-            centered: true,
             onOk: () => {
               dispatch(appActions.showLoading());
               dispatch(quanLyVeActions.deleteTicket(record.MAVE));
@@ -175,12 +206,97 @@ export const createColumnConfigurations = (
           showUpdateModal();
           formik.setValues({
             ...record,
-            MATOUR: record.MALOAITOUR,
-            LOAIVE: record.MALOAIVE,
+            MATOUR: record.MATOUR,
+            LOAIVE: record.MA_LOAI_VE,
             GIAVE: record.GIAVE,
             NGAYCOHIEULUC: moment(record.NGAYCOHIEULUC),
           });
         };
+
+        const showTicketDetail = () => {
+          const thItems = ['', 'Chi Tiết'];
+          const tdItems = [
+            {
+              name: 'Mã vé',
+              dataIndex: 'MAVE',
+            },
+            {
+              name: 'Tên tour',
+              dataIndex: 'TENTOUR',
+            },
+            {
+              name: 'Loại Tour',
+              dataIndex: 'TEN_LOAI_TOUR',
+            },
+            {
+              name: 'Loại vé',
+              dataIndex: 'LOAIVE',
+            },
+            {
+              name: 'Khách hàng',
+              dataIndex: 'HOTEN',
+            },
+            {
+              name: 'Giá vé',
+              dataIndex: 'GIAVE',
+            },
+            {
+              name: 'Ngày tạo vé',
+              dataIndex: 'NGAYTAO',
+              isDateTime: true,
+            },
+            {
+              name: 'Hiệu lực tới ngày',
+              dataIndex: 'NGAYCOHIEULUC',
+              isDateTime: true,
+            },
+            {
+              name: 'Tình trạng vé',
+              dataIndex: 'TINHTRANG',
+            },
+          ];
+          Modal.info({
+            title: 'Chi Tiết Vé',
+            content: (
+              <>
+                <table className={classes.table}>
+                  <thead>
+                    <tr>
+                      {thItems.map((name, index) => (
+                        <th
+                          key={index}
+                          className={classes.th}
+                          style={{ textAlign: 'center' }}
+                        >
+                          {name}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {tdItems.map((item, index) => (
+                      <>
+                        <tr key={index}>
+                          <th className={classes.th}>{item.name}</th>
+                          <td className={classes.td}>
+                            {item.isDateTime
+                              ? moment(record[item.dataIndex]).format(
+                                'DD-MM-YYYY',
+                              )
+                              : record[item.dataIndex]}
+                          </td>
+                        </tr>
+                      </>
+                    ))}
+                  </tbody>
+                </table>
+              </>
+            ),
+            centered: true,
+            width: 800,
+          });
+        };
+
         const BtnUpDateTicket = () => (
           <ButtonAction
             icon={<FaPen />}
@@ -205,11 +321,26 @@ export const createColumnConfigurations = (
             tooltipTitle='Chi tiết vé'
             placement='bottom'
             buttonType='default'
+            handleClick={showTicketDetail}
+          />
+        );
+        const BtnRevertTicket = () => (
+          <ButtonAction
+            icon={<GrReturn />}
+            tooltipTitle='Chi tiết vé'
+            placement='bottom'
+            buttonType='primary'
           />
         );
         return (
           <div className={classes.ticket__content__table__actions}>
-            {record.TINHTRANG === 'active' && (
+            <BtnShowInfo />
+            {record.TINHTRANG === 'Đã bị hủy' && (
+              <>
+                <BtnRevertTicket />
+              </>
+            )}
+            {record.TINHTRANG === 'Còn hiệu lực' && (
               <>
                 <BtnUpDateTicket />
                 <BtnDeleteTicket />
