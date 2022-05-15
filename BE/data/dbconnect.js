@@ -505,7 +505,6 @@ const layThongTinThongKe = async () => {
       VeTour 
     GROUP BY TRANG_THAI_VE, MONTH(NGAYCOHIEULUC), YEAR(NGAYCOHIEULUC)
     `;
-    console.log(query);
     const result = await pool.request().query(query);
     return result.recordset;
   } catch (error) {
