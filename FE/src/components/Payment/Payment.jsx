@@ -16,7 +16,6 @@ function Payment() {
     const { id } = useParams();
     const [singleOderproducttour, setSingleOderproducttour] = useState([]);
     const booking = useSelector(state => state.tourlist.booking)
-    const tongTien = booking.soluongtreem * 500000 + booking.soluongnguoilon * 650000 + 100000
     useEffect(() => {
         getData(id);
     }, [id]);
@@ -30,31 +29,31 @@ function Payment() {
     const hanlePayment = () => {
         let date = new Date();
         let objApi = {
-            MAKHACHHANH: '1',
+            MAKHACHHANG: '1',
             MATOUR: singleOderproducttour[0].MATOUR,
             NGAYDAT: date,
-            TINHTRANGTHANHTOAN: 'Ai biết',
+            TINHTRANGTHANHTOAN: 'Đã Thanh Toán',
             SOLUONGVEDAT: booking.soluongtreem + booking.soluongnguoilon,
-            TONGTIEN: tongTien
+            TONGTIEN: booking.price
         };
         console.log('dpi dat ve',objApi);
-        // return async () => {
-        //     try {
-        //         const result = await axios({
-        //             url: 'apidatve',
-        //             method: 'POST',
-        //             data: objApi,
-        //         });
+        return async () => {
+            try {
+                const result = await axios({
+                    url: '/api/datTour',
+                    method: 'POST',
+                    data: objApi,
+                });
 
-        //     } catch (err) {
-        //         console.log("loi~ dat ve'");
-        //     }
-        // }
+            } catch (err) {
+                console.log("loi~ dat ve'");
+            }
+        }
     }
     return (
         <Fragment>
             <Header />
-            {singleOderproducttour.map(({ TENTOUR }) => <Box component={'div'} sx={{
+            {singleOderproducttour.map(({ TENTOUR,GIATOUR }) => <Box component={'div'} sx={{
 
                 backgroundColor: '#f7f9fa'
             }}>
@@ -150,11 +149,11 @@ function Payment() {
                                         <h3>Chi tiết giá</h3>
                                         <div className={classes.chitietgia}>
                                             <p>{TENTOUR} - Người lớn x{booking.soluongnguoilon}</p>
-                                            <p><NumberFormat thousandSeparator={true} displayType={'text'} thousandsGroupStyle="thousand" value={booking.soluongnguoilon * 650000} /> VND</p>
+                                            <p><NumberFormat thousandSeparator={true} displayType={'text'} thousandsGroupStyle="thousand" value={booking.soluongnguoilon * GIATOUR} /> VND</p>
                                         </div>
                                         <div className={classes.chitietgia}>
                                             <p>{TENTOUR} - Trẻ em x{booking.soluongtreem}</p>
-                                            <p><NumberFormat thousandSeparator={true} displayType={'text'} thousandsGroupStyle="thousand" value={booking.soluongtreem * 500000} /> VND</p>
+                                            <p><NumberFormat thousandSeparator={true} displayType={'text'} thousandsGroupStyle="thousand" value={booking.soluongtreem * (GIATOUR-100000)} /> VND</p>
                                         </div>
                                         <div className={classes.chitietgia}>
                                             <p>Phí tiện ích</p>
@@ -163,7 +162,7 @@ function Payment() {
                                         <hr />
                                         <div className={classes.chitietgia} style={{ marginTop: '20px' }}>
                                             <p>Tổng giá tiền</p>
-                                            <p><NumberFormat thousandSeparator={true} displayType={'text'} thousandsGroupStyle="thousand" value={tongTien} /> VND</p>
+                                            <p><NumberFormat thousandSeparator={true} displayType={'text'} thousandsGroupStyle="thousand" value={booking.price} /> VND</p>
                                         </div>
                                     </div>
 

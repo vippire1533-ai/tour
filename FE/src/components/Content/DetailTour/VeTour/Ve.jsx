@@ -142,7 +142,7 @@ const Ve = () => {
                     </div>
                     <KeyboardArrowDownIcon style={{ color: '#0d99f4' }} fontSize="large" />
                   </div>
-                  {peoplePopup && <Apply countLarge={countLarge} countSmall={countSmall} setCountLarge={ChangeCountLarge} setCountSmall={ChangeCountSmall} setPrice={setPriceSum} setPeoplePopup={ChangePeoplePopup} />}
+                  {peoplePopup && <Apply countLarge={countLarge} countSmall={countSmall} setCountLarge={ChangeCountLarge} setCountSmall={ChangeCountSmall} setPrice={setPriceSum} setPeoplePopup={ChangePeoplePopup} GIATOUR={GIATOUR}/>}
                 </div>
                 <div style={{ position: 'relative' }}>
                   <div className={classes.item} onClick={() => {

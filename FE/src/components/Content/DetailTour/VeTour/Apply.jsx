@@ -2,10 +2,10 @@ import { Box } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import NumberFormat from "react-number-format";
 
-function Apply({ countLarge, countSmall, setCountLarge, setCountSmall, setPrice, setPeoplePopup }) {
+function Apply({ countLarge, countSmall, setCountLarge, setCountSmall, setPrice, setPeoplePopup, GIATOUR }) {
 
   useEffect(() => {
-    setPrice(countLarge * 650000 + countSmall * 500000)
+    setPrice(countLarge * GIATOUR + countSmall * (GIATOUR-100000))
   })
 
   return (
@@ -25,7 +25,7 @@ function Apply({ countLarge, countSmall, setCountLarge, setCountSmall, setPrice,
       <Box component={'div'} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '0 15px' }}>
         <Box component={'div'}>
           <p style={{ margin: 0, color: "rgba(104,113,118,1.00)", fontSize: "12px" }}>Người lớn (12 tuổi trở lên )</p>
-          <p style={{ margin: "4px 0 0 0", color: "rgba(3,18,26,1.00)", fontSize: "16px", fontWeight: '700' }}>650.000 VND</p>
+          <p style={{ margin: "4px 0 0 0", color: "rgba(3,18,26,1.00)", fontSize: "16px", fontWeight: '700' }}><NumberFormat thousandSeparator={true} displayType={'text'} thousandsGroupStyle="thousand" value={GIATOUR}  /> VND</p>
         </Box>
         <Box component={'div'}>
           <button style={{ outline: 'none', padding: '8px 12px', color: '#c04b35', width: '40px', height: '40px', margin: '0' }} onClick={() => {
@@ -46,7 +46,7 @@ function Apply({ countLarge, countSmall, setCountLarge, setCountSmall, setPrice,
       <Box component={'div'} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '16px 15px' }}>
         <Box component={'div'}>
           <p style={{ margin: 0, color: "rgba(104,113,118,1.00)", fontSize: "12px" }}>Trẻ em (5 - 11 tuổi )</p>
-          <p style={{ margin: "4px 0 0 0", color: "rgba(3,18,26,1.00)", fontSize: "16px", fontWeight: '700' }}>500.000 VND</p>
+          <p style={{ margin: "4px 0 0 0", color: "rgba(3,18,26,1.00)", fontSize: "16px", fontWeight: '700' }}><NumberFormat thousandSeparator={true} displayType={'text'} thousandsGroupStyle="thousand" value={GIATOUR - 100000}  />VND</p>
         </Box>
         <Box component={'div'} >
           <button style={{ outline: 'none', padding: '8px 12px', color: '#c04b35', width: '40px', height: '40px', margin: '0' }} onClick={() => {
@@ -67,13 +67,13 @@ function Apply({ countLarge, countSmall, setCountLarge, setCountSmall, setPrice,
       <Box component={'div'} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <Box component={'div'}>
           <p style={{ margin: 0, color: "rgba(104,113,118,1.00)", fontSize: "12px" }}>Tổng giá tiền</p>
-          <p style={{ margin: "4px 0 0 0", color: "rgba(3,18,26,1.00)", fontSize: "16px", fontWeight: '700' }}><NumberFormat thousandSeparator={true} displayType={'text'} thousandsGroupStyle="thousand" value={countLarge * 650000 + countSmall * 500000} /> VND</p>
+          <p style={{ margin: "4px 0 0 0", color: "rgba(3,18,26,1.00)", fontSize: "16px", fontWeight: '700' }}><NumberFormat thousandSeparator={true} displayType={'text'} thousandsGroupStyle="thousand" value={countLarge * GIATOUR + countSmall * (GIATOUR-100000)} /> VND</p>
         </Box>
         <Box component={'div'}>
 
           <span style={{ color: 'rgb(1, 148, 243)', fontWeight: '700', cursor: 'pointer' }} onClick={() => {
             setPeoplePopup(false)
-            }}>Xong</span>
+          }}>Xong</span>
         </Box>
       </Box>
     </Box>

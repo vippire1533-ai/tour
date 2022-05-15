@@ -33,7 +33,7 @@ const Left = (props) => {
 
   return (
     <div className={classes.left}>
-      {singleOderproducttour.map(({ MATOUR }) => (
+      {singleOderproducttour.map(({ MATOUR,GIATOUR }) => (
         <div>
           <div className={classes.login}>
             <img
@@ -158,11 +158,11 @@ const Left = (props) => {
               <div className={classes.chitiettongtien}>
                 <div className={classes.chitietnguoi}>
                   <p>Người lớn ({booking.soluongnguoilon}x)</p>
-                  <p><NumberFormat thousandSeparator={true} displayType={'text'} thousandsGroupStyle="thousand" value={booking.soluongnguoilon * 650000} /> VND</p>
+                  <p><NumberFormat thousandSeparator={true} displayType={'text'} thousandsGroupStyle="thousand" value={booking.soluongnguoilon * GIATOUR} /> VND</p>
                 </div>
                 <div className={classes.chitietnguoi}>
                   <p>Trẻ em ({booking.soluongtreem}x)</p>
-                  <p><NumberFormat thousandSeparator={true} displayType={'text'} thousandsGroupStyle="thousand" value={booking.soluongtreem * 500000} /> VND</p>
+                  <p><NumberFormat thousandSeparator={true} displayType={'text'} thousandsGroupStyle="thousand" value={booking.soluongtreem * (GIATOUR-100000)} /> VND</p>
                 </div>
               </div>
             </>}
