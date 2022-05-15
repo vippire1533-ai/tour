@@ -337,7 +337,15 @@ router.get('/thongKe', async (req, res) => {
   }
 });
 
-
+router.post('/datTour', async (req, res) => {
+  try {
+    const result = await dbconnect.taoDonDatTour(req.body);
+    return res.status(201).send(result);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send(error);
+  }
+});
 
 const sslServer = https.createServer(
   {
