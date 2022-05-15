@@ -29,12 +29,12 @@ function Payment() {
     const hanlePayment = () => {
         let date = new Date();
         let objApi = {
-            MAKHACHHANG: '1',
-            MATOUR: singleOderproducttour[0].MATOUR,
-            NGAYDAT: date,
-            SOLUONGVEDAT: booking.soluongtreem + booking.soluongnguoilon,
-            TONGTIEN: booking.price,
-            MA_LOAI_VE: singleOderproducttour[0].MALOAI
+            maKH: '1',
+            maTour: singleOderproducttour[0].MATOUR,
+            ngayDat: date,
+            soLuong: booking.soluongtreem + booking.soluongnguoilon,
+            tongTien: booking.price,
+            maLoaiVe: singleOderproducttour[0].MALOAI
         };
         console.log('dpi dat ve', objApi);
         return async () => {
