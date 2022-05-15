@@ -27,6 +27,7 @@ function Payment() {
             console.log(res.data);
         });
     };
+    console.log(singleOderproducttour);
     const hanlePayment = () => {
         let date = new Date();
         let objApi = {

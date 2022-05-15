@@ -10,9 +10,9 @@ import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined';
 import QueryBuilderOutlinedIcon from '@mui/icons-material/QueryBuilderOutlined';
 import Apply from "./Apply";
 import TimeTour from "./Time";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setSumPrice } from "../../../../Redux/Action/Touraction";
-
+import {getAllTicketTypes} from '../../../../Redux/Action/quanLyLoaiVeActions'
 const Ve = () => {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -26,11 +26,14 @@ const Ve = () => {
   const [singleproducttour, setSingleproducttour] = useState([]);
 
   const [countLarge, setCountLarge] = useState(1)
-  const [countSmall, setCountSmall] = useState(0)
+  const [countSmall, setCountSmall] = useState(1)
   const [price, setPrice] = useState(0)
   const dispatch = useDispatch();
+  const {ticketTypes} = useSelector(state=>state.quanLyLoaiVeState)
+  console.log('tickety',ticketTypes);
   useEffect(() => {
     getData(id);
+    dispatch(getAllTicketTypes())
   }, [id]);
   const getData = async (id) => {
     const respone = await axios.get(`/api/products/${id}`).then((res) => {
@@ -127,7 +130,7 @@ const Ve = () => {
                     </div>
                     <KeyboardArrowDownIcon style={{ color: '#0d99f4' }} fontSize="large" />
                   </div>
-                  {dayPopup && <DateTour day={day} setDay={hanleDay} setDayPopup={hanleDayPopup} setPeoplePopup={ChangePeoplePopup} />}
+                  {dayPopup && <DateTour day={day} setDay={hanleDay} setDayPopup={hanleDayPopup} setPeoplePopup={ChangePeoplePopup} GIATOUR={GIATOUR} />}
                 </div>
                 <div style={{ position: 'relative' }}>
                   <div className={classes.item} onClick={() => {
@@ -137,12 +140,12 @@ const Ve = () => {
                   }}>
                     <GroupOutlinedIcon />
                     <div>
-                      <p style={{ margin: '0', color: 'rgba(3,18,26,1.00)', fontSize: '16px', fontWeight: '700' }}>Áp dụng cho</p>
+                      <p style={{ margin: '0', color: 'rgba(3,18,26,1.00)', fontSize: '16px', fontWeight: '700' }}>Loại vé</p>
                       <p style={{ margin: '0', color: 'rgba(104,113,118,1.00)', fontSize: '12px', fontWeight: '500' }}>{countLarge} Người lớn, {countSmall} trẻ em</p>
                     </div>
                     <KeyboardArrowDownIcon style={{ color: '#0d99f4' }} fontSize="large" />
                   </div>
-                  {peoplePopup && <Apply countLarge={countLarge} countSmall={countSmall} setCountLarge={ChangeCountLarge} setCountSmall={ChangeCountSmall} setPrice={setPriceSum} setPeoplePopup={ChangePeoplePopup} GIATOUR={GIATOUR}/>}
+                  {peoplePopup && <Apply countLarge={countLarge} countSmall={countSmall} setCountLarge={ChangeCountLarge} setCountSmall={ChangeCountSmall} setPrice={setPriceSum} setPeoplePopup={ChangePeoplePopup} GIATOUR={GIATOUR} />}
                 </div>
                 <div style={{ position: 'relative' }}>
                   <div className={classes.item} onClick={() => {
