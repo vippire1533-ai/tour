@@ -12,7 +12,7 @@
 }
 
 /* Private styles */
-.ticket__wrapper {
+.wrapper {
   width: 85%;
   background-color: rgb(242, 247, 247);
   position: relative;
@@ -22,30 +22,24 @@
   padding: 0px 80px;
 }
 
-.ticket__content {
+.content {
   padding-top: 18px;
 }
 
-.ticket__content__header {
+.content__header {
   text-transform: uppercase;
   font-size: 36px;
 }
 
-.ticket__content__new {
+.content__new {
   padding-bottom: 16px;
   display: flex;
   align-items: center;
   justify-content: flex-end;
 }
 
-.ticket__content__new__content {
+.content__new__content {
   padding-left: 12px;
-}
-
-.ticket__content__table__actions {
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .form-group {
@@ -67,14 +61,8 @@
   padding-top: 8px;
 }
 
-.table,
-.th,
-.td {
-  padding: 12px;
-  border: 1px solid #ccc;
-}
-
-.table {
-  width: 100%;
-  border-collapse: collapse;
+.actions{
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

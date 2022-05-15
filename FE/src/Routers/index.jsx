@@ -1,32 +1,31 @@
 import React, { lazy, memo } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Category from '../components/Category';
-import Tour from '../components/Content/Tour/Tour';
 import DetailTour from '../components/Content/DetailTour/DetailTour';
-import PageTour from '../components/Content/PageXperience/PageTour';
-import PageSightSeeing from '../components/Content/PageXperience/PageSightSeeing';
-import PageTransport from '../components/Content/PageXperience/PageTransport';
+import DStour from '../components/Content/ListTour/DStour';
 import PageCuisine from '../components/Content/PageXperience/PageCuisine';
-import PageTourism from '../components/Content/PageXperience/PageTourism';
 import PageEntertain from '../components/Content/PageXperience/PageEntertain';
+import PagePlayground from '../components/Content/PageXperience/PagePlayground';
+import PageSightSeeing from '../components/Content/PageXperience/PageSightSeeing';
 import PageSpa from '../components/Content/PageXperience/PageSpa';
 import PageSport from '../components/Content/PageXperience/PageSport';
-import PagePlayground from '../components/Content/PageXperience/PagePlayground';
+import PageTour from '../components/Content/PageXperience/PageTour';
+import PageTourism from '../components/Content/PageXperience/PageTourism';
+import PageTransport from '../components/Content/PageXperience/PageTransport';
+import Tour from '../components/Content/Tour/Tour';
 import Order from '../components/OrderTour/Order';
-import DStour from '../components/Content/ListTour/DStour';
-import Manage from '../Partner/Manage';
-import QLtour from '../Partner/QLtour/QLtour';
-import ThemTour from '../Partner/QLtour/ThemTour';
-import SuaTour from '../Partner/QLtour/SuaTour';
-import QLloaitour from '../Partner/QLloaitour/QLloaitour';
-import ThemLoaiTour from '../Partner/QLloaitour/ThemLoaiTour';
-import PageRegister from '../components/Register';
-import QLdondatve from '../Partner/QLdondatve/QLdondatve';
-import Login from '../Partner/login';
-import Register from '../Partner/register';
-import QuanLyVe from '../Partner/QuanLyVe';
 import Payment from '../components/Payment/Payment';
+import PageRegister from '../components/Register';
+import Login from '../Partner/login';
+import Manage from '../Partner/Manage';
+import QLdondatve from '../Partner/QLdondatve/QLdondatve';
+import QLloaitour from '../Partner/QLloaitour/QLloaitour';
+import QLtour from '../Partner/QLtour/QLtour';
+import SuaTour from '../Partner/QLtour/SuaTour';
+import ThemTour from '../Partner/QLtour/ThemTour';
 import QuanLyLoaiVe from '../Partner/QuanLyLoaiVe';
+import QuanLyVe from '../Partner/QuanLyVe';
+import Register from '../Partner/register';
 
 const Home = lazy(() => import('../views/Home'));
 const Search = lazy(() => import('../views/Search'));
@@ -78,7 +77,6 @@ const Routers = () => {
           <Route exact path='/admin/tour/them' element={<ThemTour />} />
           <Route exact path='/admin/tour/:id' element={<SuaTour />} />
           <Route exact path='/admin/loaitour' element={<QLloaitour />} />
-          <Route exact path='/admin/loaitour/them' element={<ThemLoaiTour />} />
           <Route exact path='/admin/dondattour' element={<QLdondatve />} />
           <Route exact path='/admin/quan-ly-ve' element={<QuanLyVe />} />
           <Route

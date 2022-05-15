@@ -91,21 +91,25 @@ async function getAllTickets() {
     const query = `
     SELECT 
         VT.MAVE, 
-        LV.TENLOAI AS LOAIVE, 
-        (SELECT LV1.MALOAI FROM LoaiVe LV1 WHERE LV1.MALOAI = LV.MALOAI) AS MALOAIVE,
-        LT.TENLOAI AS LOAITOUR, 
-        (SELECT LT1.MALOAI FROM LoaiTour LT1 WHERE LT1.MALOAI = LT.MALOAI) AS MALOAITOUR,
+        LV.TENLOAI AS LOAIVE,
+        LV.MALOAI AS MA_LOAI_VE, 
+        T.TENTOUR,
+        T.MATOUR,
+        LT.TENLOAI AS TEN_LOAI_TOUR,
         VT.NGAYCOHIEULUC, 
         VT.NGAYTAO,
         KH.MAKH, KH.HOTEN, 
         VT.GIAVE,
         CASE
-          WHEN KH.MAKH IS NOT NULL THEN N'booked'
-          WHEN KH.MAKH IS NULL AND VT.NGAYCOHIEULUC >= GETDATE() THEN N'active'
-          ELSE N'expired'
+          WHEN VT.TRANG_THAI_VE = N'Đã bị xóa' THEN N'Đã bị xóa'
+          WHEN VT.TRANG_THAI_VE = N'Đã bị hủy' THEN N'Đã bị hủy'
+          WHEN KH.MAKH IS NOT NULL THEN N'Đã được đặt'
+          WHEN KH.MAKH IS NULL AND VT.NGAYCOHIEULUC >= GETDATE() THEN N'Còn hiệu lực'
+          ELSE N'Đã quá hạn'
         END AS TINHTRANG
     FROM  
-        VeTour VT	LEFT JOIN LoaiTour LT ON  LT.MALOAI = VT.MATOUR
+        VeTour VT	LEFT JOIN TOUR T ON  T.MATOUR = VT.MATOUR
+        LEFT JOIN LoaiTour LT ON T.MALOAI = LT.MALOAI
         LEFT JOIN LoaiVe LV ON  LV.MALOAI = VT.LOAIVE
         LEFT JOIN KhachHang KH ON KH.MAKH = VT.MAKH
     ORDER BY 
@@ -124,18 +128,21 @@ async function getTicketByMaVe(maVe) {
     const queryString = `
     SELECT 
         VT.MAVE, 
-        LV.TENLOAI AS LOAIVE, 
-        (SELECT LV1.MALOAI FROM LoaiVe LV1 WHERE LV1.MALOAI = LV.MALOAI) AS MALOAIVE,
-        LT.TENLOAI AS LOAITOUR, 
-        (SELECT LT1.MALOAI FROM LoaiTour LT1 WHERE LT1.MALOAI = LT.MALOAI) AS MALOAITOUR,
+        LV.TENLOAI AS LOAIVE,
+        LV.MALOAI AS MA_LOAI_VE, 
+        T.TENTOUR,
+        T.MATOUR,
+        LT.TENLOAI AS TEN_LOAI_TOUR,
         VT.NGAYCOHIEULUC, 
         VT.NGAYTAO,
         KH.MAKH, KH.HOTEN, 
         VT.GIAVE,
         CASE
-          WHEN KH.MAKH IS NOT NULL THEN N'Đã Được Đặt'
-          WHEN KH.MAKH IS NULL AND VT.NGAYCOHIEULUC >= GETDATE() THEN N'Còn Hiệu Lực'
-          ELSE N'Đã Hết Hạn'
+          WHEN VT.TRANG_THAI_VE = N'Đã bị xóa' THEN N'Đã bị xóa'
+          WHEN VT.TRANG_THAI_VE = N'Đã bị hủy' THEN N'Đã bị hủy'
+          WHEN KH.MAKH IS NOT NULL THEN N'Đã được đặt'
+          WHEN KH.MAKH IS NULL AND VT.NGAYCOHIEULUC >= GETDATE() THEN N'Còn hiệu lực'
+          ELSE N'Đã quá hạn'
         END AS TINHTRANG
     FROM  
         VeTour VT	LEFT JOIN LoaiTour LT ON  LT.MALOAI = VT.MATOUR
@@ -175,13 +182,14 @@ async function addve(listve) {
   }
 }
 
-async function deleteVe(listveMAVE) {
+async function deleteVe(maVe) {
   try {
-    let pool = await sql.connect(config);
-    let deleteVe = await pool
+    const pool = await sql.connect(config);
+    const deleteVe = await pool
       .request()
-      .input('MAVE', sql.Int, listveMAVE)
-      .execute('DeleteVe');
+      .input('MAVE', sql.Int, +maVe)
+      .input('TINH_TRANG_VE', sql.NVarChar, 'Đã bị xóa')
+      .execute('setTinhTrangVe');
     return deleteVe.recordsets;
   } catch (error) {
     throw error;
@@ -230,12 +238,34 @@ async function addTourType(payload) {
     throw err;
   }
 }
-async function deleteTourType(listloaitourMALOAI) {
+
+const updateTourType = async (maLoaiTour, payload) => {
+  try {
+    const pool = await sql.connect(config);
+    const query = `
+      UPDATE LoaiTour
+      SET
+        TENLOAI = @TENLOAI
+      WHERE 
+        MALOAI = @MALOAI
+    `;
+    const result = await pool
+      .request()
+      .input('MALOAI', sql.Int, +maLoaiTour)
+      .input('TENLOAI', sql.NVarChar, payload.TENLOAI)
+      .query(query);
+    return result.recordset;
+  } catch (error) {
+    throw error;
+  }
+};
+
+async function deleteTourType(maLoaiTour) {
   try {
     let pool = await sql.connect(config);
     let deleteTour = await pool
       .request()
-      .input('MALOAI', sql.Int, listloaitourMALOAI)
+      .input('MALOAI', sql.Int, +maLoaiTour)
       .execute('DeleteLoaiTour');
     return deleteTour.recordsets;
   } catch (error) {
@@ -245,11 +275,39 @@ async function deleteTourType(listloaitourMALOAI) {
 // Đơn đặt vé
 async function GetDonDatVe() {
   try {
-    let pool = await sql.connect(config);
-    let products = await pool.request().query('select * FROM DONDATVE');
-    return products.recordsets;
+    const pool = await sql.connect(config);
+    const query = `
+    SELECT 
+      DDT.MADONDAT AS MA_DON_DAT, 
+      DDT.MAKHACHHANG AS MA_KH,
+      KH.HOTEN AS TEN_KHACH_HANG,
+      DDT.MATOUR AS MA_TOUR,
+      LT.TENLOAI AS LOAI_TOUR,
+      T.TENTOUR AS TEN_TOUR,
+      T.DIEMDEN AS DIEM_DEN,
+      T.DIEMDI AS DIEM_DI,
+      T.TINH AS TINH_THANH,
+      T.GIATOUR AS GIA_TOUR,
+      LV.MALOAI AS MA_LOAI_VE,
+      LV.TENLOAI AS TEN_LOAI_VE,
+      DDT.SOLUONGVEDAT AS SO_LUONG_VE_DAT, 
+      DDT.TONGTIEN AS TONG_TIEN,
+      DDT.TINHTRANGTHANHTOAN AS TINH_TRANG_THANH_TOAN,
+      DDT.TINH_TRANG_DON,
+      DDT.NGAYDAT AS NGAY_DAT
+  FROM 
+      DonDatTour DDT  
+      INNER JOIN KhachHang KH on KH.MAKH = DDT.MAKHACHHANG
+      INNER JOIN Tour T ON T.MATOUR = DDT.MATOUR
+      INNER JOIN LoaiTour LT ON T.MALOAI = LT.MALOAI
+      INNER JOIN LoaiVe LV ON LV.MALOAI = DDT.MA_LOAI_VE
+  ORDER BY 
+      DDT.MADONDAT
+    `;
+    const products = await pool.request().query(query);
+    return products.recordset;
   } catch (error) {
-    console.log(error);
+    throw error;
   }
 }
 
@@ -270,18 +328,70 @@ async function addDonDatVe(listdondatve) {
   }
 }
 
-async function deleteDonDatVe(listdondatveMADATVE) {
+async function declineDonDatVe(maDonDat) {
   try {
-    let pool = await sql.connect(config);
-    let deleteTour = await pool
+    const pool = await sql.connect(config);
+    const query = `
+    UPDATE 
+      DonDatTour 
+    SET 
+      TINH_TRANG_DON = N'Đã hủy đơn', 
+      TINHTRANGTHANHTOAN=N'Đã hoàn tiền' 
+    WHERE 
+      MADONDAT = @MADONDAT
+    `;
+    const deleteTour = await pool
       .request()
-      .input('MADATVE', sql.Int, listdondatveMADATVE)
-      .execute('DeleteLoaiTour');
-    return deleteTour.recordsets;
+      .input('MADONDAT', sql.Int, +maDonDat)
+      .query(query);
+    const queryUpdateVeTour = `
+      UPDATE 
+        VeTour 
+      SET 
+        TRANG_THAI_VE = N'Đã bị hủy' 
+      WHERE 
+        MA_DON_DAT = @MA_DON_DAT
+      `;
+    const updateVeTour = await pool
+      .request()
+      .input('MA_DON_DAT', sql.Int, +maDonDat)
+      .query(queryUpdateVeTour);
+
+    return [deleteTour.recordset, updateVeTour.recordset];
   } catch (error) {
     throw error;
   }
 }
+
+const acceptOrder = async (maDonDat, maKH, danhSachCacVe) => {
+  try {
+    const pool = await sql.connect(config);
+    const query1 = `
+    UPDATE 
+      DonDatTour 
+    SET 
+      TINH_TRANG_DON = N'Đã duyệt đơn'
+    WHERE 
+      MADONDAT = ${ maDonDat }
+    `;
+    const query2 = `
+    UPDATE
+      VeTour
+    SET
+      TRANG_THAI_VE = N'Đã được đặt',
+      MAKH = ${ maKH },
+      MA_DON_DAT = ${ maDonDat }
+    WHERE 
+      MAVE IN (${ danhSachCacVe.join(',') })`;
+    const result = await Promise.all([
+      pool.request().query(query1),
+      pool.request().query(query2),
+    ]);
+    return result;
+  } catch (error) {
+    throw error;
+  }
+};
 
 const getAllTicketTypes = async () => {
   try {
@@ -334,6 +444,89 @@ const deleteTicketType = async (maLoaiVe) => {
   }
 };
 
+const findTickerByDonDatTour = async () => {
+  try {
+    const pool = await sql.connect(config);
+    const query = `
+    SELECT 
+      VT.MAVE, 
+      VT.MATOUR AS MA_TOUR,
+      T.TENTOUR, 
+      LV.TENLOAI AS TEN_LOAI_VE, 
+      LV.MALOAI AS MA_LOAI_VE, 
+      LT.TENLOAI as TEN_LOAI_TOUR, 
+      VT.NGAYTAO as NGAY_TAO, 
+      VT.NGAYCOHIEULUC as NGAY_CO_HIEU_LUC,
+      VT.GIAVE as GIA_VE
+    FROM 
+      VeTour VT	INNER JOIN Tour T ON VT.MATOUR = T.MATOUR 
+                INNER JOIN DonDatTour DDT ON T.MATOUR = DDT.MATOUR
+                INNER JOIN LoaiVe LV ON VT.LOAIVE = LV.MALOAI
+                INNER JOIN LoaiTour LT ON T.MALOAI = LT.MALOAI
+    WHERE 
+      VT.TRANG_THAI_VE = N'Còn hiệu lực' 
+    ORDER BY
+    VT.MAVE ASC
+  `;
+    const data = await pool.request().query(query);
+    return data.recordset;
+  } catch (error) {
+    throw error;
+  }
+};
+
+// Tours
+const getAllTours = async () => {
+  try {
+    const pool = await sql.connect(config);
+    const query = `
+      SELECT MATOUR AS MA_TOUR, TENTOUR AS TEN_TOUR FROM Tour
+    `;
+    const result = await pool.request().query(query);
+    return result.recordset;
+  } catch (error) {
+    throw error;
+  }
+};
+
+// Thống kê
+const layThongTinThongKe = async () => {
+  try {
+    const pool = await sql.connect(config);
+    const query = `
+    SELECT 
+      TRANG_THAI_VE, 
+      MONTH(NGAYCOHIEULUC) as THANG,
+      YEAR(NGAYCOHIEULUC) as NAM,
+      count(MAVE) as SO_LUONG_VE, 
+      count(MAKH) as SO_KHACH_HANG, 
+      sum(GIAVE) as TONG_DOANH_THU 
+    FROM 
+      VeTour 
+    GROUP BY TRANG_THAI_VE, MONTH(NGAYCOHIEULUC), YEAR(NGAYCOHIEULUC)
+    `;
+    const result = await pool.request().query(query);
+    return result.recordset;
+  } catch (error) {
+    throw error;
+  }
+};
+
+// Đặt tour
+const taoDonDatTour = async (payload) => {
+  try {
+    const pool = await sql.connect(config);
+    const { maKH, maTour, ngayDat, soLuong, tongTien, maLoaiVe } = payload;
+    const query = `
+    INSERT INTO DonDatTour(MAKHACHHANG, MATOUR, NGAYDAT, TINHTRANGTHANHTOAN,SOLUONGVEDAT,TONGTIEN,MA_LOAI_VE, TINH_TRANG_DON)
+    VALUES(${ maKH }, ${ maTour }, ${ ngayDat }, N'Đã thanh toán', ${ soLuong }, ${ tongTien }, ${ maLoaiVe }, N'Đang xử lý')
+    `;
+    const result = await pool.request().query(query);
+    return result.recordset;
+  } catch (error) {
+    throw error;
+  }
+};
 export default {
   GetData,
   GetDatas,
@@ -350,10 +543,16 @@ export default {
   addTourType,
   deleteTourType,
   addDonDatVe,
-  deleteDonDatVe,
+  declineDonDatVe,
   getAllTicketTypes,
   createTicketType,
   deleteTicketType,
   updateTicketType,
+  updateTourType,
+  getAllTours,
+  findTickerByDonDatTour,
+  acceptOrder,
+  layThongTinThongKe,
+  taoDonDatTour,
   sql,
 };

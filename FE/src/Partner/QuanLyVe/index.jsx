@@ -7,7 +7,7 @@ import AlertPopup from '../../components/AlertPopup';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import Menuleft from '../Menuleft';
 import Menutop from '../Menutop';
-import * as quanLyLoaiTourActions from './../../Redux/Action/quanLyLoaiTourActions';
+import * as quanLyTourActions from './../../Redux/Action/quanLyTourActions';
 import * as quanLyLoaiVeActions from './../../Redux/Action/quanLyLoaiVeActions';
 import * as quanLyVeActions from './../../Redux/Action/quanLyVeActions';
 import ButtonAction from './ButtonAction';
@@ -27,7 +27,7 @@ const QuanLyVe = () => {
   const dispatch = useDispatch();
   const tickets = useSelector((state) => state.quanLyVeState.tickets);
   const { isLoading, isShowModal } = useSelector((state) => state.appState);
-  const { tourTypes } = useSelector((state) => state.quanLyLoaiTourState);
+  const { tours } = useSelector((state) => state.quanLyTourState);
   const { ticketTypes } = useSelector((state) => state.quanLyLoaiVeState);
 
   const formik = useFormik({
@@ -55,7 +55,8 @@ const QuanLyVe = () => {
           `Vui lòng chọn ngày có hiệu lực từ ngày ${
             new Date().getDate() + 1
           } trở đi!`,
-        ),
+        )
+        .typeError('Vui lòng chọn ngày có hiệu lực'),
     }),
   });
 
@@ -114,7 +115,7 @@ const QuanLyVe = () => {
   useEffect(() => {
     dispatch(quanLyVeActions.getAllTickets());
     dispatch(quanLyLoaiVeActions.getAllTicketTypes());
-    dispatch(quanLyLoaiTourActions.getAllTourTypes());
+    dispatch(quanLyTourActions.getAllTours());
   }, []);
 
   useEffect(() => {
@@ -173,18 +174,18 @@ const QuanLyVe = () => {
             <form>
               <div className={styles['form-group']}>
                 <label htmlFor='MATOUR' className={styles['form-label']}>
-                  Loại Tour
+                  Tour
                 </label>
                 <Select
                   id='MATOUR'
-                  placeholder='Chọn loại tour'
+                  placeholder='Chọn tour'
                   className={styles['form-control']}
                   value={formik.values.MATOUR || undefined}
                   onChange={(value) => formik.setFieldValue('MATOUR', value)}
                 >
-                  {tourTypes.map((type) => (
-                    <Select.Option value={type.MALOAI} key={type.MALOAI}>
-                      {type.TENLOAI}
+                  {tours.map((tour) => (
+                    <Select.Option value={tour.MA_TOUR} key={tour.MA_TOUR}>
+                      {tour.TEN_TOUR}
                     </Select.Option>
                   ))}
                 </Select>

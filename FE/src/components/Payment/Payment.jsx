@@ -32,11 +32,11 @@ function Payment() {
             MAKHACHHANG: '1',
             MATOUR: singleOderproducttour[0].MATOUR,
             NGAYDAT: date,
-            TINHTRANGTHANHTOAN: 'Đã Thanh Toán',
             SOLUONGVEDAT: booking.soluongtreem + booking.soluongnguoilon,
-            TONGTIEN: booking.price
+            TONGTIEN: booking.price,
+            MA_LOAI_VE: singleOderproducttour[0].MALOAI
         };
-        console.log('dpi dat ve',objApi);
+        console.log('dpi dat ve', objApi);
         return async () => {
             try {
                 const result = await axios({
@@ -53,7 +53,7 @@ function Payment() {
     return (
         <Fragment>
             <Header />
-            {singleOderproducttour.map(({ TENTOUR,GIATOUR }) => <Box component={'div'} sx={{
+            {singleOderproducttour.map(({ TENTOUR, GIATOUR }) => <Box component={'div'} sx={{
 
                 backgroundColor: '#f7f9fa'
             }}>
@@ -153,7 +153,7 @@ function Payment() {
                                         </div>
                                         <div className={classes.chitietgia}>
                                             <p>{TENTOUR} - Trẻ em x{booking.soluongtreem}</p>
-                                            <p><NumberFormat thousandSeparator={true} displayType={'text'} thousandsGroupStyle="thousand" value={booking.soluongtreem * (GIATOUR-100000)} /> VND</p>
+                                            <p><NumberFormat thousandSeparator={true} displayType={'text'} thousandsGroupStyle="thousand" value={booking.soluongtreem * (GIATOUR - 100000)} /> VND</p>
                                         </div>
                                         <div className={classes.chitietgia}>
                                             <p>Phí tiện ích</p>
@@ -171,7 +171,7 @@ function Payment() {
                                     <p>Bằng việc nhấn thanh toán, bạn đồng ý <span>Điều khoản & điều kiện</span> và <span>Chính sách quyền riêng tư.</span></p>
                                 </div>
                                 <div className={classes.thanhtoan}>
-                                    <button onClick={hanlePayment}><PunchClockIcon  style={{ fontSize: '16px', marginRight: '20px' }} /><span>Thanh toán Thẻ thanh toán</span></button>
+                                    <button onClick={hanlePayment}><PunchClockIcon style={{ fontSize: '16px', marginRight: '20px' }} /><span>Thanh toán Thẻ thanh toán</span></button>
                                 </div>
                             </Box>
 

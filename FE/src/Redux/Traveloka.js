@@ -5,6 +5,9 @@ import appReducer from './Reducer/appReducer';
 import quanLyLoaiTourReducer from './Reducer/quanLyLoaiTourReducer';
 import quanLyLoaiVeReducer from './Reducer/quanLyLoaiVeReducer';
 import quanLyVeReducer from './Reducer/quanLyVeReducer';
+import quanLyDonDatVeReducer from './Reducer/quanLyDonDatVeReducer';
+import quanLyTourReducer from './Reducer/quanLyTourReducer';
+import thongKeReducer from './Reducer/thongKeReducer';
 import { tourlistreducer } from './Reducer/Tourreducer';
 
 const reducer = combineReducers({
@@ -12,6 +15,9 @@ const reducer = combineReducers({
   quanLyVeState: quanLyVeReducer,
   quanLyLoaiVeState: quanLyLoaiVeReducer,
   quanLyLoaiTourState: quanLyLoaiTourReducer,
+  quanLyDonDatVeState: quanLyDonDatVeReducer,
+  quanLyTourState: quanLyTourReducer,
+  thongKeState: thongKeReducer,
   appState: appReducer,
 });
 const initialState = {};
