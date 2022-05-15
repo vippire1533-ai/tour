@@ -204,9 +204,8 @@ INSERT [dbo].[LoaiTour] ([TENLOAI]) VALUES ( N'Du lịch')
 INSERT [dbo].[LoaiTour] ([TENLOAI]) VALUES (N'Thể thao')
 INSERT [dbo].[LoaiTour] ([TENLOAI]) VALUES (N'Giải trí')
 GO
-INSERT [dbo].[LoaiVe] ([TENLOAI]) VALUES (N'Giải Trí')
-INSERT [dbo].[LoaiVe] ([TENLOAI]) VALUES (N'Thể Thao')
-INSERT [dbo].[LoaiVe] ([TENLOAI]) VALUES (N'Tour')
+INSERT [dbo].[LoaiVe] ([TENLOAI]) VALUES (N'Người lớn')
+INSERT [dbo].[LoaiVe] ([TENLOAI]) VALUES (N'Trẻ em')
 GO
 
 INSERT [dbo].[Tour](MALOAI,TENTOUR,GTTOUR,GIATOUR,NOIDUNGTOUR,HINHANH,NGAYDI,DIEMDI,DIEMDEN,NGAYTAO,TINH) VALUES (1, N'ăn tối trên sông Sài Gòn', N'ăn tối thực đơn 5 món, du ngoạn trên sông 3 giờ', 500000, N'Ăn tối, ngắm sông', N'https://tausaigon.com.vn/upload/images/bufftet%20%C4%83n%20t%E1%BB%91i%20tr%C3%AAn%20s%C3%B4ng%20S%C3%A0i%20G%C3%B2n.jpg', CAST(N'2022-04-04T00:00:00.000' AS DateTime), N'quận 1', N'bến nhà rồng, quận 1', CAST(N'2022-04-12T00:00:00.000' AS DateTime), 'hcm')
