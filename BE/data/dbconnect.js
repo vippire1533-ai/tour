@@ -521,6 +521,7 @@ const taoDonDatTour = async (payload) => {
     INSERT INTO DonDatTour(MAKHACHHANG, MATOUR, NGAYDAT, TINHTRANGTHANHTOAN,SOLUONGVEDAT,TONGTIEN,MA_LOAI_VE, TINH_TRANG_DON)
     VALUES(${ maKH }, ${ maTour }, ${ ngayDat }, N'Đã thanh toán', ${ soLuong }, ${ tongTien }, ${ maLoaiVe }, N'Đang xử lý')
     `;
+    console.log(query);
     const result = await pool.request().query(query);
     return result.recordset;
   } catch (error) {

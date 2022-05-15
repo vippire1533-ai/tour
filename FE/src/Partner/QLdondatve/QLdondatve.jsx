@@ -45,7 +45,7 @@ const QLdondatve = () => {
     },
     {
       title: 'Tên Tour',
-      dataIndex: 'LOAI_TOUR',
+      dataIndex: 'TEN_TOUR',
       key: 'TEN_TOUR',
       sorter: (item1, item2) =>
         item1['TEN_TOUR'].localeCompare(item2['TEN_TOUR']),
@@ -69,6 +69,13 @@ const QLdondatve = () => {
         item1['TEN_LOAI_VE'].localeCompare(item2['TEN_LOAI_VE']),
       align: 'center',
       ellipsis: true,
+    },
+    {
+      title: 'Ngày Đặt',
+      dataIndex: 'NGAY_DAT',
+      key: 'NGAY_DAT',
+      align: 'center',
+      render: (value) => moment(value).format('DD-MM-YYYY'),
     },
     {
       title: 'Giá Tour',
@@ -316,7 +323,7 @@ const QLdondatve = () => {
             ),
             width: 1000,
             onOk: () => {
-              if (!ids.length) {
+              if (!ids.length || ids.length < record.SO_LUONG_VE_DAT) {
                 alert('Vui lòng chọn vé để duyệt đơn');
               } else {
                 dispatch(

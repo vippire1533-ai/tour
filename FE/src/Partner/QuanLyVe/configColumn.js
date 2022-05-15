@@ -335,6 +335,11 @@ export const createColumnConfigurations = (
         return (
           <div className={classes.ticket__content__table__actions}>
             <BtnShowInfo />
+            {record.TINHTRANG === 'Đã quá hạn' && (
+              <>
+                <BtnDeleteTicket />
+              </>
+            )}
             {record.TINHTRANG === 'Đã bị hủy' && (
               <>
                 <BtnRevertTicket />
