@@ -489,6 +489,29 @@ const getAllTours = async () => {
   }
 };
 
+// Thống kê
+const layThongTinThongKe = async () => {
+  try {
+    const pool = await sql.connect(config);
+    const query = `
+    SELECT 
+      TRANG_THAI_VE, 
+      MONTH(NGAYCOHIEULUC) as THANG,
+      YEAR(NGAYCOHIEULUC) as NAM,
+      count(MAVE) as SO_LUONG_VE, 
+      count(MAKH) as SO_KHACH_HANG, 
+      sum(GIAVE) as TONG_DOANH_THU 
+    FROM 
+      VeTour 
+    GROUP BY TRANG_THAI_VE, MONTH(NGAYCOHIEULUC), YEAR(NGAYCOHIEULUC)
+    `;
+    console.log(query);
+    const result = await pool.request().query(query);
+    return result.recordset;
+  } catch (error) {
+    throw error;
+  }
+};
 export default {
   GetData,
   GetDatas,
@@ -514,5 +537,6 @@ export default {
   getAllTours,
   findTickerByDonDatTour,
   acceptOrder,
+  layThongTinThongKe,
   sql,
 };

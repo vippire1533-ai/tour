@@ -23,7 +23,7 @@ export const TAG_CONFIG = {
   },
   'Đã bị hủy': {
     title: 'Đã bị hủy',
-    color: 'blue',
+    color: 'yellow',
   },
   'Đã bị xóa': {
     title: 'Đã bị xóa',
@@ -327,7 +327,7 @@ export const createColumnConfigurations = (
         const BtnRevertTicket = () => (
           <ButtonAction
             icon={<GrReturn />}
-            tooltipTitle='Chi tiết vé'
+            tooltipTitle='Khôi phục vé'
             placement='bottom'
             buttonType='primary'
           />

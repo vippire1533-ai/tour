@@ -327,6 +327,18 @@ router.get('/getTicktByDDT', async (req, res) => {
   }
 });
 
+router.get('/thongKe', async (req, res) => {
+  try {
+    const result = await dbconnect.layThongTinThongKe();
+    return res.status(200).send(result);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send(error);
+  }
+});
+
+
+
 const sslServer = https.createServer(
   {
     key: fs.readFileSync('cetificate/key.pem'),
