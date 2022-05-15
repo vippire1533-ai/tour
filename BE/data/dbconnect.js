@@ -512,6 +512,22 @@ const layThongTinThongKe = async () => {
     throw error;
   }
 };
+
+// Đặt tour
+const taoDonDatTour = async (payload) => {
+  try {
+    const pool = await sql.connect(config);
+    const { maKH, maTour, ngayDat, soLuong, tongTien, maLoaiVe } = payload;
+    const query = `
+    INSERT INTO DonDatTour(MAKHACHHANG, MATOUR, NGAYDAT, TINHTRANGTHANHTOAN,SOLUONGVEDAT,TONGTIEN,MA_LOAI_VE, TINH_TRANG_DON)
+    VALUES(${ maKH }, ${ maTour }, ${ ngayDat }, N'Đã thanh toán', ${ soLuong }, ${ tongTien }, ${ maLoaiVe }, N'Đang xử lý')
+    `;
+    const result = await pool.request().query(query);
+    return result.recordset;
+  } catch (error) {
+    throw error;
+  }
+};
 export default {
   GetData,
   GetDatas,
@@ -538,5 +554,6 @@ export default {
   findTickerByDonDatTour,
   acceptOrder,
   layThongTinThongKe,
+  taoDonDatTour,
   sql,
 };
