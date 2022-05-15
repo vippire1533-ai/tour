@@ -9,6 +9,7 @@ import { useParams } from "react-router-dom";
 import Footer from '../Footer';
 import Header from '../Header';
 import classes from "./Payment.module.css";
+import Swal from 'sweetalert2'
 
 function Payment() {
     const label = { inputProps: { 'aria-label': 'Switch demo' } };
@@ -37,6 +38,11 @@ function Payment() {
             maLoaiVe: singleOderproducttour[0].MALOAI
         };
         console.log('dpi dat ve', objApi);
+        Swal.fire({
+            title: 'Đặt vé thành công',
+            icon: 'success',
+            confirmButtonText: 'OK'
+          })
         return async () => {
             try {
                 const result = await axios({
