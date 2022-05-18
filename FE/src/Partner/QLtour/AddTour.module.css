@@ -1,0 +1,68 @@
+.containerAddTour {
+    width: 85%;
+    background-color: rgb(242, 247, 247);
+    position: relative;
+    float: right;
+    min-height: 100vh;
+    padding: 20px 60px;
+  }
+  p{
+    margin:0;
+    min-width: 100px;
+    font-size: 17px;
+    font-weight: 700;
+  }
+  .input{
+    width: 100%;
+    padding: 5px 10px;
+    font-size: 16px;
+    height: 40px;
+  }
+  .rowInput{
+    display: flex;
+    margin-bottom: 20px;
+    min-height: 70px;
+  }
+  .rowInput1{
+    display: flex;
+    margin-bottom: 20px;
+    min-height: 130px;
+  }
+  .colHeader{
+    width: 33.33%;
+    margin: 0 20px;
+  }
+  .col50{
+    width: 50%;
+    margin: 0 20px;
+
+  }
+  .rowItem{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .rowItem1{
+    display: flex;
+    justify-content: space-between;
+  }
+.err{
+  color: red;
+  margin-top: 5px;
+  margin-left: 100px;
+}
+.button{
+  font-size: 20px;
+  width: 150px;
+  height: 50px;
+  color: white;
+  font-weight: 600;
+  background-color: rgb(150, 191, 233);
+  cursor: pointer;
+  float: right;
+  margin: 0 20px;
+}
+.button:hover{
+  background-color: rgb(71, 151, 231);
+
+}

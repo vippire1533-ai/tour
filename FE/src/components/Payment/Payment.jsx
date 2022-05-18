@@ -29,7 +29,6 @@ function Payment() {
   };
   console.log(singleOderproducttour);
   const hanlePayment = () => {
-    let date = new Date();
     let objApi = {
       maKH: '1',
       maTour: singleOderproducttour[0].MATOUR,
