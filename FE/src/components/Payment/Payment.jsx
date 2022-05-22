@@ -10,6 +10,7 @@ import Footer from '../Footer';
 import Header from '../Header';
 import classes from './Payment.module.css';
 import Swal from 'sweetalert2';
+import { useNavigate } from "react-router-dom";
 
 function Payment() {
   const label = { inputProps: { 'aria-label': 'Switch demo' } };
@@ -17,17 +18,20 @@ function Payment() {
   const { id } = useParams();
   const [singleOderproducttour, setSingleOderproducttour] = useState([]);
   const booking = useSelector((state) => state.tourlist.booking);
+  const [nameInput, setNameInput] = useState('');
+  const [data, setData] = useState()
+  const navigate = useNavigate();
+
   useEffect(() => {
     getData(id);
+    setData(JSON.parse(localStorage.getItem("dataUser")));
+
   }, [id]);
   const getData = async (id) => {
     const respone = await axios.get(`/api/products/${id}`).then((res) => {
-      console.log();
       setSingleOderproducttour(res.data);
-      console.log(res.data);
     });
   };
-  console.log(singleOderproducttour);
   const hanlePayment = () => {
     let objApi = {
       maKH: '1',
@@ -36,29 +40,37 @@ function Payment() {
       soLuong: booking.soluongtreem + booking.soluongnguoilon,
       tongTien: booking.price,
       maLoaiVe: booking.maLoaiVe,
+      // email:data.email
     };
-    console.log('dpi dat ve', objApi);
-
-    axios({
-      url: '/api/datTour',
-      method: 'POST',
-      data: objApi,
-    })
-      .then(() => {
-        Swal.fire({
-          title: 'Đặt vé thành công',
-          icon: 'success',
-          confirmButtonText: 'OK',
-        });
-        window.location.href = '/';
-      })
-      .catch((err) => {
-        Swal.fire({
-          title: 'Đặt vé không thành công',
-          icon: 'error',
-          confirmButtonText: 'OK',
-        });
+if (!data){
+  Swal.fire({
+    icon: 'error',
+    title: 'Vui lòng đăng nhập để thực hiện',
+    confirmButtonText: 'OK',
+  })
+}else{
+  axios({
+    url: '/api/datTour',
+    method: 'POST',
+    data: objApi,
+  })
+    .then(() => {
+      Swal.fire({
+        title: 'Đặt vé thành công',
+        icon: 'success',
+        confirmButtonText: 'OK',
       });
+      window.location.href = '/';
+    })
+    .catch((err) => {
+      Swal.fire({
+        title: 'Đặt vé không thành công',
+        icon: 'error',
+        confirmButtonText: 'OK',
+      });
+    });
+}
+
   };
   return (
     <Fragment>
@@ -185,10 +197,9 @@ function Payment() {
                     <div>
                       <div>
                         <p className={classes.label}>Số thẻ tín dụng</p>
-                        <input
-                          className={classes.input}
-                          placeholder='18 chữ số trên mặt thẻ'
-                        />
+                        <NumberFormat format="#### #### #### ####" className={classes.input}
+                          placeholder='16 chữ số trên mặt thẻ' />
+
                       </div>
                       <div
                         style={{
@@ -198,17 +209,12 @@ function Payment() {
                       >
                         <div>
                           <p className={classes.label}>Hiệu lực đến</p>
-                          <input
-                            className={classes.input}
-                            placeholder='MM/YY'
-                          />
+                          <NumberFormat format="##/##" placeholder="MM/YY" mask={['M', 'M', 'Y', 'Y']} className={classes.input} />
                         </div>
                         <div>
                           <p className={classes.label}>CVV</p>
-                          <input
-                            className={classes.input}
-                            placeholder='3 chữ số CVV'
-                          />
+
+                          <NumberFormat className={classes.input} placeholder='3 chữ số CVV' format="###" />
                         </div>
                       </div>
 
@@ -218,6 +224,10 @@ function Payment() {
                           className={classes.input}
                           placeholder='Tên trên thẻ'
                           style={{ marginBottom: '5px' }}
+                          value={nameInput}
+                          onChange={(e) => {
+                            setNameInput((e.target.value).toLocaleUpperCase())
+                          }}
                         />
                       </div>
                     </div>
@@ -358,8 +368,8 @@ function Payment() {
                     <div className={classes.detail}>
                       <span>Áp dụng cho</span>
                       <div style={{ textAlign: 'right' }}>
-                        <p>Người lớn: {booking.soluongnguoilon}</p>
-                        <p>Trẻ nhỏ (từ bé thứ 2): {booking.soluongtreem}</p>
+                        <p style={{ fontSize: "14px" }}>Người lớn: {booking.soluongnguoilon}</p>
+                        <p style={{ fontSize: "14px" }}>Trẻ nhỏ (từ bé thứ 2): {booking.soluongtreem}</p>
                       </div>
                     </div>
                   </div>
