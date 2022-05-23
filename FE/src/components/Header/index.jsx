@@ -58,6 +58,7 @@ const Header = () => {
   console.log(data);
   return (
     <div className='hd-main'>
+      {isLoading && <LoadingSpinner />}
       <div className='hd-wraper'>
         <div className='hd-menu'>
           <div className='hd-left'>
@@ -221,16 +222,13 @@ const Header = () => {
                     </div>
                   </div>
                 </div>
-              <div className="hd-signup">
-                <a
-                  href="/register"
-                  style={{ textDecoration: "none", color: "#fff" }}
-                >
-                  Đăng ký
-                </a>
-              </div>
-            </>)}
-
+                <div className='hd-signup'>
+                  <a href='/register' style={{ textDecoration: 'none', color: '#fff' }}>
+                    Đăng ký
+                  </a>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>
