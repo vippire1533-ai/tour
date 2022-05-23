@@ -648,11 +648,11 @@ const constructEmailTemplate = (info) => {
       <td style="border: 1px solid #ccc; padding: 12px">${ info.TEN_LOAI_VE }</td>
     </tr>
     <tr>
-      <td style="border: 1px solid #ccc; padding: 12px">Tổn Tiền</td>
+      <td style="border: 1px solid #ccc; padding: 12px">Tổng Tiền</td>
       <td style="border: 1px solid #ccc; padding: 12px">${ info.TONG_TIEN }</td>
     </tr>
     <tr>
-      <td style="border: 1px solid #ccc; padding: 12px">Tổn Tiền</td>
+      <td style="border: 1px solid #ccc; padding: 12px">Ngày đặt</td>
       <td style="border: 1px solid #ccc; padding: 12px">${ new Date(info.NGAY_DAT).toLocaleString() }</td>
     </tr>
     <tr>
