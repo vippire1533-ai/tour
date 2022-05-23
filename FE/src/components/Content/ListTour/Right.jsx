@@ -72,7 +72,7 @@ const Right = () => {
         </div>
       </div>
       <div className={classes.danhsach}>
-        {producttour.map(({ MATOUR, TENTOUR, GIATOUR, DIEMDEN, HINHANH, TINH }) => {
+        {producttour.map(({ MATOUR, TENTOUR, GIATOUR, DIEMDEN, TINH, DANH_SACH_LINK_ANH }) => {
           if (TINH == maTinh) {
 
             return <div
@@ -81,7 +81,7 @@ const Right = () => {
               className={classes.items}
             >
               <span className={classes.tag}>Trãi nghiệm mới</span>
-              <img alt="example" src={HINHANH} />
+              <img alt="example" src={DANH_SACH_LINK_ANH[0]} />
 
               <div className={classes.noidung}>
                 <h2>{TENTOUR}</h2>
