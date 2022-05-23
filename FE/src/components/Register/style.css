@@ -2,7 +2,7 @@
   font-family: 'Noto Sans JP', sans-serif;
 }
 .title {
-  background-color: rgba(1,148,243,1.00);
+  background-color: rgba(1, 148, 243, 1);
   width: 100%;
   color: #fff;
   margin: 0px;
@@ -30,7 +30,7 @@
   max-width: 1200px;
   min-height: 650px;
   margin: auto;
-  font-family: 'Noto Sans JP', sans-serif!important;
+  font-family: 'Noto Sans JP', sans-serif !important;
 }
 .content-left {
   width: 32%;
@@ -44,16 +44,15 @@
 }
 .content-endow .content-endow-title {
   font-size: 19px;
-  font-family: 'Noto Sans JP', sans-serif!important;
+  font-family: 'Noto Sans JP', sans-serif !important;
 }
 .content-endow p {
   font-size: 16px;
   /* font-family: 'Noto Sans JP', sans-serif!important; */
-
 }
 .content-endow a {
   text-decoration: none;
-  color: rgba(1,148,243,1.00)!important;
+  color: rgba(1, 148, 243, 1) !important;
 }
 .content-right {
   margin-left: 1%;
@@ -62,8 +61,7 @@
 .form-content {
   width: 34%;
   margin-left: 1%;
-  font-family: 'Noto Sans JP', sans-serif!important;
-
+  font-family: 'Noto Sans JP', sans-serif !important;
 }
 .form-content-submit {
   border-radius: 15px;
@@ -88,7 +86,7 @@
   width: 35%;
   margin-left: 15px;
   font-size: 14px;
-  font-family: 'Noto Sans JP', sans-serif!important;
+  font-family: 'Noto Sans JP', sans-serif !important;
 }
 .input-method button {
   color: rgb(2, 100, 200);
@@ -96,13 +94,13 @@
   cursor: pointer;
   font-size: 15px;
   background: none;
-  font-family: 'Noto Sans JP', sans-serif!important;
+  font-family: 'Noto Sans JP', sans-serif !important;
 }
 .note-input-info {
   margin-left: 15px;
   margin-top: -30px;
-  color: rgba(104,113,118,1.00);
-  font-family: 'Noto Sans JP', sans-serif!important;
+  color: rgba(104, 113, 118, 1);
+  font-family: 'Noto Sans JP', sans-serif !important;
 }
 .input-data-form {
   margin-left: 15px;
@@ -121,7 +119,7 @@
   border: 1px solid rgb(214, 213, 213);
   border-radius: 8px;
   /* padding-left: 25%; */
-  font-family: 'Noto Sans JP', sans-serif!important;
+  font-family: 'Noto Sans JP', sans-serif !important;
   text-align: left;
   -moz-appearance: none;
   -webkit-appearance: none;
@@ -140,28 +138,28 @@
   width: 100%;
 }
 .option-slected:hover {
-  background-color: rgba(66,133,244,1.00);
+  background-color: rgba(66, 133, 244, 1);
   color: #fff;
 }
 .div-phone {
   width: 50%;
   margin-left: 3%;
-  border-bottom-color: rgba(205,208,209,1.00);
-  border-left-color: rgba(205,208,209,1.00);
-  border-right-color: rgba(205,208,209,1.00);
-  border-top-color: rgba(205,208,209,1.00);
+  border-bottom-color: rgba(205, 208, 209, 1);
+  border-left-color: rgba(205, 208, 209, 1);
+  border-right-color: rgba(205, 208, 209, 1);
+  border-top-color: rgba(205, 208, 209, 1);
 }
 .div-phone input {
   border: 1px solid rgb(214, 213, 213);
   border-radius: 8px;
   height: 40px;
   width: 100%;
-  font-family: 'Noto Sans JP', sans-serif!important;
+  font-family: 'Noto Sans JP', sans-serif !important;
   font-size: 17px;
-  border-bottom-color: rgba(205,208,209,1.00);
-  border-left-color: rgba(205,208,209,1.00);
-  border-right-color: rgba(205,208,209,1.00);
-  border-top-color: rgba(205,208,209,1.00);
+  border-bottom-color: rgba(205, 208, 209, 1);
+  border-left-color: rgba(205, 208, 209, 1);
+  border-right-color: rgba(205, 208, 209, 1);
+  border-top-color: rgba(205, 208, 209, 1);
 }
 .div-email {
   width: 70%;
@@ -171,11 +169,11 @@
   border-radius: 8px;
   height: 40px;
   width: 100%;
-  font-family: 'Noto Sans JP', sans-serif!important;
-  border-bottom-color: rgba(205,208,209,1.00);
-  border-left-color: rgba(205,208,209,1.00);
-  border-right-color: rgba(205,208,209,1.00);
-  border-top-color: rgba(205,208,209,1.00);
+  font-family: 'Noto Sans JP', sans-serif !important;
+  border-bottom-color: rgba(205, 208, 209, 1);
+  border-left-color: rgba(205, 208, 209, 1);
+  border-right-color: rgba(205, 208, 209, 1);
+  border-top-color: rgba(205, 208, 209, 1);
   font-size: 17px;
 }
 .div-submit {
@@ -189,31 +187,31 @@
   width: 80%;
   color: #fff;
   background-color: rgb(223, 68, 15);
-  font-family: 'Noto Sans JP', sans-serif!important;
+  font-family: 'Noto Sans JP', sans-serif !important;
   cursor: pointer;
 }
 .note-input-submit {
   margin-left: 15px;
   margin-top: -15px;
-  color: rgba(104,113,118,1.00);
-  font-family: 'Noto Sans JP', sans-serif!important;
+  color: rgba(104, 113, 118, 1);
+  font-family: 'Noto Sans JP', sans-serif !important;
 }
 .note-input-login {
   height: 50px;
   text-align: center;
-  background-color: rgba(236,248,255,1.00);
+  background-color: rgba(236, 248, 255, 1);
   font-size: 15px;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-family: 'Noto Sans JP', sans-serif!important;
+  font-family: 'Noto Sans JP', sans-serif !important;
 }
 .note-input-login a {
   font-weight: 600;
   font-size: 14px;
   text-decoration: none;
   color: rgb(1, 148, 243);
-  font-family: 'Noto Sans JP', sans-serif!important;
+  font-family: 'Noto Sans JP', sans-serif !important;
   cursor: pointer;
 }
 .note-input-policy {
@@ -224,20 +222,20 @@
   padding-top: 20px;
   justify-content: center;
   align-items: center;
-  font-family: 'Noto Sans JP', sans-serif!important;
+  font-family: 'Noto Sans JP', sans-serif !important;
 }
 .note-input-policy a {
   font-size: 14px;
   text-decoration: none;
   color: rgb(1, 148, 243);
-  font-family: 'Noto Sans JP', sans-serif!important;
+  font-family: 'Noto Sans JP', sans-serif !important;
   cursor: pointer;
 }
 .fb {
   margin-top: 20px;
   height: 35px;
   text-align: center;
-  background-color: rgba(59,89,152,1.00);
+  background-color: rgba(59, 89, 152, 1);
   color: #fff;
   border: none;
   border-radius: 8px;
@@ -245,14 +243,14 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  font-family: 'Noto Sans JP', sans-serif!important;
+  font-family: 'Noto Sans JP', sans-serif !important;
   cursor: pointer;
 }
 .gg {
   margin-top: 10px;
   height: 35px;
   text-align: center;
-  background-color: rgba(66,133,244,1.00);
+  background-color: rgba(66, 133, 244, 1);
   color: #fff;
   border: none;
   border-radius: 8px;
@@ -260,19 +258,19 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  font-family: 'Noto Sans JP', sans-serif!important;
+  font-family: 'Noto Sans JP', sans-serif !important;
   cursor: pointer;
 }
 .security {
   margin-top: 10px;
   height: 50px;
   text-align: center;
-  background-color: rgba(255,255,255,1.00);
+  background-color: rgba(255, 255, 255, 1);
   border: none;
   border-radius: 5px;
   font-size: 12px;
   display: flex;
-  font-family: 'Noto Sans JP', sans-serif!important;
+  font-family: 'Noto Sans JP', sans-serif !important;
   box-shadow: 0px 1px 2px rgb(3 18 26 / 20%);
 }
 .security-icon {
@@ -287,21 +285,21 @@
 }
 .security-content a {
   color: rgb(1, 148, 243);
-  font-family: 'Noto Sans JP', sans-serif!important;
+  font-family: 'Noto Sans JP', sans-serif !important;
   cursor: pointer;
 }
 .author {
   margin-top: 10px;
   height: 50px;
   text-align: center;
-  background-color: rgba(255,255,255,1.00);
+  background-color: rgba(255, 255, 255, 1);
   border: none;
   border-radius: 5px;
   font-size: 17px;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-family: 'Noto Sans JP', sans-serif!important;
+  font-family: 'Noto Sans JP', sans-serif !important;
 }
 .message-submit {
   height: 80px;
@@ -313,30 +311,30 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  font-family: 'Noto Sans JP', sans-serif!important;
+  font-family: 'Noto Sans JP', sans-serif !important;
 }
 .div-otp {
   width: 70%;
-  border-bottom-color: rgba(205,208,209,1.00);
-  border-left-color: rgba(205,208,209,1.00);
-  border-right-color: rgba(205,208,209,1.00);
-  border-top-color: rgba(205,208,209,1.00);
+  border-bottom-color: rgba(205, 208, 209, 1);
+  border-left-color: rgba(205, 208, 209, 1);
+  border-right-color: rgba(205, 208, 209, 1);
+  border-top-color: rgba(205, 208, 209, 1);
 }
 .div-otp input {
   border: 1px solid rgb(214, 213, 213);
   border-radius: 8px;
   height: 40px;
   width: 100%;
-  font-family: 'Noto Sans JP', sans-serif!important;
+  font-family: 'Noto Sans JP', sans-serif !important;
   font-size: 17px;
-  border-bottom-color: rgba(205,208,209,1.00);
-  border-left-color: rgba(205,208,209,1.00);
-  border-right-color: rgba(205,208,209,1.00);
-  border-top-color: rgba(205,208,209,1.00);
+  border-bottom-color: rgba(205, 208, 209, 1);
+  border-left-color: rgba(205, 208, 209, 1);
+  border-right-color: rgba(205, 208, 209, 1);
+  border-top-color: rgba(205, 208, 209, 1);
 }
 .note-input-info-message {
   margin-left: 15px;
-  font-family: 'Noto Sans JP', sans-serif!important;
+  font-family: 'Noto Sans JP', sans-serif !important;
 }
 .note-input-submit-message {
   margin-left: 15px;
@@ -348,15 +346,15 @@
   padding-left: 3px;
 }
 .submit-otp {
-  background-color: rgb(242, 243, 243)!important;
-  color: rgb(205, 208, 209)!important;
+  background-color: rgb(242, 243, 243) !important;
+  color: rgb(205, 208, 209) !important;
 }
 .validate {
   color: rgb(249, 41, 41);
   font-size: 12px;
   height: 10px;
 }
-.button-submit{
+.button-submit {
   font-size: 20px;
   width: 140px;
   height: 40px;
@@ -367,17 +365,19 @@
   margin-top: 20px;
   float: right;
 }
-.input{
+.input {
   width: 100%;
   padding: 5px 10px;
   font-size: 16px;
   height: 30px;
 }
-.row{
+.row {
   display: flex;
   margin-top: 10px;
 }
-.button-submit:hover{
+.button-submit:hover {
   background-color: rgb(71, 151, 231);
-
+}
+.row p {
+  min-width: 100px;
 }

@@ -45,9 +45,9 @@ const QuanLyVe = () => {
         .required('Vui lòng nhập giá vé!')
         .typeError('Giá vé phải là số!'),
       NGAYCOHIEULUC: Yup.date()
-        .required('Vui lòng chọn ngày có hiệu lực!')
-        .min(new Date(), `Vui lòng chọn ngày có hiệu lực từ ngày ${new Date().getDate() + 1} trở đi!`)
-        .typeError('Vui lòng chọn ngày có hiệu lực'),
+        .required('Vui lòng chọn ngày đi!')
+        .min(new Date(), `Vui lòng chọn ngày đi từ ngày ${new Date().getDate() + 1} trở đi!`)
+        .typeError('Vui lòng chọn ngày đi'),
     }),
   });
 
@@ -197,11 +197,11 @@ const QuanLyVe = () => {
               </div>
               <div className={styles['form-group']}>
                 <label htmlFor='NGAYCOHIEULUC' className={styles['form-label']}>
-                  Ngày Có Hiệu Lực
+                  Ngày Đi
                 </label>
                 <DatePicker
                   id='NGAYCOHIEULUC'
-                  placeholder='Ngày có hiệu lực'
+                  placeholder='Ngày Đi'
                   className={styles['form-control']}
                   format='DD/MM/YYYY'
                   value={formik.values.NGAYCOHIEULUC}

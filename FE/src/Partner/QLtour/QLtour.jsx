@@ -1,12 +1,12 @@
-import classes from "./QLtour.module.css";
-import { Fragment } from "react";
-import Menutop from "../Menutop";
-import Menuleft from "../Menuleft";
-import React, { useEffect, useState } from "react";
-import { Button, Card, List, message, Select } from "antd";
+import classes from './QLtour.module.css';
+import { Fragment } from 'react';
+import Menutop from '../Menutop';
+import Menuleft from '../Menuleft';
+import React, { useEffect, useState } from 'react';
+import { Button, Card, List, message, Select } from 'antd';
 
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const QLtour = () => {
   const [productList, setProductList] = useState([]);
@@ -35,29 +35,29 @@ const QLtour = () => {
     getAlldate();
   }, []);
   const getAlldate = async () => {
-    const respone = await axios.get("/api/products").then((res) => {
+    const respone = await axios.get('/api/products').then((res) => {
       setProductList(res.data);
       console.log(res.data);
     });
   };
-  console.log("data =>", productList);
+  console.log('data =>', productList);
 
-  const onDelete = async (MATOUR) =>{
-    if(window.confirm("Are you sure that wanted to delete this ")) {
-      const respone =await axios.delete(`/api/products/${MATOUR}`).then((res) =>{
+  const onDelete = async (MATOUR) => {
+    if (window.confirm('Are you sure that wanted to delete this ')) {
+      const respone = await axios.delete(`/api/products/${MATOUR}`).then((res) => {
         console.log(res.data);
-        console.log("Delete success");
+        console.log('Delete success');
         getAlldate();
-      },[])
+      }, []);
     }
-  }
+  };
   return (
     <Fragment>
       <Menutop />
       <Menuleft />
       <div className={classes.dstour}>
-      <div className={classes.btnthem}>
-          <button onClick={() => navigate("/admin/tour/them")}>Tạo tour</button>
+        <div className={classes.btnthem}>
+          <button onClick={() => navigate('/admin/tour/them')}>Tạo tour</button>
         </div>
         <table className={classes.table}>
           <tr>
@@ -84,23 +84,23 @@ const QLtour = () => {
 
                 <div className={classes.element}>{item.GIATOUR} VND</div>
 
-                <img
+                {/* <img
                   className={classes.hinhanh}
                   alt="example"
                   src={item.HINHANH}
-                />
+                /> */}
                 <div className={classes.element}>{item.NGAYDI}</div>
                 <div className={classes.element}>{item.DIEMDI}</div>
                 <div className={classes.element}>{item.DIEMDEN}</div>
                 <div className={classes.option}>
                   <div className={classes.xoa}>
-                    <img src="https://cdn.iconscout.com/icon/premium/png-256-thumb/delete-1432400-1211078.png" onClick={()=> onDelete(item.MATOUR)}/>
+                    <img
+                      src='https://cdn.iconscout.com/icon/premium/png-256-thumb/delete-1432400-1211078.png'
+                      onClick={() => onDelete(item.MATOUR)}
+                    />
                   </div>
-                  <div
-                    className={classes.sua}
-                    onClick={() => navigate("/admin/tour/" + item.MATOUR)}
-                  >
-                    <img src="https://banner2.cleanpng.com/20180417/eeq/kisspng-computer-icons-editing-icon-design-random-icons-5ad5ac7df28c06.7497951515239527659935.jpg" />
+                  <div className={classes.sua} onClick={() => navigate('/admin/tour/' + item.MATOUR)}>
+                    <img src='https://banner2.cleanpng.com/20180417/eeq/kisspng-computer-icons-editing-icon-design-random-icons-5ad5ac7df28c06.7497951515239527659935.jpg' />
                   </div>
                 </div>
               </div>

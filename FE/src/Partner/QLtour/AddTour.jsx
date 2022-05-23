@@ -89,8 +89,6 @@ const AddTour = () => {
     onSubmit: async (values, { resetForm }) => {
       const payload = new FormData();
       fileList.forEach((file) => {
-        console.log(file.name);
-        console.log(file.originFileObj);
         payload.append('images', file.originFileObj);
       });
       payload.append('tourInfo', JSON.stringify({ ...values, ngayDi: values.ngayDi._d }));
