@@ -196,7 +196,9 @@ const Header = () => {
                   className="hd-icon-ddl"
                 />
                 <div className="hd-login-sub dropdown-list">
-                  {/* <div className="item-login">Chỉnh sửa hồ sơ</div> */}
+                  <div className="item-login" onClick={()=>{
+                    navigate('/user/account')
+                  }}>Chỉnh sửa hồ sơ</div>
                   <div className="item-login" onClick={() => {
                     Swal.fire({
                       icon: 'question',

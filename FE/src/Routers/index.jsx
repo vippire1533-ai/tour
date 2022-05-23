@@ -56,7 +56,7 @@ const Routers = () => {
           <Route exact path='/san-choi' element={<PagePlayground />} />
           <Route exact path='/activities' element={<Tour />} />
           <Route exact path='/payment/:id' element={<Payment />} />
-          <Route exact path='/list' element={<DStour />} />
+          <Route exact path='/list/:maTinh' element={<DStour />} />
           <Route exact path='/' element={<Home />} />
           <Route exact path='/order/:id' element={<Order />} />
           <Route exact path='/user/account' element={<UserAccount />} />
