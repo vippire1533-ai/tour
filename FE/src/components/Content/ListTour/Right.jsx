@@ -1,6 +1,6 @@
-import classes from "./Right.module.css";
-import React, { useEffect, useState } from "react";
-import { Button, Card, List, message, Select } from "antd";
+import classes from './Right.module.css';
+import React, { useEffect, useState } from 'react';
+import { Button, Card, List, message, Select } from 'antd';
 
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
@@ -20,13 +20,18 @@ const Right = () => {
     getDatas();
   }, []);
   const getDatas = async () => {
-    const respone = await axios.get("/api/products").then((res) => {
-      setProducttour(res.data);
-      console.log(res.data);
+    const respone = await axios.get('/api/products').then((res) => {
+      const tours = res.data.map((tour) => ({
+        ...tour,
+        DANH_SACH_LINK_ANH: tour.DANH_SACH_ANH.map(
+          (idAnh) => `${process.env.BACKEND_URL || 'https://localhost:8000'}/api/tour/images/${idAnh}`,
+        ),
+      }));
+      setProducttour(tours);
     });
 
   };
-  console.log("data =>", producttour);
+  console.log('data =>', producttour);
 
   const [checked, setChecked] = useState();
   const handleSubmit = () => {
@@ -35,13 +40,13 @@ const Right = () => {
 
   const dataprice = [
     {
-      price: "0 - 1.000.000",
+      price: '0 - 1.000.000',
     },
     {
-      price: "1.000.000 - 4.000.000",
+      price: '1.000.000 - 4.000.000',
     },
     {
-      price: "4.000.000+",
+      price: '4.000.000+',
     },
   ];
   return (
@@ -60,8 +65,8 @@ const Right = () => {
           <button className={classes.xeptheo}>
             Phổ biến nhất
             <img
-              src="https://d1785e74lyxkqq.cloudfront.net/_next/static/v2/8/8537ce8fe832f4d73d28a686595accec.svg"
-              alt="null"
+              src='https://d1785e74lyxkqq.cloudfront.net/_next/static/v2/8/8537ce8fe832f4d73d28a686595accec.svg'
+              alt='null'
             />
           </button>
         </div>
