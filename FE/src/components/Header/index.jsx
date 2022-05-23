@@ -221,8 +221,16 @@ const Header = () => {
                     </div>
                   </div>
                 </div>
-              </>
-            )}
+              <div className="hd-signup">
+                <a
+                  href="/register"
+                  style={{ textDecoration: "none", color: "#fff" }}
+                >
+                  Đăng ký
+                </a>
+              </div>
+            </>)}
+
           </div>
         </div>
       </div>
