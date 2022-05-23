@@ -38,24 +38,15 @@ const QuanLyVe = () => {
       NGAYCOHIEULUC: '',
     },
     validationSchema: Yup.object({
-      MATOUR: Yup.string()
-        .required('Loại Tour không được để trống!')
-        .typeError('Loại Tour không được để trống!'),
-      LOAIVE: Yup.string()
-        .required('Loại Vé không được để trống!')
-        .typeError('Loại Vé không được để trống!'),
+      MATOUR: Yup.string().required('Loại Tour không được để trống!').typeError('Loại Tour không được để trống!'),
+      LOAIVE: Yup.string().required('Loại Vé không được để trống!').typeError('Loại Vé không được để trống!'),
       GIAVE: Yup.number()
         .moreThan(-1, 'Giá vé phải lớn hơn hoặc bằng 0')
         .required('Vui lòng nhập giá vé!')
         .typeError('Giá vé phải là số!'),
       NGAYCOHIEULUC: Yup.date()
         .required('Vui lòng chọn ngày có hiệu lực!')
-        .min(
-          new Date(),
-          `Vui lòng chọn ngày có hiệu lực từ ngày ${
-            new Date().getDate() + 1
-          } trở đi!`,
-        )
+        .min(new Date(), `Vui lòng chọn ngày có hiệu lực từ ngày ${new Date().getDate() + 1} trở đi!`)
         .typeError('Vui lòng chọn ngày có hiệu lực'),
     }),
   });
@@ -95,11 +86,7 @@ const QuanLyVe = () => {
         NGAYTAO: formik.values.NGAYTAO,
         MAVE: formik.values.MAVE,
       };
-      dispatch(
-        isUpdateTicket
-          ? quanLyVeActions.updateTicket(updatePayload)
-          : quanLyVeActions.createTicket(payload),
-      );
+      dispatch(isUpdateTicket ? quanLyVeActions.updateTicket(updatePayload) : quanLyVeActions.createTicket(payload));
       formik.resetForm();
       setsIUpdateTicket(false);
       setIsModalVisible(false);
@@ -119,21 +106,13 @@ const QuanLyVe = () => {
   }, []);
 
   useEffect(() => {
-    setColumnConfigurations(
-      createColumnConfigurations(tickets, dispatch, showUpdateModal, formik),
-    );
+    setColumnConfigurations(createColumnConfigurations(tickets, dispatch, showUpdateModal, formik));
   }, [tickets]);
 
   return (
     <>
       {isLoading && <LoadingSpinner />}
-      {isShowModal && (
-        <AlertPopup
-          title='Thành Công'
-          message='Thao tác thành công'
-          type='success'
-        />
-      )}
+      {isShowModal && <AlertPopup title='Thành Công' message='Thao tác thành công' type='success' />}
       <Menutop />
       <Menuleft />
       <div className={styles.ticket__wrapper}>
@@ -149,9 +128,7 @@ const QuanLyVe = () => {
               buttonSize='large'
               handleClick={handleCreateNewTicket}
             >
-              <span className={styles.ticket__content__new__content}>
-                Tạo Vé
-              </span>
+              <span className={styles.ticket__content__new__content}>Tạo Vé</span>
             </ButtonAction>
           </div>
           <Table
@@ -190,10 +167,7 @@ const QuanLyVe = () => {
                   ))}
                 </Select>
                 {formik.touched.MATOUR && formik.errors.MATOUR ? (
-                  <Typography.Text
-                    type='danger'
-                    className={styles['error-message']}
-                  >
+                  <Typography.Text type='danger' className={styles['error-message']}>
                     {formik.errors.MATOUR}
                   </Typography.Text>
                 ) : null}
@@ -216,10 +190,7 @@ const QuanLyVe = () => {
                   ))}
                 </Select>
                 {formik.touched.LOAIVE && formik.errors.LOAIVE ? (
-                  <Typography.Text
-                    type='danger'
-                    className={styles['error-message']}
-                  >
+                  <Typography.Text type='danger' className={styles['error-message']}>
                     {formik.errors.LOAIVE}
                   </Typography.Text>
                 ) : null}
@@ -234,15 +205,11 @@ const QuanLyVe = () => {
                   className={styles['form-control']}
                   format='DD/MM/YYYY'
                   value={formik.values.NGAYCOHIEULUC}
-                  onChange={(value) =>
-                    formik.setFieldValue('NGAYCOHIEULUC', value)
-                  }
+                  onChange={(value) => formik.setFieldValue('NGAYCOHIEULUC', value)}
+                  onBlur={formik.handleBlur}
                 />
                 {formik.touched.NGAYCOHIEULUC && formik.errors.NGAYCOHIEULUC ? (
-                  <Typography.Text
-                    type='danger'
-                    className={styles['error-message']}
-                  >
+                  <Typography.Text type='danger' className={styles['error-message']}>
                     {formik.errors.NGAYCOHIEULUC}
                   </Typography.Text>
                 ) : null}
@@ -259,10 +226,7 @@ const QuanLyVe = () => {
                   {...formik.getFieldProps('GIAVE')}
                 />
                 {formik.touched.GIAVE && formik.errors.GIAVE ? (
-                  <Typography.Text
-                    type='danger'
-                    className={styles['error-message']}
-                  >
+                  <Typography.Text type='danger' className={styles['error-message']}>
                     {formik.errors.GIAVE}
                   </Typography.Text>
                 ) : null}

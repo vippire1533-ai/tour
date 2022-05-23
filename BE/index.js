@@ -5,7 +5,7 @@ import fs from 'fs';
 import https from 'https';
 import dbconnect from './data/dbconnect.js';
 import router from './routes/route.js';
-
+import uploadFiles from './data/uploadFiles';
 // app.use("/",TourRoutes);
 const app = express();
 
@@ -23,21 +23,44 @@ router.use((request, response, next) => {
 
 router.route('/products').get((request, response) => {
   dbconnect.GetDatas().then((result) => {
-    response.send(result[0]);
+    response.send(result);
   });
 });
 router.route('/products/:id').get((request, response) => {
-  dbconnect.GetData(request.params.id).then((result) => {
-    response.send(result[0]);
-  });
+  dbconnect
+    .GetData(request.params.id)
+    .then((result) => {
+      if (result.length) {
+        return response.status(200).send(result);
+      } else {
+        return response.status(404).send('Không tìm thấy liệu');
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      return response.status(500).send(err);
+    });
 });
-router.route('/products').post((request, response) => {
-  let Category = { ...request.body };
-
-  dbconnect.addTour(Category).then((result) => {
-    response.status(201).send(result);
-  });
-});
+router.route('/products').post(
+  uploadFiles.fields([
+    {
+      name: 'images',
+      maxCount: 10,
+    },
+  ]),
+  async (request, response) => {
+    const tourInfo = JSON.parse(request.body.tourInfo);
+    try {
+      const newTourRecord = await dbconnect.addTour(tourInfo);
+      const [newTour] = newTourRecord;
+      const imageRecord = await dbconnect.uploadTourImages(request.files.images, newTour.MA_TOUR);
+      return response.status(201).send({ newTourRecord, imageRecord });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).send(error);
+    }
+  },
+);
 router.route('/products/:id').put((request, response) => {
   let eventid = request.params.id;
   let data = request.body[0];
@@ -127,11 +150,7 @@ router
   .put(async (req, res) => {
     try {
       const id = req.params.id;
-      const resutl = await dbconnect.acceptOrder(
-        id,
-        req.body.maKH,
-        req.body.danhSachCacVe,
-      );
+      const resutl = await dbconnect.acceptOrder(id, req.body.maKH, req.body.danhSachCacVe);
       res.status(200).send(resutl);
     } catch (error) {
       console.log(error);
@@ -314,12 +333,7 @@ router.route('/tours').get(async (req, res) => {
 router.get('/getTicktByDDT', async (req, res) => {
   try {
     const { maTour, maLoaiVe, ngayDat, soLuong } = req.query;
-    const result = await dbconnect.findTickerByDonDatTour(
-      maTour,
-      maLoaiVe,
-      ngayDat,
-      soLuong,
-    );
+    const result = await dbconnect.findTickerByDonDatTour(maTour, maLoaiVe, ngayDat, soLuong);
     res.status(200).send(result);
   } catch (error) {
     console.log(error);
@@ -344,6 +358,21 @@ router.post('/datTour', async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).send(error);
+  }
+});
+
+router.get('/tour/images/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+    const [imageRecord] = await dbconnect.getTourIimage(id);
+    if (imageRecord) {
+      return res.header('Content-Type', 'image/jpeg').status(200).send(imageRecord.HINH_ANH_DATA);
+    } else {
+      return res.status(404).send('Không tìm thấy dữ liệu');
+    }
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send(error);
   }
 });
 

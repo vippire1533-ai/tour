@@ -90,7 +90,7 @@ function Apply({
                   displayType={'text'}
                   thousandsGroupStyle='thousand'
                   value={GIATOUR}
-                />{' '}
+                />
                 VND
               </p>
             </Box>

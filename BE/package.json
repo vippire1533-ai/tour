@@ -29,6 +29,8 @@
     "mongoose": "^6.2.9",
     "morgan": "^1.10.0",
     "mssql": "^8.0.2",
+    "multer": "^1.4.4",
+    "nodemailer": "^6.7.5",
     "nodemon": "^2.0.15",
     "openssl": "^2.0.0"
   },

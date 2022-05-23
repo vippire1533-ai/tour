@@ -4,16 +4,16 @@
   font-family: Arial, Helvetica, sans-serif;
   margin-top: 20px;
 }
-.hinhanh{
+.hinhanh {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 25%);
   border-radius: 14px;
-padding: 16px;
+  padding: 16px;
 }
-.title{
+.title {
   font-size: 24px;
   margin: 0;
 }
-.diemden{
+.diemden {
   margin: 16px 0;
   font-size: 12px;
   color: rgba(104, 113, 118, 1);
@@ -22,32 +22,49 @@ padding: 16px;
   width: 12px;
   margin-right: 5px;
 }
-.content{
+.content {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-.anh img{
+
+.content img {
+  object-fit: cover;
+}
+
+.anh img {
   height: 512px;
   border-radius: 8px;
   width: 768px;
+  object-fit: cover;
 }
-.anhnho{
+
+.anh img:hover{
+  cursor: pointer;
+}
+
+.anhnho {
   text-align: right;
+  cursor: pointer;
 }
+
+.anhnho img:hover{
+  border: 2px solid rgba(0, 0, 255, 0.5);
+}
+
 .anhnho img {
   border-radius: 6px;
   margin-bottom: 5px;
   height: 122px;
   width: 148px;
 }
-.danhgia h2 { 
-  color: rgba(3,18,26,1.00);
+.danhgia h2 {
+  color: rgba(3, 18, 26, 1);
   font-size: 20px;
   line-height: 28px;
   font-weight: 700;
 }
-.danhgia p{
+.danhgia p {
   line-height: 24px;
   font-size: 16px;
   font-weight: 500;
@@ -62,7 +79,7 @@ padding: 16px;
   width: 24px;
   margin-right: 5px;
 }
-.timtour{
+.timtour {
   margin-top: 16px;
   margin-bottom: 20px;
 }
@@ -87,18 +104,24 @@ padding: 16px;
   padding-left: 0px;
   margin: 5px 0;
 }
-.timtour p{
+.timtour p {
   line-height: 24px;
   font-size: 16px;
   font-weight: 500;
   margin: 0;
 }
-.footer img{
+.footer img {
   width: 80px;
   height: 80px;
   border-radius: 5px;
 }
-.footer p{
+.footer p {
   margin: 5px 0;
   font-weight: 700;
+}
+
+.giaTour {
+  font-size: 32px;
+  font-weight: bold;
+  margin-right: 40px;
 }

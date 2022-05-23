@@ -4,58 +4,112 @@ import config from './dbconfig.js';
 // ĐẶT TOUR
 async function GetDatas() {
   try {
-    let pool = await sql.connect(config);
-    let products = await pool
-      .request()
-      .query(
-        'select MATOUR,lt.TENLOAI,TENTOUR,GTTOUR,GIATOUR,NOIDUNGTOUR,HINHANH,NGAYDI,DIEMDI,DIEMDEN,NGAYTAO  from Tour t,LoaiTour lt  where t.MALOAI=lt.MALOAI',
-      );
-    return products.recordsets;
+    const pool = await sql.connect(config);
+    const queryString = `SELECT  
+          MATOUR,
+          lt.TENLOAI,
+          TENTOUR,
+          GTTOUR,
+          GIATOUR,
+          NOIDUNGTOUR,
+          HINHANH,
+          NGAYDI,
+          DIEMDI,
+          DIEMDEN,
+          NGAYTAO,
+          T_HA.MA_HINH_ANH 
+    FROM  Tour t LEFT JOIN 
+          LoaiTour lt ON t.MALOAI = lt.MALOAI 
+          LEFT JOIN Tour_HinhAnh T_HA ON t.MATOUR = T_HA.MA_TOUR`;
+    const request = await pool.request().query(queryString);
+    const tourRecords = request.recordset;
+    const tours = tourRecords.reduce((acc, tour) => {
+      const tourItem = acc.find((item) => item.MATOUR === tour.MATOUR);
+      if (tourItem) {
+        tourItem.DANH_SACH_ANH.push(tour.MA_HINH_ANH);
+      } else {
+        acc.push({
+          ...tour,
+          DANH_SACH_ANH: [tour.MA_HINH_ANH],
+        });
+      }
+      return acc;
+    }, []);
+    return tours;
   } catch (error) {
-    console.log(error);
+    throw error;
   }
 }
 
-async function GetData(CategoryMATOUR) {
+async function GetData(maTour) {
   try {
-    let pool = await sql.connect(config);
-    let product = await pool
-      .request()
-      .input('MATOUR', sql.Int, CategoryMATOUR)
-      .query('SELECT * FROM Tour where MATOUR = @MATOUR');
-    return product.recordsets;
+    const pool = await sql.connect(config);
+    const queryString = `
+    SELECT  
+      MATOUR,
+      lt.TENLOAI,
+      TENTOUR,
+      GTTOUR,
+      GIATOUR,
+      NOIDUNGTOUR,
+      HINHANH,
+      NGAYDI,
+      DIEMDI,
+      DIEMDEN,
+      NGAYTAO,
+      T_HA.MA_HINH_ANH 
+    FROM  
+      Tour t LEFT JOIN 
+      LoaiTour lt ON t.MALOAI = lt.MALOAI 
+      LEFT JOIN Tour_HinhAnh T_HA ON t.MATOUR = T_HA.MA_TOUR
+    WHERE t.MATOUR = @MA_TOUR
+    `;
+    const request = await pool.request().input('MA_TOUR', sql.Int, maTour).query(queryString);
+    const tourRecords = request.recordset;
+    const tour = tourRecords.reduce((acc, tour) => {
+      const tourItem = acc.find((item) => item.MATOUR === tour.MATOUR);
+      if (tourItem) {
+        tourItem.DANH_SACH_ANH.push(tour.MA_HINH_ANH);
+      } else {
+        acc.push({
+          ...tour,
+          DANH_SACH_ANH: [tour.MA_HINH_ANH],
+        });
+      }
+      return acc;
+    }, []);
+    return tour;
   } catch (error) {
     console.log(error);
+    throw error;
   }
 }
-async function addTour(Category) {
+
+async function addTour(tourInfo) {
   try {
     let pool = await sql.connect(config);
-    let insertproduct = await pool
+    let request = await pool
       .request()
-      .input('MALOAI', sql.Int, Category.MALOAI)
-      .input('TENTOUR', sql.NVarChar, Category.TENTOUR)
-      .input('GTTOUR', sql.NVarChar, Category.GTTOUR)
-      .input('GIATOUR', sql.Int, Category.GIATOUR)
-      .input('NOIDUNGTOUR', sql.NVarChar, Category.NOIDUNGTOUR)
-      .input('HINHANH', sql.NVarChar, Category.HINHANH)
-      .input('NGAYDI', sql.DateTime, Category.NGAYDI)
-      .input('DIEMDI', sql.NVarChar, Category.DIEMDI)
-      .input('DIEMDEN', sql.NVarChar, Category.DIEMDEN)
-      .input('NGAYTAO', sql.DateTime, Category.NGAYTAO)
+      .input('MALOAI', sql.Int, tourInfo.loaiTour)
+      .input('TENTOUR', sql.NVarChar, tourInfo.tenTour)
+      .input('GTTOUR', sql.NVarChar, tourInfo.gioiThieuTour)
+      .input('GIATOUR', sql.Int, +tourInfo.giaTour)
+      .input('NOIDUNGTOUR', sql.NVarChar, tourInfo.noiDungTour)
+      .input('HINHANH', sql.NVarChar, null)
+      .input('NGAYDI', sql.DateTime, new Date(tourInfo.ngayDi))
+      .input('DIEMDI', sql.NVarChar, tourInfo.diemDi)
+      .input('DIEMDEN', sql.NVarChar, tourInfo.diemDen)
+      .input('NGAYTAO', sql.DateTime, new Date())
       .execute('InsertTour');
-    return insertproduct.recordsets;
+    return request.recordset;
   } catch (err) {
-    console.log(err);
+    throw err;
   }
 }
 async function deleteTour(CategoryMATOUR) {
   try {
     let pool = await sql.connect(config);
-    let deleteTour = await pool
-      .request()
-      .input('MATOUR', sql.Int, CategoryMATOUR)
-      .execute('DeleteTour');
+    let deleteTour = await pool.request().input('MATOUR', sql.Int, CategoryMATOUR).execute('DeleteTour');
     return deleteTour.recordsets;
   } catch (error) {
     console.log(error);
@@ -81,6 +135,7 @@ async function updateTour(CategoryMATOUR, Category) {
     return updateproduct.recordsets;
   } catch (error) {
     console.log(error);
+    throw error;
   }
 }
 
@@ -383,10 +438,7 @@ const acceptOrder = async (maDonDat, maKH, danhSachCacVe) => {
       MA_DON_DAT = ${ maDonDat }
     WHERE 
       MAVE IN (${ danhSachCacVe.join(',') })`;
-    const result = await Promise.all([
-      pool.request().query(query1),
-      pool.request().query(query2),
-    ]);
+    const result = await Promise.all([pool.request().query(query1), pool.request().query(query2)]);
     return result;
   } catch (error) {
     throw error;
@@ -407,10 +459,7 @@ const getAllTicketTypes = async () => {
 const createTicketType = async (payload) => {
   try {
     const pool = await sql.connect(config);
-    const data = await pool
-      .request()
-      .input('TENLOAI', sql.NVarChar, payload.TENLOAI)
-      .execute('InsertLoaiVe');
+    const data = await pool.request().input('TENLOAI', sql.NVarChar, payload.TENLOAI).execute('InsertLoaiVe');
     return data.recordset;
   } catch (error) {
     throw error;
@@ -521,9 +570,38 @@ const taoDonDatTour = async (payload) => {
     INSERT INTO DonDatTour(MAKHACHHANG, MATOUR, NGAYDAT, TINHTRANGTHANHTOAN,SOLUONGVEDAT,TONGTIEN,MA_LOAI_VE, TINH_TRANG_DON)
     VALUES(${ maKH }, ${ maTour }, ${ ngayDat }, N'Đã thanh toán', ${ soLuong }, ${ tongTien }, ${ maLoaiVe }, N'Đang xử lý')
     `;
-    console.log(query);
     const result = await pool.request().query(query);
     return result.recordset;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const uploadTourImages = async (files, maTour) => {
+  try {
+    const pool = await sql.connect(config);
+    const request = pool.request().input('maTour', sql.Int, maTour);
+    files.forEach((file, index) => {
+      request.input(`fileName_${ index }`, sql.NVarChar, file.originalname);
+      request.input(`fileSrc_${ index }`, sql.VarBinary, file.buffer);
+    });
+    const paramsList = files.map((_, index) => {
+      return `(@fileName_${ index }, @fileSrc_${ index }, @maTour)`;
+    });
+    const queryString = `INSERT INTO Tour_HinhAnh(TEN_HINH_ANH, HINH_ANH_DATA, MA_TOUR) VALUES ${ paramsList.join(',') }`;
+    const rs = await request.query(queryString);
+    return rs.recordset;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const getTourIimage = async (maHinhAnh) => {
+  try {
+    const pool = await sql.connect(config);
+    const queryString = `SELECT * FROM Tour_HinhAnh WHERE MA_HINH_ANH = @maHinhAnh`;
+    const request = await pool.request().input('maHinhAnh', sql.Int, maHinhAnh).query(queryString);
+    return request.recordset;
   } catch (error) {
     throw error;
   }
@@ -555,5 +633,7 @@ export default {
   acceptOrder,
   layThongTinThongKe,
   taoDonDatTour,
+  uploadTourImages,
+  getTourIimage,
   sql,
 };
