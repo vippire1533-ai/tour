@@ -104,13 +104,6 @@ export const createColumnConfigurations = (
       align: 'center',
     },
     {
-      title: 'Khách Hàng',
-      dataIndex: 'HOTEN',
-      key: 'HOTEN',
-      ellipsis: true,
-      align: 'center',
-    },
-    {
       title: 'Giá Vé',
       dataIndex: 'GIAVE',
       key: 'GIAVE',
@@ -135,7 +128,7 @@ export const createColumnConfigurations = (
         new Date(item2['NGAYTAO']).getTime(),
     },
     {
-      title: 'Hiệu Lực Tới Ngày',
+      title: 'Ngày Đi',
       dataIndex: 'NGAYCOHIEULUC',
       key: 'NGAYCOHIEULUC',
       render: (value) => moment(value).format('DD-MM-YYYY'),
@@ -233,10 +226,6 @@ export const createColumnConfigurations = (
               dataIndex: 'LOAIVE',
             },
             {
-              name: 'Khách hàng',
-              dataIndex: 'HOTEN',
-            },
-            {
               name: 'Giá vé',
               dataIndex: 'GIAVE',
             },
@@ -246,7 +235,7 @@ export const createColumnConfigurations = (
               isDateTime: true,
             },
             {
-              name: 'Hiệu lực tới ngày',
+              name: 'Ngày Đi',
               dataIndex: 'NGAYCOHIEULUC',
               isDateTime: true,
             },

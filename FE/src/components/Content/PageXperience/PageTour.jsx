@@ -13,7 +13,6 @@ const PageTour = (props) => {
     <Fragment>
       <Header />
       <div className={classes.container}>
-        <h1>Tour</h1>
         <Search status='0' />
         <div className={classes.location}>
           <h3>Điểm đến địa phương</h3>

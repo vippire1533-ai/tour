@@ -1,0 +1,84 @@
+.clearfix::after,
+.clearfix::before {
+  clear: both;
+}
+
+.wrapper {
+  width: 85%;
+  background-color: rgb(242, 247, 247);
+  position: relative;
+  float: right;
+  overflow-y: scroll;
+  padding: 0px 80px;
+}
+
+.content {
+  padding-top: 18px;
+}
+
+.title {
+  text-transform: uppercase;
+  font-size: 36px;
+}
+
+.form {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.form-group {
+  padding: 12px;
+}
+
+.form-control {
+  display: block;
+  width: 100%;
+}
+
+.form-label {
+  display: inline-block;
+  font-size: 14px;
+  padding-bottom: 12px;
+  font-weight: bold;
+}
+
+.form-side-left {
+  width: 60%;
+}
+
+.form-side-right {
+  width: 40%;
+  padding-left: 12px;
+}
+
+.form-actions {
+  padding: 16px 0;
+}
+
+.center-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.align-two-side {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.side {
+  width: 48%;
+}
+
+.center-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.error-message {
+  display: inline-block;
+  padding-top: 8px;
+}

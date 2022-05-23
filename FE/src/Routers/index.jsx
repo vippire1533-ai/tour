@@ -20,6 +20,7 @@ import Login from '../Partner/login';
 import Manage from '../Partner/Manage';
 import QLdondatve from '../Partner/QLdondatve/QLdondatve';
 import QLloaitour from '../Partner/QLloaitour/QLloaitour';
+import AddTour from '../Partner/QLtour/AddTour';
 import QLtour from '../Partner/QLtour/QLtour';
 import SuaTour from '../Partner/QLtour/SuaTour';
 import ThemTour from '../Partner/QLtour/ThemTour';
@@ -55,7 +56,7 @@ const Routers = () => {
           <Route exact path='/san-choi' element={<PagePlayground />} />
           <Route exact path='/activities' element={<Tour />} />
           <Route exact path='/payment/:id' element={<Payment />} />
-          <Route exact path='/list' element={<DStour />} />
+          <Route exact path='/list/:maTinh' element={<DStour />} />
           <Route exact path='/' element={<Home />} />
           <Route exact path='/order/:id' element={<Order />} />
           <Route exact path='/user/account' element={<UserAccount />} />
@@ -74,7 +75,7 @@ const Routers = () => {
           <Route exact path='/admin/register' element={<Register />} />
           <Route exact path='/admin/thongke' element={<Manage />} />
           <Route exact path='/admin/tour' element={<QLtour />} />
-          <Route exact path='/admin/tour/them' element={<ThemTour />} />
+          <Route exact path='/admin/tour/them' element={<AddTour />} />
           <Route exact path='/admin/tour/:id' element={<SuaTour />} />
           <Route exact path='/admin/loaitour' element={<QLloaitour />} />
           <Route exact path='/admin/dondattour' element={<QLdondatve />} />

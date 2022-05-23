@@ -1,61 +1,119 @@
 import sql from 'mssql/msnodesqlv8';
 import config from './dbconfig.js';
+import sendMail from './sendMail';
 
 // ĐẶT TOUR
 async function GetDatas() {
   try {
-    let pool = await sql.connect(config);
-    let products = await pool
-      .request()
-      .query(
-        'select MATOUR,lt.TENLOAI,TENTOUR,GTTOUR,GIATOUR,NOIDUNGTOUR,HINHANH,NGAYDI,DIEMDI,DIEMDEN,NGAYTAO  from Tour t,LoaiTour lt  where t.MALOAI=lt.MALOAI',
-      );
-    return products.recordsets;
+    const pool = await sql.connect(config);
+    const queryString = `SELECT  
+          MATOUR,
+          lt.TENLOAI,
+          TENTOUR,
+          GTTOUR,
+          GIATOUR,
+          NOIDUNGTOUR,
+          HINHANH,
+          NGAYDI,
+          DIEMDI,
+          DIEMDEN,
+          NGAYTAO,
+          T_HA.MA_HINH_ANH,
+          TINH
+    FROM  Tour t LEFT JOIN 
+          LoaiTour lt ON t.MALOAI = lt.MALOAI 
+          LEFT JOIN Tour_HinhAnh T_HA ON t.MATOUR = T_HA.MA_TOUR`;
+    const request = await pool.request().query(queryString);
+    const tourRecords = request.recordset;
+    const tours = tourRecords.reduce((acc, tour) => {
+      const tourItem = acc.find((item) => item.MATOUR === tour.MATOUR);
+      if (tourItem) {
+        tourItem.DANH_SACH_ANH.push(tour.MA_HINH_ANH);
+      } else {
+        acc.push({
+          ...tour,
+          DANH_SACH_ANH: [tour.MA_HINH_ANH],
+        });
+      }
+      return acc;
+    }, []);
+    return tours;
   } catch (error) {
-    console.log(error);
+    throw error;
   }
 }
 
-async function GetData(CategoryMATOUR) {
+async function GetData(maTour) {
   try {
-    let pool = await sql.connect(config);
-    let product = await pool
-      .request()
-      .input('MATOUR', sql.Int, CategoryMATOUR)
-      .query('SELECT * FROM Tour where MATOUR = @MATOUR');
-    return product.recordsets;
+    const pool = await sql.connect(config);
+    const queryString = `
+    SELECT  
+      MATOUR,
+      lt.TENLOAI,
+      TENTOUR,
+      GTTOUR,
+      GIATOUR,
+      NOIDUNGTOUR,
+      HINHANH,
+      NGAYDI,
+      DIEMDI,
+      DIEMDEN,
+      NGAYTAO,
+      T_HA.MA_HINH_ANH,
+      TINH
+    FROM  
+      Tour t LEFT JOIN 
+      LoaiTour lt ON t.MALOAI = lt.MALOAI 
+      LEFT JOIN Tour_HinhAnh T_HA ON t.MATOUR = T_HA.MA_TOUR
+    WHERE t.MATOUR = @MA_TOUR
+    `;
+    const request = await pool.request().input('MA_TOUR', sql.Int, maTour).query(queryString);
+    const tourRecords = request.recordset;
+    const tour = tourRecords.reduce((acc, tour) => {
+      const tourItem = acc.find((item) => item.MATOUR === tour.MATOUR);
+      if (tourItem) {
+        tourItem.DANH_SACH_ANH.push(tour.MA_HINH_ANH);
+      } else {
+        acc.push({
+          ...tour,
+          DANH_SACH_ANH: [tour.MA_HINH_ANH],
+        });
+      }
+      return acc;
+    }, []);
+    return tour;
   } catch (error) {
     console.log(error);
+    throw error;
   }
 }
-async function addTour(Category) {
+
+async function addTour(tourInfo) {
   try {
     let pool = await sql.connect(config);
-    let insertproduct = await pool
+    let request = await pool
       .request()
-      .input('MALOAI', sql.Int, Category.MALOAI)
-      .input('TENTOUR', sql.NVarChar, Category.TENTOUR)
-      .input('GTTOUR', sql.NVarChar, Category.GTTOUR)
-      .input('GIATOUR', sql.Int, Category.GIATOUR)
-      .input('NOIDUNGTOUR', sql.NVarChar, Category.NOIDUNGTOUR)
-      .input('HINHANH', sql.NVarChar, Category.HINHANH)
-      .input('NGAYDI', sql.DateTime, Category.NGAYDI)
-      .input('DIEMDI', sql.NVarChar, Category.DIEMDI)
-      .input('DIEMDEN', sql.NVarChar, Category.DIEMDEN)
-      .input('NGAYTAO', sql.DateTime, Category.NGAYTAO)
+      .input('MALOAI', sql.Int, tourInfo.loaiTour)
+      .input('TENTOUR', sql.NVarChar, tourInfo.tenTour)
+      .input('GTTOUR', sql.NVarChar, tourInfo.gioiThieuTour)
+      .input('GIATOUR', sql.Int, +tourInfo.giaTour)
+      .input('NOIDUNGTOUR', sql.NVarChar, tourInfo.noiDungTour)
+      .input('HINHANH', sql.NVarChar, null)
+      .input('NGAYDI', sql.DateTime, new Date(tourInfo.ngayDi))
+      .input('DIEMDI', sql.NVarChar, tourInfo.diemDi)
+      .input('DIEMDEN', sql.NVarChar, tourInfo.diemDen)
+      .input('NGAYTAO', sql.DateTime, new Date())
+      .input('TINH', sql.NVarChar, tourInfo.tinh)
       .execute('InsertTour');
-    return insertproduct.recordsets;
+    return request.recordset;
   } catch (err) {
-    console.log(err);
+    throw err;
   }
 }
 async function deleteTour(CategoryMATOUR) {
   try {
     let pool = await sql.connect(config);
-    let deleteTour = await pool
-      .request()
-      .input('MATOUR', sql.Int, CategoryMATOUR)
-      .execute('DeleteTour');
+    let deleteTour = await pool.request().input('MATOUR', sql.Int, CategoryMATOUR).execute('DeleteTour');
     return deleteTour.recordsets;
   } catch (error) {
     console.log(error);
@@ -81,6 +139,7 @@ async function updateTour(CategoryMATOUR, Category) {
     return updateproduct.recordsets;
   } catch (error) {
     console.log(error);
+    throw error;
   }
 }
 
@@ -311,6 +370,46 @@ async function GetDonDatVe() {
   }
 }
 
+async function GetDonDatVeTheoMaDonDat(maDonDat) {
+  try {
+    const pool = await sql.connect(config);
+    const query = `
+    SELECT 
+      DDT.MADONDAT AS MA_DON_DAT, 
+      DDT.MAKHACHHANG AS MA_KH,
+      KH.HOTEN AS TEN_KHACH_HANG,
+      DDT.MATOUR AS MA_TOUR,
+      LT.TENLOAI AS LOAI_TOUR,
+      T.TENTOUR AS TEN_TOUR,
+      T.DIEMDEN AS DIEM_DEN,
+      T.DIEMDI AS DIEM_DI,
+      T.TINH AS TINH_THANH,
+      T.GIATOUR AS GIA_TOUR,
+      LV.MALOAI AS MA_LOAI_VE,
+      LV.TENLOAI AS TEN_LOAI_VE,
+      DDT.SOLUONGVEDAT AS SO_LUONG_VE_DAT, 
+      DDT.TONGTIEN AS TONG_TIEN,
+      DDT.TINHTRANGTHANHTOAN AS TINH_TRANG_THANH_TOAN,
+      DDT.TINH_TRANG_DON,
+      DDT.NGAYDAT AS NGAY_DAT
+  FROM 
+      DonDatTour DDT  
+      INNER JOIN KhachHang KH on KH.MAKH = DDT.MAKHACHHANG
+      INNER JOIN Tour T ON T.MATOUR = DDT.MATOUR
+      INNER JOIN LoaiTour LT ON T.MALOAI = LT.MALOAI
+      INNER JOIN LoaiVe LV ON LV.MALOAI = DDT.MA_LOAI_VE
+  WHERE 
+      DDT.MADONDAT = ${ maDonDat }
+  ORDER BY 
+      DDT.MADONDAT
+    `;
+    const products = await pool.request().query(query);
+    return products.recordset;
+  } catch (error) {
+    throw error;
+  }
+}
+
 async function addDonDatVe(listdondatve) {
   try {
     let pool = await sql.connect(config);
@@ -325,6 +424,7 @@ async function addDonDatVe(listdondatve) {
     return insertproduct.recordsets;
   } catch (err) {
     console.log(err);
+    throw err;
   }
 }
 
@@ -383,10 +483,7 @@ const acceptOrder = async (maDonDat, maKH, danhSachCacVe) => {
       MA_DON_DAT = ${ maDonDat }
     WHERE 
       MAVE IN (${ danhSachCacVe.join(',') })`;
-    const result = await Promise.all([
-      pool.request().query(query1),
-      pool.request().query(query2),
-    ]);
+    const result = await Promise.all([pool.request().query(query1), pool.request().query(query2)]);
     return result;
   } catch (error) {
     throw error;
@@ -407,10 +504,7 @@ const getAllTicketTypes = async () => {
 const createTicketType = async (payload) => {
   try {
     const pool = await sql.connect(config);
-    const data = await pool
-      .request()
-      .input('TENLOAI', sql.NVarChar, payload.TENLOAI)
-      .execute('InsertLoaiVe');
+    const data = await pool.request().input('TENLOAI', sql.NVarChar, payload.TENLOAI).execute('InsertLoaiVe');
     return data.recordset;
   } catch (error) {
     throw error;
@@ -464,9 +558,10 @@ const findTickerByDonDatTour = async () => {
                 INNER JOIN LoaiVe LV ON VT.LOAIVE = LV.MALOAI
                 INNER JOIN LoaiTour LT ON T.MALOAI = LT.MALOAI
     WHERE 
-      VT.TRANG_THAI_VE = N'Còn hiệu lực' 
+      VT.TRANG_THAI_VE = N'Còn hiệu lực' AND
+      VT.NGAYCOHIEULUC >= GETDATE()
     ORDER BY
-    VT.MAVE ASC
+      VT.MAVE ASC
   `;
     const data = await pool.request().query(query);
     return data.recordset;
@@ -513,17 +608,123 @@ const layThongTinThongKe = async () => {
 };
 
 // Đặt tour
+const constructEmailTemplate = (info) => {
+  return `
+  <h2>Đặt Vé Thành Công</h2>
+<table style="border-collapse: collapse; width: 500px; border: 1px solid #ccc">
+  <thead>
+    <tr>
+      <th style="border: 1px solid #ccc; padding: 12px"></th>
+      <th style="border: 1px solid #ccc; padding: 12px">Chi Tiết</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="border: 1px solid #ccc; padding: 12px">Mã Đơn Đặt</td>
+      <td style="border: 1px solid #ccc; padding: 12px">${ info.TEN_KHACH_HANG }</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #ccc; padding: 12px">Tour</td>
+      <td style="border: 1px solid #ccc; padding: 12px">${ info.TEN_TOUR }</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #ccc; padding: 12px">Điểm Đến</td>
+      <td style="border: 1px solid #ccc; padding: 12px">${ info.DIEM_DEN }</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #ccc; padding: 12px">Điểm Đi</td>
+      <td style="border: 1px solid #ccc; padding: 12px">${ info.DIEM_DI }</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #ccc; padding: 12px">Tỉnh/Thành Phố</td>
+      <td style="border: 1px solid #ccc; padding: 12px">${ info.TINH_THANH }</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #ccc; padding: 12px">Số Lượng Vé</td>
+      <td style="border: 1px solid #ccc; padding: 12px">${ info.SO_LUONG_VE_DAT }</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #ccc; padding: 12px">Loại Vé</td>
+      <td style="border: 1px solid #ccc; padding: 12px">${ info.TEN_LOAI_VE }</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #ccc; padding: 12px">Tổn Tiền</td>
+      <td style="border: 1px solid #ccc; padding: 12px">${ info.TONG_TIEN }</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #ccc; padding: 12px">Tổn Tiền</td>
+      <td style="border: 1px solid #ccc; padding: 12px">${ new Date(info.NGAY_DAT).toLocaleString() }</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #ccc; padding: 12px">Hình Thức Thanh Toán</td>
+      <td style="border: 1px solid #ccc; padding: 12px">Chuyển Khoản Ngân Hàng</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #ccc; padding: 12px">Trạng Thái</td>
+      <td style="border: 1px solid #ccc; padding: 12px">Đã được thanh toán. Đang chờ xử lý</td>
+    </tr>
+  </tbody>
+</table>
+`;
+};
+
 const taoDonDatTour = async (payload) => {
   try {
     const pool = await sql.connect(config);
-    const { maKH, maTour, ngayDat, soLuong, tongTien, maLoaiVe } = payload;
+    const { maKH, maTour, ngayDat, soLuong, tongTien, maLoaiVe, email } = payload;
     const query = `
     INSERT INTO DonDatTour(MAKHACHHANG, MATOUR, NGAYDAT, TINHTRANGTHANHTOAN,SOLUONGVEDAT,TONGTIEN,MA_LOAI_VE, TINH_TRANG_DON)
-    VALUES(${ maKH }, ${ maTour }, ${ ngayDat }, N'Đã thanh toán', ${ soLuong }, ${ tongTien }, ${ maLoaiVe }, N'Đang xử lý')
+    VALUES(${ maKH }, ${ maTour }, ${ ngayDat }, N'Đã thanh toán', ${ soLuong }, ${ tongTien }, ${ maLoaiVe }, N'Đang xử lý');
+    SELECT SCOPE_IDENTITY() AS id;
     `;
-    console.log(query);
-    const result = await pool.request().query(query);
-    return result.recordset;
+    const record = await pool.request().query(query);
+    const [newOrder] = record.recordset;
+    const info = await GetDonDatVeTheoMaDonDat(newOrder.id);
+    if (info.length) {
+      const htmlTemplate = constructEmailTemplate(info[0]);
+      await sendMail(email, 'Đặt Vé Thành Công', htmlTemplate);
+    }
+    return newOrder;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const uploadTourImages = async (files, maTour) => {
+  try {
+    const pool = await sql.connect(config);
+    const request = pool.request().input('maTour', sql.Int, maTour);
+    files.forEach((file, index) => {
+      request.input(`fileName_${ index }`, sql.NVarChar, file.originalname);
+      request.input(`fileSrc_${ index }`, sql.VarBinary, file.buffer);
+    });
+    const paramsList = files.map((_, index) => {
+      return `(@fileName_${ index }, @fileSrc_${ index }, @maTour)`;
+    });
+    const queryString = `INSERT INTO Tour_HinhAnh(TEN_HINH_ANH, HINH_ANH_DATA, MA_TOUR) VALUES ${ paramsList.join(',') }`;
+    const rs = await request.query(queryString);
+    return rs.recordset;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const getTourIimage = async (maHinhAnh) => {
+  try {
+    const pool = await sql.connect(config);
+    const queryString = `SELECT * FROM Tour_HinhAnh WHERE MA_HINH_ANH = @maHinhAnh`;
+    const request = await pool.request().input('maHinhAnh', sql.Int, maHinhAnh).query(queryString);
+    return request.recordset;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const testMail = async (info) => {
+  try {
+    const htmlTemplate = await constructEmailTemplate(info);
+    await sendMail('nguyenduchoa0130@gmail.com', 'Traveloka: Thanh Toán Thành Công', htmlTemplate);
+    return null;
   } catch (error) {
     throw error;
   }
@@ -555,5 +756,8 @@ export default {
   acceptOrder,
   layThongTinThongKe,
   taoDonDatTour,
+  uploadTourImages,
+  getTourIimage,
+  testMail,
   sql,
 };
