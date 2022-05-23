@@ -621,8 +621,12 @@ const constructEmailTemplate = (info) => {
   <tbody>
     <tr>
       <td style="border: 1px solid #ccc; padding: 12px">Mã Đơn Đặt</td>
-      <td style="border: 1px solid #ccc; padding: 12px">${ info.TEN_KHACH_HANG }</td>
+      <td style="border: 1px solid #ccc; padding: 12px">${ info.MA_DON_DAT }</td>
     </tr>
+    <tr>
+    <td style="border: 1px solid #ccc; padding: 12px">Khách Hàng</td>
+    <td style="border: 1px solid #ccc; padding: 12px">${ info.TEN_KHACH_HANG }</td>
+  </tr>
     <tr>
       <td style="border: 1px solid #ccc; padding: 12px">Tour</td>
       <td style="border: 1px solid #ccc; padding: 12px">${ info.TEN_TOUR }</td>
