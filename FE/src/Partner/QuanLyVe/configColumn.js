@@ -104,13 +104,6 @@ export const createColumnConfigurations = (
       align: 'center',
     },
     {
-      title: 'Khách Hàng',
-      dataIndex: 'HOTEN',
-      key: 'HOTEN',
-      ellipsis: true,
-      align: 'center',
-    },
-    {
       title: 'Giá Vé',
       dataIndex: 'GIAVE',
       key: 'GIAVE',

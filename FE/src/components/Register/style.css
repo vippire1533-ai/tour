@@ -356,3 +356,28 @@
   font-size: 12px;
   height: 10px;
 }
+.button-submit{
+  font-size: 20px;
+  width: 140px;
+  height: 40px;
+  color: white;
+  font-weight: 600;
+  background-color: rgb(150, 191, 233);
+  cursor: pointer;
+  margin-top: 20px;
+  float: right;
+}
+.input{
+  width: 100%;
+  padding: 5px 10px;
+  font-size: 16px;
+  height: 30px;
+}
+.row{
+  display: flex;
+  margin-top: 10px;
+}
+.button-submit:hover{
+  background-color: rgb(71, 151, 231);
+
+}

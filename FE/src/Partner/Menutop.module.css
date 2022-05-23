@@ -17,7 +17,7 @@
 }
 
 .search_field input , button {
-    height: 32px;
+    /* height: 32px; */
     border-radius: 6px;
     border-style: none;
     margin-left: 5px;
