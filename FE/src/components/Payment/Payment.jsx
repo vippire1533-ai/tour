@@ -36,16 +36,6 @@ function Payment() {
     });
   };
   const hanlePayment = () => {
-    dispatch(appActions.showLoading());
-    let objApi = {
-      maKH: '1',
-      maTour: singleOderproducttour[0].MATOUR,
-      ngayDat: `'${booking.ngayDate}'`,
-      soLuong: booking.soluongtreem + booking.soluongnguoilon,
-      tongTien: booking.price,
-      maLoaiVe: booking.maLoaiVe,
-      email: data.email,
-    };
     if (!data) {
       Swal.fire({
         icon: 'error',
@@ -53,6 +43,16 @@ function Payment() {
         confirmButtonText: 'OK',
       });
     } else {
+    dispatch(appActions.showLoading());
+      let objApi = {
+        maKH: '1',
+        maTour: singleOderproducttour[0].MATOUR,
+        ngayDat: `'${booking.ngayDate}'`,
+        soLuong: booking.soluongtreem + booking.soluongnguoilon,
+        tongTien: booking.price,
+        maLoaiVe: booking.maLoaiVe,
+        email: data.email,
+      };
       axios({
         url: '/api/datTour',
         method: 'POST',
