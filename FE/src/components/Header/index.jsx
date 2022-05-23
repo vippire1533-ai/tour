@@ -199,7 +199,7 @@ const Header = () => {
                   <p className='hd-currency'>{data?.username}</p>
                   <img src={require(`../../assets/header/chev-down.svg`).default} alt='ddl' className='hd-icon-ddl' />
                   <div className='hd-login-sub dropdown-list'>
-                    {/* <div className="item-login">Chỉnh sửa hồ sơ</div> */}
+                    <div className="item-login" onClick={() => navigate('/user/account')}>Chỉnh sửa hồ sơ</div>
                     <div
                       className='item-login'
                       onClick={() => {
@@ -222,11 +222,11 @@ const Header = () => {
                     </div>
                   </div>
                 </div>
-                <div className='hd-signup'>
+                {/* <div className='hd-signup'>
                   <a href='/register' style={{ textDecoration: 'none', color: '#fff' }}>
                     Đăng ký
                   </a>
-                </div>
+                </div> */}
               </>
             )}
           </div>
