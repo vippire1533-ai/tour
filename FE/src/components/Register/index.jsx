@@ -393,7 +393,7 @@ const PageRegister = () => {
                       {({ isSubmitting }) => (
                         <Form>
                           <div className="row">
-                            <p>UserName</p>
+                            <p>Tài Khoản</p>
                             <Field type="username" name="username" className="input" />
                           </div>
                           <div className="row">
@@ -401,7 +401,7 @@ const PageRegister = () => {
                             <Field type="email" name="email" className="input" />
                           </div>
                           <div className="row">
-                            <p>Password</p>
+                            <p>Mật Khẩu</p>
                             <Field type="password" name="password" className="input" />
                           </div>
                           {/* <div>
@@ -409,7 +409,7 @@ const PageRegister = () => {
                             <Field type="passwordconfirm" name="passwordconfirm" className="input" />
                           </div> */}
                           <button type="submit" disabled={isSubmitting} className="button-submit">
-                            Submit
+                            Đăng Nhập
                           </button>
                           <div style={{ clear: 'both' }}></div>
                         </Form>

@@ -33,7 +33,8 @@ const Header = () => {
         })
         setData(res.data);
         localStorage.setItem("dataUser", JSON.stringify(res.data))
-        navigate('/user/account')
+        // navigate('/user/account')
+        window.location.reload();
       })
       .catch((err) => {
         Swal.fire({

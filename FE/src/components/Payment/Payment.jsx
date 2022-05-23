@@ -66,7 +66,7 @@ if (!data){
       Swal.fire({
         title: 'Đặt vé không thành công',
         icon: 'error',
-        confirmButtonText: 'OK',
+        confirmButtonText: 'OK', 
       });
     });
 }
