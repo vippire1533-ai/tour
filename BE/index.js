@@ -6,6 +6,7 @@ import https from 'https';
 import dbconnect from './data/dbconnect.js';
 import router from './routes/route.js';
 import uploadFiles from './data/uploadFiles';
+import connectDatabase from './utils/testConnection.js';
 // app.use("/",TourRoutes);
 const app = express();
 
@@ -413,4 +414,11 @@ const sslServer = https.createServer(
   app,
 );
 
-sslServer.listen(8000, () => console.log('Secure server on port 8000'));
+connectDatabase()
+  .then(() => {
+    sslServer.listen(8000, () => console.log('Secure server on port 8000'));
+  })
+  .catch((err) => {
+    console.log('Start failed!!');
+    console.log(err);
+  });

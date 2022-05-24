@@ -110,6 +110,7 @@ async function addTour(tourInfo) {
     throw err;
   }
 }
+
 async function deleteTour(CategoryMATOUR) {
   try {
     let pool = await sql.connect(config);
@@ -119,6 +120,7 @@ async function deleteTour(CategoryMATOUR) {
     console.log(error);
   }
 }
+
 async function updateTour(CategoryMATOUR, Category) {
   try {
     let pool = await sql.connect(config);
@@ -142,7 +144,6 @@ async function updateTour(CategoryMATOUR, Category) {
     throw error;
   }
 }
-
 // ĐẶT VÉ;
 async function getAllTickets() {
   try {
@@ -583,7 +584,6 @@ const getAllTours = async () => {
     throw error;
   }
 };
-
 // Thống kê
 const layThongTinThongKe = async () => {
   try {
@@ -606,7 +606,6 @@ const layThongTinThongKe = async () => {
     throw error;
   }
 };
-
 // Đặt tour
 const constructEmailTemplate = (info) => {
   return `
@@ -733,6 +732,7 @@ const testMail = async (info) => {
     throw error;
   }
 };
+
 export default {
   GetData,
   GetDatas,
