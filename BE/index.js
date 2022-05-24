@@ -414,11 +414,4 @@ const sslServer = https.createServer(
   app,
 );
 
-connectDatabase()
-  .then(() => {
-    sslServer.listen(8000, () => console.log('Secure server on port 8000'));
-  })
-  .catch((err) => {
-    console.log('Start failed!!');
-    console.log(err);
-  });
+sslServer.listen(8000, () => console.log('Secure server on port 8000'));
