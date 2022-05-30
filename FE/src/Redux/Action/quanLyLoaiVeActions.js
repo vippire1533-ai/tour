@@ -1,4 +1,4 @@
-import axios from 'axios';
+import { default as axios } from './../../utils/axios';
 import * as quanLyLoaiVeActionTypes from './../Constants/quanLyLoaiVeActionTypes';
 import * as appActions from './appActions';
 

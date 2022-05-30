@@ -1,6 +1,6 @@
 import * as quanLyDonDatVeActionTypes from './../Constants/quanLyDonDatVeActionTypes';
 import * as appActions from './appActions';
-import axios from 'axios';
+import { default as axios } from './../../utils/axios';
 
 const BASE_URL = '/api/dondatve';
 

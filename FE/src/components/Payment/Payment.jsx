@@ -1,17 +1,17 @@
 import PunchClockIcon from '@mui/icons-material/PunchClock';
 import { Box } from '@mui/material';
 import Switch from '@mui/material/Switch';
-import axios from 'axios';
 import React, { Fragment, useEffect, useState } from 'react';
 import NumberFormat from 'react-number-format';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import Footer from '../Footer';
 import Header from '../Header';
-import classes from './Payment.module.css';
-import LoadingSpinner from './../LoadingSpinner';
 import * as appActions from './../../Redux/Action/appActions';
+import { default as axios } from './../../utils/axios';
+import LoadingSpinner from './../LoadingSpinner';
+import classes from './Payment.module.css';
 
 function Payment() {
   const label = { inputProps: { 'aria-label': 'Switch demo' } };
@@ -43,7 +43,7 @@ function Payment() {
         confirmButtonText: 'OK',
       });
     } else {
-    dispatch(appActions.showLoading());
+      dispatch(appActions.showLoading());
       let objApi = {
         maKH: '1',
         maTour: singleOderproducttour[0].MATOUR,

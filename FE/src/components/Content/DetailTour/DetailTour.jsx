@@ -1,13 +1,13 @@
-import axios from 'axios';
 import React, { Fragment, useEffect, useState } from 'react';
+import NumberFormat from 'react-number-format';
 import { useNavigate, useParams } from 'react-router-dom';
+import Swal from 'sweetalert2';
 import Footer from '../../Footer';
 import Header from '../../Header';
+import { default as axios } from './../../../utils/axios';
 import classes from './DetailTour.module.css';
 import './style.css';
 import Ve from './VeTour/Ve';
-import Swal from 'sweetalert2';
-import NumberFormat from 'react-number-format';
 
 const DetailTour = ({ match }) => {
   const navigate = useNavigate();
@@ -18,9 +18,6 @@ const DetailTour = ({ match }) => {
 
   useEffect(() => {
     getData(id);
-    // setSingleproducttour([
-    //   { MATOUR: "1", TENTOUR: "e", GIATOUR: "1000", DIEMDEN: "anc", HINHANH: "https://deviet.vn/wp-content/uploads/2019/04/ban-do-vuong-quoc-anh.jpg" },
-    // ])
   }, [id]);
   const getData = async (id) => {
     const respone = await axios

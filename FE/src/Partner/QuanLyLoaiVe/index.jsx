@@ -1,5 +1,4 @@
 import { Input, Modal, Table, Typography } from 'antd';
-import axios from 'axios';
 import cx from 'classnames';
 import { useFormik } from 'formik';
 import React, { useEffect, useState } from 'react';
@@ -10,6 +9,7 @@ import * as Yup from 'yup';
 import AlertPopup from './../../components/AlertPopup';
 import LoadingSpinner from './../../components/LoadingSpinner';
 import * as quanLyLoaiVeActions from './../../Redux/Action/quanLyLoaiVeActions';
+import { default as axios } from './../../utils/axios';
 import Menuleft from './../Menuleft';
 import Menutop from './../Menutop';
 import ButtonAction from './../QuanLyVe/ButtonAction';
@@ -34,9 +34,7 @@ const QuanLyLoaiVe = () => {
         .test('checkDuplicate', 'Tên loại vé đã tồn tại', async (value) => {
           try {
             const { data } = await axios.get('/api/ticketTypes');
-            return !data.find(
-              (item) => item.TENLOAI.toLowerCase() === value.toLowerCase(),
-            );
+            return !data.find((item) => item.TENLOAI.toLowerCase() === value.toLowerCase());
           } catch (error) {
             return true;
           }
@@ -89,8 +87,7 @@ const QuanLyLoaiVe = () => {
       title: 'Tên Loại',
       dataIndex: 'TENLOAI',
       key: 'TENLOAI',
-      sorter: (item1, item2) =>
-        item1['TENLOAI'].localeCompare(item2['TENLOAI']),
+      sorter: (item1, item2) => item1['TENLOAI'].localeCompare(item2['TENLOAI']),
     },
     {
       title: 'Thao Tác',
@@ -150,13 +147,7 @@ const QuanLyLoaiVe = () => {
   return (
     <>
       {isLoading && <LoadingSpinner />}
-      {isShowModal && (
-        <AlertPopup
-          title='Thành Công'
-          message='Thao tác thành công'
-          type='success'
-        />
-      )}
+      {isShowModal && <AlertPopup title='Thành Công' message='Thao tác thành công' type='success' />}
       <Menutop />
       <Menuleft />
       <div className={classes.wrapper}>
@@ -203,10 +194,7 @@ const QuanLyLoaiVe = () => {
                 {...formik.getFieldProps('TENLOAI')}
               />
               {formik.touched.TENLOAI && formik.errors.TENLOAI ? (
-                <Typography.Text
-                  type='danger'
-                  className={classes['error-message']}
-                >
+                <Typography.Text type='danger' className={classes['error-message']}>
                   {formik.errors.TENLOAI}
                 </Typography.Text>
               ) : null}

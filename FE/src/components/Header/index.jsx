@@ -1,19 +1,16 @@
 import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
-import LoadingSpinner from './../LoadingSpinner';
-import { useSelector, useDispatch } from 'react-redux';
-import * as appActions from './../../Redux/Action/appActions';
-
-// Style
-import './style.css';
-
-// Data
-import { HeaderMenu } from './settings';
-
 // Components
 import HeaderBack from '../HeaderBack';
-import axios from 'axios';
+import * as appActions from './../../Redux/Action/appActions';
+import { default as axios } from './../../utils/axios';
+import LoadingSpinner from './../LoadingSpinner';
+// Data
+import { HeaderMenu } from './settings';
+// Style
+import './style.css';
 
 const Header = () => {
   const [type, setType] = useState('password');
@@ -199,7 +196,9 @@ const Header = () => {
                   <p className='hd-currency'>{data?.username}</p>
                   <img src={require(`../../assets/header/chev-down.svg`).default} alt='ddl' className='hd-icon-ddl' />
                   <div className='hd-login-sub dropdown-list'>
-                    <div className="item-login" onClick={() => navigate('/user/account')}>Chỉnh sửa hồ sơ</div>
+                    <div className='item-login' onClick={() => navigate('/user/account')}>
+                      Chỉnh sửa hồ sơ
+                    </div>
                     <div
                       className='item-login'
                       onClick={() => {

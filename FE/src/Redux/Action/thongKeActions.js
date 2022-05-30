@@ -1,5 +1,5 @@
 import * as thongKeActionTypes from './../Constants/thongKeActionTypes';
-import axios from 'axios';
+import { default as axios } from './../../utils/axios';
 
 const BASE_URL = '/api/thongKe';
 
