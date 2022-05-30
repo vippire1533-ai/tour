@@ -21,7 +21,7 @@ let config = {
   },
 };
 
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV.trim() !== 'production') {
   config = {
     ...config,
     ...devConfig
