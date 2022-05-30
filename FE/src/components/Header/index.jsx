@@ -13,7 +13,7 @@ import { HeaderMenu } from './settings';
 
 // Components
 import HeaderBack from '../HeaderBack';
-import axios from 'axios';
+import { default as axios } from './../../utils/axios';
 
 const Header = () => {
   const [type, setType] = useState('password');
@@ -199,7 +199,9 @@ const Header = () => {
                   <p className='hd-currency'>{data?.username}</p>
                   <img src={require(`../../assets/header/chev-down.svg`).default} alt='ddl' className='hd-icon-ddl' />
                   <div className='hd-login-sub dropdown-list'>
-                    <div className="item-login" onClick={() => navigate('/user/account')}>Chỉnh sửa hồ sơ</div>
+                    <div className='item-login' onClick={() => navigate('/user/account')}>
+                      Chỉnh sửa hồ sơ
+                    </div>
                     <div
                       className='item-login'
                       onClick={() => {

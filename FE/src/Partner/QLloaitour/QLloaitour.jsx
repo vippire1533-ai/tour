@@ -1,5 +1,5 @@
 import { Input, Modal, Table, Typography } from 'antd';
-import axios from 'axios';
+import { default as axios } from './../../utils/axios';
 import cx from 'classnames';
 import { useFormik } from 'formik';
 import React, { useEffect, useState } from 'react';
@@ -34,9 +34,7 @@ const QLloaitour = () => {
         .test('checkDuplicate', 'Tên loại tour đã tồn tại', async (value) => {
           try {
             const { data } = await axios.get('/api/tourTypes');
-            return !data.find(
-              (item) => item.TENLOAI.toLowerCase() === value.toLowerCase(),
-            );
+            return !data.find((item) => item.TENLOAI.toLowerCase() === value.toLowerCase());
           } catch (error) {
             return true;
           }
@@ -89,8 +87,7 @@ const QLloaitour = () => {
       title: 'Tên Loại Tour',
       dataIndex: 'TENLOAI',
       key: 'TENLOAI',
-      sorter: (item1, item2) =>
-        item1['TENLOAI'].localeCompare(item2['TENLOAI']),
+      sorter: (item1, item2) => item1['TENLOAI'].localeCompare(item2['TENLOAI']),
     },
     {
       title: 'Thao Tác',
@@ -150,13 +147,7 @@ const QLloaitour = () => {
   return (
     <>
       {isLoading && <LoadingSpinner />}
-      {isShowModal && (
-        <AlertPopup
-          title='Thành Công'
-          message='Thao tác thành công'
-          type='success'
-        />
-      )}
+      {isShowModal && <AlertPopup title='Thành Công' message='Thao tác thành công' type='success' />}
       <Menutop />
       <Menuleft />
       <div className={classes.wrapper}>
@@ -172,9 +163,7 @@ const QLloaitour = () => {
               buttonSize='large'
               handleClick={handleNewTicketType}
             >
-              <span className={classes.content__new__content}>
-                Tạo Loại Tour
-              </span>
+              <span className={classes.content__new__content}>Tạo Loại Tour</span>
             </ButtonAction>
           </div>
           <Table
@@ -205,10 +194,7 @@ const QLloaitour = () => {
                 {...formik.getFieldProps('TENLOAI')}
               />
               {formik.touched.TENLOAI && formik.errors.TENLOAI ? (
-                <Typography.Text
-                  type='danger'
-                  className={classes['error-message']}
-                >
+                <Typography.Text type='danger' className={classes['error-message']}>
                   {formik.errors.TENLOAI}
                 </Typography.Text>
               ) : null}

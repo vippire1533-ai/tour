@@ -1,6 +1,6 @@
 import { Box, Card } from '@mui/material';
 import classes from './Ve.module.css';
-import axios from 'axios';
+import { default as axios } from './../../utils/axios';
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import DateTour from './Date';
@@ -16,9 +16,7 @@ import { getAllTicketTypes } from '../../../../Redux/Action/quanLyLoaiVeActions'
 
 const findTicketId = (ticketTypes, typeName) => {
   if (Array.isArray(ticketTypes)) {
-    const ticketType = ticketTypes.find(
-      (type) => type.TENLOAI.toLowerCase() === typeName.toLowerCase(),
-    );
+    const ticketType = ticketTypes.find((type) => type.TENLOAI.toLowerCase() === typeName.toLowerCase());
     return ticketType ? ticketType.MALOAI : null;
   }
   return null;
@@ -173,10 +171,7 @@ const Ve = () => {
                           {day.day}
                         </p>
                       </div>
-                      <KeyboardArrowDownIcon
-                        style={{ color: '#0d99f4' }}
-                        fontSize='large'
-                      />
+                      <KeyboardArrowDownIcon style={{ color: '#0d99f4' }} fontSize='large' />
                     </div>
                     {dayPopup && (
                       <DateTour
@@ -221,10 +216,7 @@ const Ve = () => {
                           {countLarge} Người lớn, {countSmall} trẻ em
                         </p>
                       </div>
-                      <KeyboardArrowDownIcon
-                        style={{ color: '#0d99f4' }}
-                        fontSize='large'
-                      />
+                      <KeyboardArrowDownIcon style={{ color: '#0d99f4' }} fontSize='large' />
                     </div>
                     {peoplePopup && (
                       <Apply
@@ -271,10 +263,7 @@ const Ve = () => {
                           18:30
                         </p>
                       </div>
-                      <KeyboardArrowDownIcon
-                        style={{ color: '#0d99f4' }}
-                        fontSize='large'
-                      />
+                      <KeyboardArrowDownIcon style={{ color: '#0d99f4' }} fontSize='large' />
                     </div>
 
                     {timePopup && <TimeTour />}

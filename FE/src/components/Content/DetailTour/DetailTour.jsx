@@ -1,4 +1,4 @@
-import axios from 'axios';
+import { default as axios } from './../../utils/axios';
 import React, { Fragment, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Footer from '../../Footer';

@@ -1,7 +1,7 @@
 import PunchClockIcon from '@mui/icons-material/PunchClock';
 import { Box } from '@mui/material';
 import Switch from '@mui/material/Switch';
-import axios from 'axios';
+import { default as axios } from './../../utils/axios';
 import React, { Fragment, useEffect, useState } from 'react';
 import NumberFormat from 'react-number-format';
 import { useSelector, useDispatch } from 'react-redux';
@@ -43,7 +43,7 @@ function Payment() {
         confirmButtonText: 'OK',
       });
     } else {
-    dispatch(appActions.showLoading());
+      dispatch(appActions.showLoading());
       let objApi = {
         maKH: '1',
         maTour: singleOderproducttour[0].MATOUR,

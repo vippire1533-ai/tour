@@ -1,4 +1,4 @@
-import axios from 'axios';
+import { default as axios } from './../../utils/axios';
 import https from 'https';
 const BACKEND_URL = process.env.BACKEND_URL || 'https://localhost:8000';
 

@@ -1,6 +1,6 @@
 import * as quanLyVeActionType from '../Constants/quanLyVeActionTypes';
 import * as appActions from './../Action/appActions';
-import axios from 'axios';
+import { default as axios } from './../../utils/axios';
 
 const BASE_URL = '/api/veproducts';
 

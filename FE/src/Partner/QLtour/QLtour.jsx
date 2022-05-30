@@ -6,7 +6,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Card, List, message, Select } from 'antd';
 
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { default as axios } from './../../utils/axios';
 
 const QLtour = () => {
   const [productList, setProductList] = useState([]);

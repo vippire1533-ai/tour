@@ -1,6 +1,6 @@
 import Alert from '@mui/material/Alert';
 import Collapse from '@mui/material/Collapse';
-import axios from 'axios';
+import { default as axios } from './../../utils/axios';
 import { Field, Form, Formik } from 'formik';
 import React, { Fragment } from 'react';
 import { useNavigate } from 'react-router-dom';
