@@ -259,7 +259,7 @@ const Ve = () => {
                             fontWeight: '500',
                           }}
                         >
-                          18:30
+                          7:00
                         </p>
                       </div>
                       <KeyboardArrowDownIcon style={{ color: '#0d99f4' }} fontSize='large' />

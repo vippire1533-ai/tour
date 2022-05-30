@@ -1,13 +1,10 @@
-import classes from "./DStour.module.css";
-import Card from "../../UI/Card";
-import Right from "./Right";
-import { useParams } from "react-router-dom";
-import Left from "./Left";
-import axios from "axios";
-import React, { useState, useEffect } from "react";
-import { Fragment } from "react";
-import Header from "../../Header";
-import Footer from "../../Footer";
+import React, { Fragment } from 'react';
+import { useParams } from 'react-router-dom';
+import Footer from '../../Footer';
+import Header from '../../Header';
+import classes from './DStour.module.css';
+import Left from './Left';
+import Right from './Right';
 
 function DStour(props) {
   const params = useParams();
@@ -17,12 +14,13 @@ function DStour(props) {
       <Header />
       <div className={classes.container}>
         <div className={classes.link}>
-          <a href="">Xperience</a>
+          <a href=''>Xperience</a>
           <a>/</a>
-          <a href="" className={classes.danhmuc}>Tp.HCM</a>
+          <a href='' className={classes.danhmuc}>
+            Tp.HCM
+          </a>
         </div>
-        <h1>Tất cả kết quả cho thành phố HCM</h1>
-
+        <h1>Tất cả kết quả</h1>
         <Left />
         <Right />
       </div>
