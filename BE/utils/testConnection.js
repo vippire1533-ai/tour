@@ -4,7 +4,9 @@ import config from './../data/dbconfig';
 const connectDatabase = async () => {
   try {
     console.log('Connecting.....');
-    await sql.connect(config);
+    console.log('config', config);
+    const pool = await sql.connect(config);
+    console.log('pool', pool);
   } catch (error) {
     console.log(error);
   }
