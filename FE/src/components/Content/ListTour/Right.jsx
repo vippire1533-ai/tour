@@ -1,37 +1,35 @@
-import classes from './Right.module.css';
+import { Select } from 'antd';
+import { default as axios } from './../../../utils/axios';
 import React, { useEffect, useState } from 'react';
-import { Button, Card, List, message, Select } from 'antd';
+import { useNavigate, useParams } from 'react-router-dom';
+import classes from './Right.module.css';
+import dotenv from 'dotenv';
 
-import { useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
-import { useDispatch, useSelector } from "react-redux";
-import { listtour } from "../../../Redux/Action/Touraction";
+dotenv.config();
+
+const host =
+  process.env.NODE_ENV === 'production'
+    ? process.env.REACT_APP_PROD_BACKEND_URL
+    : process.env.REACT_APP_DEV_BACKEND_URL;
+
 const Right = () => {
-  // const [productList, setProductList] = useState([]);
-
   const navigate = useNavigate();
-
   const { Option } = Select;
   const [producttour, setProducttour] = useState([]);
   const { maTinh } = useParams();
-
 
   useEffect(() => {
     getDatas();
   }, []);
   const getDatas = async () => {
-    const respone = await axios.get('/api/products').then((res) => {
+    await axios.get('/api/products').then((res) => {
       const tours = res.data.map((tour) => ({
         ...tour,
-        DANH_SACH_LINK_ANH: tour.DANH_SACH_ANH.map(
-          (idAnh) => `${process.env.BACKEND_URL || 'https://localhost:8000'}/api/tour/images/${idAnh}`,
-        ),
+        DANH_SACH_LINK_ANH: tour.DANH_SACH_ANH.map((idAnh) => `${host}/api/tour/images/${idAnh}`),
       }));
       setProducttour(tours);
     });
-
   };
-  console.log('data =>', producttour);
 
   const [checked, setChecked] = useState();
   const handleSubmit = () => {
@@ -52,13 +50,11 @@ const Right = () => {
   return (
     <div className={classes.container}>
       <div className={classes.right}>
-        {/* <button className={classes.locgia}> */}
-        <select className={classes.locgia} id="price">
+        <select className={classes.locgia} id='price'>
           {dataprice.map((val) => (
-            <option value="volvo">VND {val.price}</option>
+            <option value='volvo'>VND {val.price}</option>
           ))}
         </select>
-
 
         <div className={classes.xeptheos}>
           <p>Xếp theo: </p>
@@ -74,33 +70,29 @@ const Right = () => {
       <div className={classes.danhsach}>
         {producttour.map(({ MATOUR, TENTOUR, GIATOUR, DIEMDEN, TINH, DANH_SACH_LINK_ANH }) => {
           if (TINH == maTinh) {
+            return (
+              <div key={producttour.id} onClick={() => navigate('/detail-tour/' + MATOUR)} className={classes.items}>
+                <span className={classes.tag}>Trãi nghiệm mới</span>
+                <img alt='example' src={DANH_SACH_LINK_ANH[0]} />
 
-            return <div
-              key={producttour.id}
-              onClick={() => navigate("/detail-tour/" + MATOUR)}
-              className={classes.items}
-            >
-              <span className={classes.tag}>Trãi nghiệm mới</span>
-              <img alt="example" src={DANH_SACH_LINK_ANH[0]} />
-
-              <div className={classes.noidung}>
-                <h2>{TENTOUR}</h2>
-                <div className={classes.diemden}>
-                  <img src="https://d1785e74lyxkqq.cloudfront.net/_next/static/v2/0/0629a9ae0d41e994ff5043f52cbb1b2e.svg" />
-                  {DIEMDEN}
+                <div className={classes.noidung}>
+                  <h2>{TENTOUR}</h2>
+                  <div className={classes.diemden}>
+                    <img src='https://d1785e74lyxkqq.cloudfront.net/_next/static/v2/0/0629a9ae0d41e994ff5043f52cbb1b2e.svg' />
+                    {DIEMDEN}
+                  </div>
+                  <h1>{GIATOUR} VND</h1>
                 </div>
-                <h1>{GIATOUR} VND</h1>
+                <div className={classes.luu}>
+                  <img
+                    alt='null'
+                    src='https://d1785e74lyxkqq.cloudfront.net/_next/static/v2/4/42e4a7e6ed00f63a69daf8b5a980d0d6.svg'
+                  />
+                </div>
               </div>
-              <div className={classes.luu}>
-                <img
-                  alt="null"
-                  src="https://d1785e74lyxkqq.cloudfront.net/_next/static/v2/4/42e4a7e6ed00f63a69daf8b5a980d0d6.svg"
-                />
-              </div>
-            </div>
+            );
           }
         })}
-
       </div>
     </div>
   );

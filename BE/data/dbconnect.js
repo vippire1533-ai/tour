@@ -6,7 +6,8 @@ import sendMail from './sendMail';
 async function GetDatas() {
   try {
     const pool = await sql.connect(config);
-    const queryString = `SELECT  
+    const queryString = `
+    SELECT  
           MATOUR,
           lt.TENLOAI,
           TENTOUR,

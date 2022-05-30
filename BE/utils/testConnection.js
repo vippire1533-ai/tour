@@ -1,11 +1,5 @@
 import sql from 'mssql/msnodesqlv8';
-
-const config = {
-  user: 'sa',
-  password: '153246789sST',
-  server: '157.245.59.209',
-  database: 'tour'
-};
+import config from './../data/dbconfig';
 
 const connectDatabase = async () => {
   try {
