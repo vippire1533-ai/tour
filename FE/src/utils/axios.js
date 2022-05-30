@@ -1,6 +1,6 @@
-import { default as axios } from './../../utils/axios';
+import axios from 'axios';
 import https from 'https';
-const BACKEND_URL = process.env.BACKEND_URL || 'https://localhost:8000';
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'https://localhost:8000';
 
 const instanceAxios = axios.create({
   baseURL: BACKEND_URL,

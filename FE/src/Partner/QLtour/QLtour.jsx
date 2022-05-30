@@ -1,36 +1,15 @@
-import classes from './QLtour.module.css';
-import { Fragment } from 'react';
-import Menutop from '../Menutop';
-import Menuleft from '../Menuleft';
-import React, { useEffect, useState } from 'react';
-import { Button, Card, List, message, Select } from 'antd';
-
+import { List } from 'antd';
+import React, { Fragment, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Menuleft from '../Menuleft';
+import Menutop from '../Menutop';
 import { default as axios } from './../../utils/axios';
+import classes from './QLtour.module.css';
 
 const QLtour = () => {
   const [productList, setProductList] = useState([]);
   const [loaiTour, setLoaiTour] = useState([]);
   const navigate = useNavigate();
-  // const{id} = useParams();
-  // useEffect(()=>{
-  //   if(id){
-  //     onUpdate(id);
-  //   }
-  // },[id])
-  // const onUpdate = async(id) =>{
-  //   const respone = await axios.put(`/api/products/${id}`).then((res) =>{
-  //     console.log(res.data)
-  //     console.log("Update success")
-  //   });
-  // }
-  // useEffect(() => {
-  //   axios
-  //     .get("https://622ac4ec14ccb950d224ca1b.mockapi.io/TOUR")
-  //     .then((res) => {
-  //       setProductList([...productList, ...res.data]);
-  //     });
-  // }, []);
   useEffect(() => {
     getAlldate();
   }, []);

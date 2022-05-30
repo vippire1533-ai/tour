@@ -1,5 +1,4 @@
 import { Input, Modal, Table, Typography } from 'antd';
-import { default as axios } from './../../utils/axios';
 import cx from 'classnames';
 import { useFormik } from 'formik';
 import React, { useEffect, useState } from 'react';
@@ -10,6 +9,7 @@ import * as Yup from 'yup';
 import AlertPopup from './../../components/AlertPopup';
 import LoadingSpinner from './../../components/LoadingSpinner';
 import * as quanLyLoaiVeActions from './../../Redux/Action/quanLyLoaiVeActions';
+import { default as axios } from './../../utils/axios';
 import Menuleft from './../Menuleft';
 import Menutop from './../Menutop';
 import ButtonAction from './../QuanLyVe/ButtonAction';

@@ -1,18 +1,17 @@
-import { Box, Card } from '@mui/material';
-import classes from './Ve.module.css';
-import { default as axios } from './../../utils/axios';
-import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import DateTour from './Date';
 import DateRangeIcon from '@mui/icons-material/DateRange';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import QueryBuilderOutlinedIcon from '@mui/icons-material/QueryBuilderOutlined';
-import Apply from './Apply';
-import TimeTour from './Time';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setSumPrice } from '../../../../Redux/Action/Touraction';
+import { useNavigate, useParams } from 'react-router-dom';
 import { getAllTicketTypes } from '../../../../Redux/Action/quanLyLoaiVeActions';
+import { setSumPrice } from '../../../../Redux/Action/Touraction';
+import { default as axios } from './../../../../utils/axios';
+import Apply from './Apply';
+import DateTour from './Date';
+import TimeTour from './Time';
+import classes from './Ve.module.css';
 
 const findTicketId = (ticketTypes, typeName) => {
   if (Array.isArray(ticketTypes)) {

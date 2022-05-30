@@ -1,16 +1,16 @@
 import Alert from '@mui/material/Alert';
 import Collapse from '@mui/material/Collapse';
-import { default as axios } from './../../utils/axios';
 import { Field, Form, Formik } from 'formik';
 import React, { Fragment } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import Footer from '../Footer';
 import Header from '../Header';
-import './style.css';
-import { useSelector, useDispatch } from 'react-redux';
-import LoadingSpinner from './../LoadingSpinner';
 import * as appActions from './../../Redux/Action/appActions';
+import { default as axios } from './../../utils/axios';
+import LoadingSpinner from './../LoadingSpinner';
+import './style.css';
 
 const PageRegister = () => {
   const dispatch = useDispatch();

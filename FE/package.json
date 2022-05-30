@@ -1,7 +1,6 @@
 {
   "name": "react-complete-guide",
   "version": "0.1.0",
-  "proxy": "https://localhost:8000",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.8.2",

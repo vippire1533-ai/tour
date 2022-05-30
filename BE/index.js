@@ -7,8 +7,9 @@ import dbconnect from './data/dbconnect.js';
 import router from './routes/route.js';
 import uploadFiles from './data/uploadFiles';
 import connectDatabase from './utils/testConnection.js';
-// app.use("/",TourRoutes);
+
 const app = express();
+const PORT = process.env.PORT || 8000;
 
 app.use(cors());
 
@@ -23,10 +24,17 @@ router.use((request, response, next) => {
 });
 
 router.route('/products').get((request, response) => {
-  dbconnect.GetDatas().then((result) => {
-    response.send(result);
-  });
+  dbconnect
+    .GetDatas()
+    .then((result) => {
+      response.send(result);
+    })
+    .catch((err) => {
+      console.log(err);
+      response.status(500).send(err);
+    });
 });
+
 router.route('/products/:id').get((request, response) => {
   dbconnect
     .GetData(request.params.id)
@@ -42,6 +50,7 @@ router.route('/products/:id').get((request, response) => {
       return response.status(500).send(err);
     });
 });
+
 router.route('/products').post(
   uploadFiles.fields([
     {
@@ -62,6 +71,7 @@ router.route('/products').post(
     }
   },
 );
+
 router.route('/products/:id').put((request, response) => {
   let eventid = request.params.id;
   let data = request.body[0];
@@ -75,18 +85,21 @@ router.route('/products/:id').put((request, response) => {
       console.log(err);
     });
 });
+
 router.route('/products/:id').delete((req, res) => {
   let eventid = req.params.id;
   dbconnect.deleteTour(eventid).then((result) => {
     res.status(204).send(result);
   });
 });
+
 //Route loai tour
 router.route('/loaitour').get((request, response) => {
   dbconnect.Getloaitour().then((result) => {
     response.send(result[0]);
   });
 });
+
 router.route('/loaitour').post((request, response) => {
   let listve = { ...request.body };
 
@@ -99,17 +112,7 @@ router.route('/loaitour').post((request, response) => {
       console.log('Add failed', err);
     });
 });
-router.route('/loaitour/:id').delete((req, res) => {
-  let eventid = req.params.id;
-  dbconnect
-    .deleteLoaiTour(eventid)
-    .then((result) => {
-      res.status(208).send(result);
-    })
-    .catch((error) => {
-      console.log('Delete Failed', error);
-    });
-});
+
 //Route đơn đặt vé
 router.route('/dondatve').get((request, response) => {
   dbconnect
@@ -121,6 +124,7 @@ router.route('/dondatve').get((request, response) => {
       res.status(500).send(err);
     });
 });
+
 router.route('/dondatve').post((request, response) => {
   let listve = { ...request.body };
 
@@ -134,6 +138,7 @@ router.route('/dondatve').post((request, response) => {
       response.status(500).send(err);
     });
 });
+
 router
   .route('/dondatve/:id')
   .delete((req, res) => {
@@ -414,4 +419,12 @@ const sslServer = https.createServer(
   app,
 );
 
-sslServer.listen(8000, () => console.log('Secure server on port 8000'));
+connectDatabase()
+  .then(() => {
+    console.log('Connect database successfully');
+    sslServer.listen(PORT, () => console.log(`Secure server is running on port ${ PORT }`));
+  })
+  .catch((err) => {
+    console.log('Error when connecting database');
+    console.log(err);
+  });
