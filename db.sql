@@ -16,7 +16,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[Admin](
-	[MAADMIN] [nvarchar](20) NOT NULL IDENTITY(1,1),
+	[MAADMIN] [int] NOT NULL IDENTITY(1,1),
 	[USERNAME] [nvarchar](30) NULL,
 	[PASSADMIN] [nvarchar](50) NULL,
 	[STATUS] [nvarchar](10) NULL,
