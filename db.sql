@@ -223,6 +223,10 @@ GO
 
 INSERT INTO [dbo].[KhachHang] VALUES('admin', '1', 'Admin', 'Nam', 'admin@gmail.com', 'HCM', '1', 0) 
 GO
+
+INSERT INTO [dbo].[Admin](USERNAME, PASSADMIN, STATUS) values('admin', '123456', 'active')
+INSERT INTO [dbo].[PARTNER](USERNAME, PASSWWORD, STATUS) values('partner', '123456', 'active')
+GO
 -- Foreign Key
 ALTER TABLE [dbo].[BinhLuan]  WITH CHECK ADD  CONSTRAINT [FK_BinhLuan_KhachHang] FOREIGN KEY([MAKH])
 REFERENCES [dbo].[KhachHang] ([MAKH])
