@@ -16,10 +16,11 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[Admin](
-	[MAADMIN] [nvarchar](20) NOT NULL,
+	[MAADMIN] [int] NOT NULL IDENTITY(1,1),
 	[USERNAME] [nvarchar](30) NULL,
 	[PASSADMIN] [nvarchar](50) NULL,
 	[STATUS] [nvarchar](10) NULL,
+	[IS_ADMIN] [bit] DEFAULT 1, 
  CONSTRAINT [PK_Admin] PRIMARY KEY CLUSTERED 
 (
 	[MAADMIN] ASC
@@ -133,6 +134,7 @@ CREATE TABLE [dbo].[PARTNER](
 	[USERNAME] [nvarchar](30) NULL,
 	[PASSWWORD] [nvarchar](30) NULL,
 	[STATUS] [nvarchar](10) NULL,
+	[IS_ADMIN] [bit] DEFAULT 0,
  CONSTRAINT [PK_PARTNER] PRIMARY KEY CLUSTERED 
 (
 	[MAPARTNER] ASC
@@ -220,6 +222,10 @@ INSERT [dbo].[LoaiVe] ([TENLOAI]) VALUES (N'Trẻ em')
 GO
 
 INSERT INTO [dbo].[KhachHang] VALUES('admin', '1', 'Admin', 'Nam', 'admin@gmail.com', 'HCM', '1', 0) 
+GO
+
+INSERT INTO [dbo].[Admin](USERNAME, PASSADMIN, STATUS) values('admin', '123456', 'active')
+INSERT INTO [dbo].[PARTNER](USERNAME, PASSWWORD, STATUS) values('partner', '123456', 'active')
 GO
 -- Foreign Key
 ALTER TABLE [dbo].[BinhLuan]  WITH CHECK ADD  CONSTRAINT [FK_BinhLuan_KhachHang] FOREIGN KEY([MAKH])
