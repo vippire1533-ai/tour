@@ -9,6 +9,7 @@ import { default as axios } from './../../utils/axios';
 import LoadingSpinner from './../LoadingSpinner';
 // Data
 import { HeaderMenu } from './settings';
+import { RiAdminFill } from 'react-icons/ri';
 // Style
 import './style.css';
 
@@ -89,6 +90,11 @@ const Header = () => {
               />
               <p className='hd-currency'>VND</p>
               <img src={require(`../../assets/header/chev-down.svg`).default} alt='ddl' className='hd-icon-ddl' />
+            </div>
+
+            <div className='hd-link-gr' onClick={() => navigate('/admin')}>
+              <RiAdminFill />
+              <p className='hd-currency'>Admin/Partner</p>
             </div>
 
             {!data ? (

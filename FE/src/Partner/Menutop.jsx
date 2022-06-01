@@ -1,33 +1,27 @@
-import classes from "./Menutop.module.css"
+import { Button } from 'antd';
+import { FiLogOut } from 'react-icons/fi';
+import classes from './Menutop.module.css';
+import { useNavigate } from 'react-router-dom';
 
 const Menutop = () => {
-    return(
-        <div className={classes.menu}>
-        <div className={classes.search}>
-          {/* <form>
-            <div className={classes.search_field}>
-              <input></input>
-              <button type="submit">
-                <img src="https://demo.dashboardpack.com/user-management-html/img/icon/icon_search.svg" />
-              </button>
-            </div>
-          </form> */}
-        </div>
-        <div className={classes.notification}>
-          <div className={classes.mess}>
-            <a>
-              <img src="https://demo.dashboardpack.com/user-management-html/img/icon/bell.svg" />
-            </a>
-            <a>
-              <img src="https://demo.dashboardpack.com/user-management-html/img/icon/msg.svg" />
-            </a>
-          </div>
-          <div className={classes.frofile}>
-              <img src="https://demo.dashboardpack.com/user-management-html/img/client_img.png"/>
-          </div>
-        </div>
-      </div>
-    )
-}
+  const navigate = useNavigate();
+  const handleClick = () => {
+    navigate('/');
+  };
 
-export default Menutop
+  return (
+    <div className={classes.menu}>
+      <div className={classes.search}></div>
+      <div className={classes.notification}>
+        <div className={classes.frofile}>
+          <img src='https://demo.dashboardpack.com/user-management-html/img/client_img.png' />
+        </div>
+        <Button type='link' className={classes.btn} icon={<FiLogOut />} onClick={handleClick}>
+          Đăng Xuất
+        </Button>
+      </div>
+    </div>
+  );
+};
+
+export default Menutop;

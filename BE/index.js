@@ -392,11 +392,11 @@ router.post('/login-management', async (req, res) => {
     } else {
       if (request.accountAdmin) {
         const { PASSADMIN, ...restInfo } = request.accountAdmin;
-        return res.status(200).send(restInfo);
+        return res.status(200).send({ ...restInfo, role: 'admin' });
       }
       if (request.accountPartner) {
         const { PASSWWORD, ...restInfo } = request.accountPartner;
-        return res.status(200).send(restInfo);
+        return res.status(200).send({ ...restInfo, role: 'partner' });
       }
     }
   } catch (error) {

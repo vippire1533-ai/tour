@@ -7,6 +7,10 @@ import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import LoadingSpinner from './../components/LoadingSpinner';
 import classes from './login.module.css';
+import { default as axios } from './../utils/axios';
+import Swal from 'sweetalert2';
+import * as appActions from './../Redux/Action/appActions';
+import * as taiKhoanActions from './../Redux/Action/taiKhoanActions';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -23,9 +27,25 @@ const Login = () => {
     }),
   });
 
-  const handleSubmit = () => {
-    console.log(formik.values);
-    formik.resetForm();
+  const handleSubmit = async () => {
+    try {
+      dispatch(appActions.showLoading());
+      const { data } = await axios.post('/api/login-management', formik.values, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      dispatch(taiKhoanActions.setAccountInfo(data));
+      dispatch(appActions.hideLoading());
+      navigate('/admin/thongke');
+    } catch (error) {
+      dispatch(appActions.hideLoading());
+      Swal.fire({
+        title: 'Đăng Nhập Thất Bại',
+        text: `Vui lòng kiểm tra lại thông tin`,
+        icon: 'error',
+      });
+    }
   };
 
   return (
