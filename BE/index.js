@@ -382,31 +382,33 @@ router.get('/tour/images/:id', async (req, res) => {
   }
 });
 
-router.get('/send-mail', async (req, res) => {
+router.post('/login-management', async (req, res) => {
   try {
-    const payload = {
-      MA_DON_DAT: 2,
-      MA_KH: 1,
-      TEN_KHACH_HANG: 'Admin',
-      MA_TOUR: 1,
-      LOAI_TOUR: 'Thể thao',
-      TEN_TOUR: 'test',
-      DIEM_DEN: '1111',
-      DIEM_DI: '1111',
-      TINH_THANH: 'NhaTrang',
-      GIA_TOUR: 1111,
-      MA_LOAI_VE: 1,
-      TEN_LOAI_VE: 'Người lớn',
-      SO_LUONG_VE_DAT: 1,
-      TONG_TIEN: 1111,
-      TINH_TRANG_THANH_TOAN: 'Đã thanh toán',
-      TINH_TRANG_DON: 'Đang xử lý',
-      NGAY_DAT: '2022-06-26T00:00:00.000Z',
-    };
-    await dbconnect.testMail(payload);
-    return res.status(200).send('Hello world');
+    const request = await dbconnect.loginIntoManagement(req.body);
+    if (!request.accountAdmin && !request.accountPartner) {
+      return res.status(404).json({
+        message: 'Tên đăng nhập hoặc mật khẩu không chính xác',
+      });
+    } else {
+      if (request.accountAdmin) {
+        const { PASSADMIN, ...restInfo } = request.accountAdmin;
+        return res.status(200).send(restInfo);
+      }
+      if (request.accountPartner) {
+        const { PASSWWORD, ...restInfo } = request.accountPartner;
+        return res.status(200).send(restInfo);
+      }
+    }
   } catch (error) {
-    console.log(error);
+    return res.status(500).send(error);
+  }
+});
+
+router.post('/create-account-management', async (req, res) => {
+  try {
+    await dbconnect.createAccountManagement(req.body);
+    return res.status(201).send('Tạo tài khoản thành công');
+  } catch (error) {
     return res.status(500).send(error);
   }
 });

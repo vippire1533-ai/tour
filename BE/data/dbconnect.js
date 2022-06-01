@@ -724,11 +724,34 @@ const getTourIimage = async (maHinhAnh) => {
   }
 };
 
-const testMail = async (info) => {
+const loginIntoManagement = async (info) => {
   try {
-    const htmlTemplate = await constructEmailTemplate(info);
-    await sendMail('nguyenduchoa0130@gmail.com', 'Traveloka: Thanh Toán Thành Công', htmlTemplate);
-    return null;
+    const pool = await sql.connect(config);
+    const queryAdminTable = `SELECT * FROM Admin WHERE USERNAME = '${ info.username }' AND PASSADMIN = '${ info.password }'`;
+    const queryPartnerTable = `SELECT * FROM PARTNER WHERE USERNAME = '${ info.username }' AND PASSWWORD = '${ info.password }'`;
+    const [adminResponse, partnerResponse] = await Promise.all([
+      pool.request().query(queryAdminTable),
+      pool.request().query(queryPartnerTable),
+    ]);
+    return {
+      accountAdmin: adminResponse.recordset.length ? adminResponse.recordset[0] : null,
+      accountPartner: partnerResponse.recordset.length ? partnerResponse.recordset[0] : null,
+    };
+  } catch (err) {
+    throw err;
+  }
+};
+
+const createAccountManagement = async (info) => {
+  try {
+    const pool = await sql.connect(config);
+    const insertIntoAdminQuery = `INSERT INTO Admin(USERNAME, PASSADMIN, STATUS) VALUES('${ info.username }', '${ info.password }', 'active')`;
+    const insertIntoPartnerQuery = `INSERT INTO Admin(USERNAME, PASSWORD, STATUS) VALUES('${ info.username }', '${ info.password }', 'active')`;
+    if (info.isAdmin) {
+      return await pool.request().query(insertIntoAdminQuery);
+    } else {
+      return await pool.request().query(insertIntoPartnerQuery);
+    }
   } catch (error) {
     throw error;
   }
@@ -763,6 +786,7 @@ export default {
   taoDonDatTour,
   uploadTourImages,
   getTourIimage,
-  testMail,
+  loginIntoManagement,
+  createAccountManagement,
   sql,
 };
