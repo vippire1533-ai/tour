@@ -23,15 +23,17 @@ import QLloaitour from '../Partner/QLloaitour/QLloaitour';
 import AddTour from '../Partner/QLtour/AddTour';
 import QLtour from '../Partner/QLtour/QLtour';
 import SuaTour from '../Partner/QLtour/SuaTour';
-import ThemTour from '../Partner/QLtour/ThemTour';
 import QuanLyLoaiVe from '../Partner/QuanLyLoaiVe';
 import QuanLyVe from '../Partner/QuanLyVe';
 import Register from '../Partner/register';
+import Auth from './../components/Auth';
 
 const Home = lazy(() => import('../views/Home'));
 const Search = lazy(() => import('../views/Search'));
 const UserAccount = lazy(() => import('../views/User/Account'));
-// const UserPurchase = lazy(() => import('../views/User/Purchase'))
+
+const publicRoles = ['admin', 'partner'];
+const adminRoles = ['partner'];
 
 const Routers = () => {
   return (
@@ -43,11 +45,7 @@ const Routers = () => {
           <Route exact path='/detail-tour/:id' element={<DetailTour />} />
           <Route exact path='/tour' element={<PageTour />} />
           <Route exact path='/diem-tham-quan' element={<PageSightSeeing />} />
-          <Route
-            exact
-            path='/phuong-tien-di-chuyen'
-            element={<PageTransport />}
-          />
+          <Route exact path='/phuong-tien-di-chuyen' element={<PageTransport />} />
           <Route exact path='/am-thuc' element={<PageCuisine />} />
           <Route exact path='/tien-ich-du-lich' element={<PageTourism />} />
           <Route exact path='/giai-tri' element={<PageEntertain />} />
@@ -60,30 +58,88 @@ const Routers = () => {
           <Route exact path='/' element={<Home />} />
           <Route exact path='/order/:id' element={<Order />} />
           <Route exact path='/user/account' element={<UserAccount />} />
-          {/* <Route exact path='/user/purchase/list' element={<UserPurchase/>} /> */}
           <Route exact path='/register' element={<PageRegister />} />
 
           <Route exact path='/list' element={<DStour />} />
           <Route exact path='/' element={<Home />} />
           <Route exact path='/order/:id' element={<Order />} />
           <Route exact path='/user/account' element={<UserAccount />} />
-          {/* <Route exact path='/user/purchase/list' element={<UserPurchase/>} /> */}
           <Route exact path='/register' element={<PageRegister />} />
 
           {/* admin */}
           <Route exact path='/admin' element={<Login />} />
           <Route exact path='/admin/register' element={<Register />} />
-          <Route exact path='/admin/thongke' element={<Manage />} />
-          <Route exact path='/admin/tour' element={<QLtour />} />
-          <Route exact path='/admin/tour/them' element={<AddTour />} />
-          <Route exact path='/admin/tour/:id' element={<SuaTour />} />
-          <Route exact path='/admin/loaitour' element={<QLloaitour />} />
-          <Route exact path='/admin/dondattour' element={<QLdondatve />} />
-          <Route exact path='/admin/quan-ly-ve' element={<QuanLyVe />} />
+          <Route
+            exact
+            path='/admin/thongke'
+            element={
+              <Auth roles={publicRoles}>
+                <Manage />
+              </Auth>
+            }
+          />
+          <Route
+            exact
+            path='/admin/tour'
+            element={
+              <Auth roles={adminRoles}>
+                <QLtour />
+              </Auth>
+            }
+          />
+          <Route
+            exact
+            path='/admin/tour/them'
+            element={
+              <Auth roles={adminRoles}>
+                <AddTour />
+              </Auth>
+            }
+          />
+          <Route
+            exact
+            path='/admin/tour/:id'
+            element={
+              <Auth roles={adminRoles}>
+                <SuaTour />
+              </Auth>
+            }
+          />
+          <Route
+            exact
+            path='/admin/loaitour'
+            element={
+              <Auth roles={adminRoles}>
+                <QLloaitour />
+              </Auth>
+            }
+          />
+          <Route
+            exact
+            path='/admin/dondattour'
+            element={
+              <Auth roles={publicRoles}>
+                <QLdondatve />
+              </Auth>
+            }
+          />
+          <Route
+            exact
+            path='/admin/quan-ly-ve'
+            element={
+              <Auth roles={publicRoles}>
+                <QuanLyVe />
+              </Auth>
+            }
+          />
           <Route
             exact
             path='/admin/quan-ly-loai-ve'
-            element={<QuanLyLoaiVe />}
+            element={
+              <Auth roles={publicRoles}>
+                <QuanLyLoaiVe />
+              </Auth>
+            }
           />
         </Routes>
       </BrowserRouter>

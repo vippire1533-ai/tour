@@ -9,6 +9,7 @@ import quanLyDonDatVeReducer from './Reducer/quanLyDonDatVeReducer';
 import quanLyTourReducer from './Reducer/quanLyTourReducer';
 import thongKeReducer from './Reducer/thongKeReducer';
 import quanLyDanhSachTourReducer from './Reducer/quanLyDanhSachTourReducer';
+import taiKhoanReducer from './Reducer/taiKhoanReducer';
 import { tourlistreducer } from './Reducer/Tourreducer';
 
 const reducer = combineReducers({
@@ -20,6 +21,7 @@ const reducer = combineReducers({
   quanLyTourState: quanLyTourReducer,
   thongKeState: thongKeReducer,
   quanLyDanhSachTourState: quanLyDanhSachTourReducer,
+  taiKhoanState: taiKhoanReducer,
   appState: appReducer,
 });
 const initialState = {};
