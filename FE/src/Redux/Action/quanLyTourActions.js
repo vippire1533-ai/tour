@@ -1,7 +1,8 @@
-import * as quanLyTourActionTypes from './../Constants/quanLyTourActionTypes';
 import { default as axios } from './../../utils/axios';
+import * as quanLyTourActionTypes from './../Constants/quanLyTourActionTypes';
 
 const BASE_URL = '/api/tours';
+
 export const getAllTours = () => {
   return async (dispatch) => {
     try {
