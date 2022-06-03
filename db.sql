@@ -468,13 +468,14 @@ GO
 	-- InsertLoaiVe
 create procedure InsertLoaiVe
 (
-@TENLOAI nvarchar(20)
+@TENLOAI nvarchar(20),
+@SO_TIEN_GIAM int
 )
 As 
 Begin
-Insert into LoaiVe(TENLOAI)
+Insert into LoaiVe(TENLOAI, SO_TIEN_GIAM)
 Values
-(@TENLOAI)
+(@TENLOAI, @SO_TIEN_GIAM)
 End
 GO
 	-- DeleteLoaiVe
