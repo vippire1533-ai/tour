@@ -219,8 +219,8 @@ INSERT [dbo].[LoaiTour] ([TENLOAI]) VALUES ( N'Du lịch')
 INSERT [dbo].[LoaiTour] ([TENLOAI]) VALUES (N'Thể thao')
 INSERT [dbo].[LoaiTour] ([TENLOAI]) VALUES (N'Giải trí')
 GO
-INSERT [dbo].[LoaiVe] ([TENLOAI]) VALUES (N'Người lớn', 0)
-INSERT [dbo].[LoaiVe] ([TENLOAI]) VALUES (N'Trẻ em', 100000)
+INSERT [dbo].[LoaiVe] ([TENLOAI], [SO_TIEN_GIAM]) VALUES (N'Người lớn', 0)
+INSERT [dbo].[LoaiVe] ([TENLOAI], [SO_TIEN_GIAM]) VALUES (N'Trẻ em', 100000)
 GO
 
 INSERT INTO [dbo].[KhachHang] VALUES('admin', '1', 'Admin', 'Nam', 'admin@gmail.com', 'HCM', '1', 0) 
