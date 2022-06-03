@@ -118,6 +118,7 @@ GO
 CREATE TABLE [dbo].[LoaiVe](
 	[MALOAI] [int] NOT NULL IDENTITY(1,1),
 	[TENLOAI] [nvarchar](20) NULL,
+	[SO_TIEN_GIAM] [int] default 0,
  CONSTRAINT [PK_LoaiVe] PRIMARY KEY CLUSTERED 
 (
 	[MALOAI] ASC
