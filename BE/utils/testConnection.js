@@ -6,9 +6,11 @@ const connectDatabase = async () => {
     console.log('Connecting.....');
     console.log('config', config);
     const pool = await sql.connect(config);
-    console.log('pool', pool);
+    // console.log('Running update....');
+    // await pool.request().execute('UpdateVeTourAndTour');
   } catch (error) {
     console.log(error);
+
   }
 };
 

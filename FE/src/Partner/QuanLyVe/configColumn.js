@@ -286,15 +286,6 @@ export const createColumnConfigurations = (
           });
         };
 
-        const BtnUpDateTicket = () => (
-          <ButtonAction
-            icon={<FaPen />}
-            tooltipTitle='Cập nhật vé'
-            placement='bottom'
-            buttonType='primary'
-            handleClick={showUpdateTickerModal}
-          />
-        );
         const BtnDeleteTicket = () => (
           <ButtonAction
             icon={<FaTimes />}
@@ -336,7 +327,6 @@ export const createColumnConfigurations = (
             )}
             {record.TINHTRANG === 'Còn hiệu lực' && (
               <>
-                <BtnUpDateTicket />
                 <BtnDeleteTicket />
               </>
             )}

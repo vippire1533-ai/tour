@@ -1,6 +1,7 @@
 import { default as axios } from './../../utils/axios';
 import * as quanLyLoaiVeActionTypes from './../Constants/quanLyLoaiVeActionTypes';
 import * as appActions from './appActions';
+import Swal from 'sweetalert2';
 
 const BASE_URL = '/api/ticketTypes';
 
@@ -16,7 +17,11 @@ export const getAllTicketTypes = () => {
       });
       return data;
     } catch (error) {
-      alert(error.message);
+      Swal.fire({
+        title: 'Lỗi',
+        text: error.message,
+        icon: 'error',
+      });
     }
   };
 };
@@ -33,7 +38,11 @@ export const createTicketType = (payload) => {
       }, 500);
       return data;
     } catch (error) {
-      alert(error.message);
+      Swal.fire({
+        title: 'Lỗi',
+        text: error.message,
+        icon: 'error',
+      });
     }
   };
 };
@@ -42,10 +51,7 @@ export const updateTicketType = (payload) => {
   return async (dispatch) => {
     try {
       dispatch(appActions.showLoading());
-      const { data } = await axios.put(
-        `${ BASE_URL }/${ payload.MALOAI }`,
-        payload,
-      );
+      const { data } = await axios.put(`${ BASE_URL }/${ payload.MALOAI }`, payload);
       dispatch(getAllTicketTypes());
       dispatch(appActions.showModal());
       setTimeout(() => {
@@ -53,7 +59,11 @@ export const updateTicketType = (payload) => {
       }, 500);
       return data;
     } catch (error) {
-      alert(error.message);
+      Swal.fire({
+        title: 'Lỗi',
+        text: error.message,
+        icon: 'error',
+      });
     }
   };
 };
@@ -70,7 +80,11 @@ export const deleteTicketType = (maLoaiVe) => {
       }, 500);
       return data;
     } catch (error) {
-      alert(error.message);
+      Swal.fire({
+        title: 'Lỗi',
+        text: error.message,
+        icon: 'error',
+      });
     }
   };
 };

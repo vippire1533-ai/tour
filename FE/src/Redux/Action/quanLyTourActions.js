@@ -1,5 +1,6 @@
 import { default as axios } from './../../utils/axios';
 import * as quanLyTourActionTypes from './../Constants/quanLyTourActionTypes';
+import Swal from 'sweetalert2';
 
 const BASE_URL = '/api/tours';
 
@@ -15,7 +16,11 @@ export const getAllTours = () => {
       });
       return data;
     } catch (error) {
-      alert(error.message);
+      Swal.fire({
+        title: 'Lỗi',
+        text: error.message,
+        icon: 'error',
+      });
     }
   };
 };

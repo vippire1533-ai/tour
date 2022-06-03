@@ -1,6 +1,7 @@
 import * as quanLyDonDatVeActionTypes from './../Constants/quanLyDonDatVeActionTypes';
 import * as appActions from './appActions';
 import { default as axios } from './../../utils/axios';
+import Swal from 'sweetalert2';
 
 const BASE_URL = '/api/dondatve';
 
@@ -16,7 +17,11 @@ export const getAllOrderList = () => {
       });
       return data;
     } catch (error) {
-      alert(error.message);
+      Swal.fire({
+        title: 'Lỗi',
+        text: error.message,
+        icon: 'error',
+      });
     }
   };
 };
@@ -33,7 +38,11 @@ export const declineOrder = (maDonDat) => {
       }, 500);
       return data;
     } catch (error) {
-      alert(error.message);
+      Swal.fire({
+        title: 'Lỗi',
+        text: error.message,
+        icon: 'error',
+      });
     }
   };
 };
@@ -51,7 +60,11 @@ export const getTicketByDonDatTour = () => {
       });
       return data;
     } catch (error) {
-      alert(error.message);
+      Swal.fire({
+        title: 'Lỗi',
+        text: error.message,
+        icon: 'error',
+      });
     }
   };
 };
@@ -62,7 +75,7 @@ export const acceptOrder = (maDonDat, maKH, danhSachCacVe) => {
       dispatch(appActions.showLoading());
       const { data } = await axios.put(`${ BASE_URL }/${ maDonDat }`, {
         danhSachCacVe,
-        maKH
+        maKH,
       });
       dispatch(getAllOrderList());
       dispatch(getTicketByDonDatTour());
@@ -72,7 +85,11 @@ export const acceptOrder = (maDonDat, maKH, danhSachCacVe) => {
       }, 500);
       return data;
     } catch (error) {
-      alert(error.message);
+      Swal.fire({
+        title: 'Lỗi',
+        text: error.message,
+        icon: 'error',
+      });
     }
   };
 };

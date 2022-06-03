@@ -413,6 +413,16 @@ router.post('/create-account-management', async (req, res) => {
   }
 });
 
+router.post('/update-application', async (req, res) => {
+  try {
+    await dbconnect.updateApplicaton();
+    return res.status(200).send('Update successfully!');
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send(error);
+  }
+});
+
 const sslServer = https.createServer(
   {
     key: fs.readFileSync('cetificate/key.pem'),

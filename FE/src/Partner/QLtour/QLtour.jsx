@@ -1,10 +1,9 @@
-import { Empty } from 'antd';
-import { DeleteFilled, EditOutlined } from '@ant-design/icons';
+import { DeleteFilled, EditOutlined, ReloadOutlined } from '@ant-design/icons';
 import { Grid } from '@mui/material';
-import { Avatar, Button, Card } from 'antd';
+import { Avatar, Button, Card, Empty, Badge } from 'antd';
 import cx from 'classnames';
 import moment from 'moment';
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import { FaPlus } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -13,20 +12,23 @@ import LoadingSpinner from '../../components/LoadingSpinner';
 import Menuleft from '../Menuleft';
 import Menutop from '../Menutop';
 import * as quanLyDanhSachTourActions from './../../Redux/Action/quanLyDanhSachTourActions';
+import * as appActions from './../../Redux/Action/appActions';
 import classes from './QLtour.module.css';
 
 const QLtour = () => {
-  const [loaiTour, setLoaiTour] = useState([]);
-
   const dispatch = useDispatch();
   const { danhSachTour } = useSelector((state) => state.quanLyDanhSachTourState);
   const { isLoading } = useSelector((state) => state.appState);
   const navigate = useNavigate();
 
+  const handleUpdateApplication = () => {
+    dispatch(appActions.updateApplicaton());
+    dispatch(quanLyDanhSachTourActions.layTatCaDanhSachTour());
+  };
+
   useEffect(() => {
     dispatch(quanLyDanhSachTourActions.layTatCaDanhSachTour());
   }, []);
-
   const onDelete = async (TENTOUR, MATOUR) => {
     Swal.fire({
       title: 'Xác Nhận',
@@ -55,7 +57,15 @@ const QLtour = () => {
       <Menutop />
       <Menuleft />
       <div className={classes.wrapper}>
-        <div className={cx(classes.clearfix, classes['center-box'])}>
+        <div className={cx(classes.clearfix, classes['center-box'], classes['align-row'])}>
+          <Button
+            className={cx(classes.btn, classes['align-right'])}
+            type='danger'
+            icon={<ReloadOutlined />}
+            onClick={handleUpdateApplication}
+          >
+            Làm mới danh sách
+          </Button>
           <Button
             className={cx(classes.btn, classes['align-right'])}
             type='primary'
@@ -64,28 +74,41 @@ const QLtour = () => {
           >
             Tạo tour
           </Button>
+        </div>
+        <div className={cx(classes.clearfix, classes['center-box'])}>
           <Grid container spacing={2}>
             {danhSachTour.length ? (
               danhSachTour.map((tour) => (
                 <>
                   <Grid item key={tour.MATOUR} xs={12} md={3}>
-                    <Card
-                      cover={
-                        <img className={classes['tour-image']} alt={tour.TENTOUR} src={tour.DANH_SACH_LINK_ANH[0]} />
-                      }
-                      actions={[
-                        <EditOutlined key='edit' />,
-                        <DeleteFilled key='setting' onClick={() => onDelete(tour.TENTOUR, tour.MATOUR)} />,
-                      ]}
+                    <Badge.Ribbon
+                      text={tour.TINH_TRANG_TOUR}
+                      color={tour.TINH_TRANG_TOUR === 'Còn hiệu lực' ? 'green' : 'volcano'}
                     >
-                      <Card.Meta
-                        avatar={
-                          <Avatar src='https://us.123rf.com/450wm/dzein/dzein1509/dzein150900013/44952464-3d-realistic-travel-and-tour-poster-design-around-the-world-with-summer-elements-vector-illustration.jpg?ver=6' />
+                      <Card
+                        cover={
+                          <img
+                            className={classes['tour-image']}
+                            alt={tour.TENTOUR}
+                            src={tour.DANH_SACH_LINK_ANH[0]}
+                            width='200'
+                            height='200'
+                          />
                         }
-                        title={tour.TENTOUR}
-                        description={moment(tour.NGAYDI).format('DD/MM/YYYY')}
-                      />
-                    </Card>
+                        actions={[
+                          <EditOutlined key='edit' />,
+                          <DeleteFilled key='setting' onClick={() => onDelete(tour.TENTOUR, tour.MATOUR)} />,
+                        ]}
+                      >
+                        <Card.Meta
+                          avatar={
+                            <Avatar src='https://us.123rf.com/450wm/dzein/dzein1509/dzein150900013/44952464-3d-realistic-travel-and-tour-poster-design-around-the-world-with-summer-elements-vector-illustration.jpg?ver=6' />
+                          }
+                          title={tour.TENTOUR}
+                          description={moment(tour.NGAYDI).format('DD/MM/YYYY')}
+                        />
+                      </Card>
+                    </Badge.Ribbon>
                   </Grid>
                 </>
               ))
