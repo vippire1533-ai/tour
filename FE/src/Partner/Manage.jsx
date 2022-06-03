@@ -29,6 +29,12 @@ const cards = [
     dataIndex: 'Đã bị hủy',
   },
   {
+    title: 'Số Lượng Vé Bị Quá Hạn',
+    bgColor: 'grey',
+    textColor: 'white',
+    dataIndex: 'Đã quá hạn',
+  },
+  {
     title: 'Số Lượng Vé Còn Hiệu Lực',
     bgColor: 'green',
     textColor: 'white',
@@ -61,11 +67,7 @@ const calculateSumByField = (data, field) => {
 };
 
 const tinhTongDoanhThu = (data) => {
-  return data.reduce(
-    (acc, item) =>
-      item.TRANG_THAI_VE === 'Đã được đặt' ? acc + item.TONG_DOANH_THU : acc,
-    0,
-  );
+  return data.reduce((acc, item) => (item.TRANG_THAI_VE === 'Đã được đặt' ? acc + item.TONG_DOANH_THU : acc), 0);
 };
 
 const Manage = () => {
@@ -74,9 +76,7 @@ const Manage = () => {
   const { thongKeData } = useSelector((state) => state.thongKeState);
 
   const findItemsByMonth = (data, month) => {
-    return Array.isArray(data)
-      ? data.filter((item) => item.THANG === month)
-      : null;
+    return Array.isArray(data) ? data.filter((item) => item.THANG === month) : null;
   };
 
   useEffect(() => {
@@ -105,12 +105,10 @@ const Manage = () => {
           options={months}
           onChange={(value) => setThang(value)}
         ></Select>
-        <h1 className={classes.heading}>
-          Thống Kê Vé {thang && `Trong Tháng ${thang}`}
-        </h1>
+        <h1 className={classes.heading}>Thống Kê Vé {thang && `Trong Tháng ${thang}`}</h1>
         <Grid container spacing={2}>
           {cards.map((card, index) => (
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={3}>
               <Card
                 title={card.title}
                 key={index}
@@ -123,11 +121,7 @@ const Manage = () => {
                 }}
               >
                 <div className={classes['center-box']}>
-                  <CountUp
-                    start={0}
-                    end={getNumberOfTicketType(thongKeData, card.dataIndex)}
-                    duration={0.7}
-                  />
+                  <CountUp start={0} end={getNumberOfTicketType(thongKeData, card.dataIndex)} duration={0.7} />
                 </div>
               </Card>
             </Grid>
@@ -144,18 +138,12 @@ const Manage = () => {
               }}
             >
               <div className={classes['center-box']}>
-                <CountUp
-                  start={0}
-                  end={calculateSumByField(thongKeData, 'SO_LUONG_VE')}
-                  duration={1}
-                />
+                <CountUp start={0} end={calculateSumByField(thongKeData, 'SO_LUONG_VE')} duration={1} />
               </div>
             </Card>
           </Grid>
         </Grid>
-        <h1 className={classes.heading}>
-          Tổng Doanh Thu {thang && `Trong Tháng ${thang}`}
-        </h1>
+        <h1 className={classes.heading}>Tổng Doanh Thu {thang && `Trong Tháng ${thang}`}</h1>
         <Grid container>
           <Grid item xs={12} md={12}>
             <Card
@@ -169,20 +157,13 @@ const Manage = () => {
               }}
             >
               <div className={classes['center-box']}>
-                <CountUp
-                  start={0}
-                  end={tinhTongDoanhThu(thongKeData)}
-                  duration={1}
-                  separator=','
-                />
+                <CountUp start={0} end={tinhTongDoanhThu(thongKeData)} duration={1} separator=',' />
                 <span style={{ paddingLeft: '10px' }}>VND</span>
               </div>
             </Card>
           </Grid>
         </Grid>
-        <h1 className={classes.heading}>
-          Biểu Đồ Doanh Thu {thang && `Trong Tháng ${thang}`}
-        </h1>
+        <h1 className={classes.heading}>Biểu Đồ Doanh Thu {thang && `Trong Tháng ${thang}`}</h1>
         <div className={classes.bieudo}>
           <ChartExample dataChart={thongKeData} />
         </div>

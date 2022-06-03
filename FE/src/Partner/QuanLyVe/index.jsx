@@ -1,22 +1,22 @@
 import { DatePicker, Input, Modal, Select, Table, Typography } from 'antd';
 import cx from 'classnames';
+import { useFormik } from 'formik';
+import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { FiPlus, FiRefreshCw } from 'react-icons/fi';
 import { useDispatch, useSelector } from 'react-redux';
+import * as Yup from 'yup';
 import AlertPopup from '../../components/AlertPopup';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import Menuleft from '../Menuleft';
 import Menutop from '../Menutop';
-import * as quanLyTourActions from './../../Redux/Action/quanLyTourActions';
+import * as appActions from './../../Redux/Action/appActions';
 import * as quanLyLoaiVeActions from './../../Redux/Action/quanLyLoaiVeActions';
+import * as quanLyTourActions from './../../Redux/Action/quanLyTourActions';
 import * as quanLyVeActions from './../../Redux/Action/quanLyVeActions';
 import ButtonAction from './ButtonAction';
 import { createColumnConfigurations } from './configColumn';
 import styles from './styles.module.css';
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
-import moment from 'moment';
-import * as appActions from './../../Redux/Action/appActions';
 
 const QuanLyVe = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -105,6 +105,16 @@ const QuanLyVe = () => {
     const selectedTour = tours.find((tour) => tour.MA_TOUR === maTour);
     formik.setFieldValue('GIAVE', selectedTour ? selectedTour.GIA_TOUR : undefined);
     formik.setFieldValue('NGAYCOHIEULUC', selectedTour ? moment(selectedTour.NGAY_DI) : undefined);
+  };
+
+  const handleTicketTypeChange = (maTicket) => {
+    formik.setFieldValue('LOAIVE', maTicket);
+    const maTour = formik.values.MATOUR;
+    if (maTour) {
+      const selectedTour = tours.find((tour) => tour.MA_TOUR === maTour);
+      const selectedTicketType = ticketTypes.find((ticketType) => ticketType.MALOAI === maTicket);
+      formik.setFieldValue('GIAVE', +selectedTour.GIA_TOUR - +selectedTicketType.SO_TIEN_GIAM);
+    }
   };
 
   useEffect(() => {
@@ -200,7 +210,7 @@ const QuanLyVe = () => {
                   placeholder='Chọn loại vé'
                   className={styles['form-control']}
                   value={formik.values.LOAIVE || undefined}
-                  onChange={(value) => formik.setFieldValue('LOAIVE', value)}
+                  onChange={handleTicketTypeChange}
                 >
                   {ticketTypes.map((type) => (
                     <Select.Option value={type.MALOAI} key={type.MALOAI}>

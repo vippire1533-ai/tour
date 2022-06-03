@@ -4,6 +4,7 @@ import { useFormik } from 'formik';
 import React, { useEffect, useState } from 'react';
 import { FaPen, FaTimes } from 'react-icons/fa';
 import { FiPlus } from 'react-icons/fi';
+import NumberFormat from 'react-number-format';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
 import AlertPopup from './../../components/AlertPopup';
@@ -25,6 +26,7 @@ const QuanLyLoaiVe = () => {
   const formik = useFormik({
     initialValues: {
       TENLOAI: '',
+      SO_TIEN_GIAM: 0,
     },
     validationSchema: Yup.object({
       TENLOAI: Yup.string()
@@ -39,6 +41,10 @@ const QuanLyLoaiVe = () => {
             return true;
           }
         }),
+      SO_TIEN_GIAM: Yup.number()
+        .required('Vui lòng nhập số tiền giảm!')
+        .typeError('Số tiền giảm không hợp lệ')
+        .moreThan(-1, 'Số tiền giảm phải là 1 số nguyên dương'),
     }),
   });
 
@@ -88,6 +94,15 @@ const QuanLyLoaiVe = () => {
       dataIndex: 'TENLOAI',
       key: 'TENLOAI',
       sorter: (item1, item2) => item1['TENLOAI'].localeCompare(item2['TENLOAI']),
+    },
+    {
+      title: 'Số tiền giảm',
+      dataIndex: 'SO_TIEN_GIAM',
+      key: 'SO_TIEN_GIAM',
+      sorter: (item1, item2) => +item1['SO_TIEN_GIAM'] - +item2['SO_TIEN_GIAM'],
+      render: (value) => (
+        <NumberFormat thousandSeparator={true} displayType={'text'} thousandsGroupStyle='thousand' value={value} />
+      ),
     },
     {
       title: 'Thao Tác',
@@ -196,6 +211,23 @@ const QuanLyLoaiVe = () => {
               {formik.touched.TENLOAI && formik.errors.TENLOAI ? (
                 <Typography.Text type='danger' className={classes['error-message']}>
                   {formik.errors.TENLOAI}
+                </Typography.Text>
+              ) : null}
+            </div>
+            <div className={classes['form-group']}>
+              <label htmlFor='SO_TIEN_GIAM' className={classes['form-label']}>
+                Sô tiền giảm
+              </label>
+              <Input
+                id='SO_TIEN_GIAM'
+                addonBefore='Số tiền giảm'
+                placeholder='Nhập Số tiền giảm'
+                className={classes['form-control']}
+                {...formik.getFieldProps('SO_TIEN_GIAM')}
+              />
+              {formik.touched.SO_TIEN_GIAM && formik.errors.SO_TIEN_GIAM ? (
+                <Typography.Text type='danger' className={classes['error-message']}>
+                  {formik.errors.SO_TIEN_GIAM}
                 </Typography.Text>
               ) : null}
             </div>
