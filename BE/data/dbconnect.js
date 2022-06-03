@@ -502,7 +502,11 @@ const getAllTicketTypes = async () => {
 const createTicketType = async (payload) => {
   try {
     const pool = await sql.connect(config);
-    const data = await pool.request().input('TENLOAI', sql.NVarChar, payload.TENLOAI).execute('InsertLoaiVe');
+    const data = await pool
+      .request()
+      .input('TENLOAI', sql.NVarChar, payload.TENLOAI)
+      .input('SO_TIEN_GIAM', +sql.Int, payload.SO_TIEN_GIAM)
+      .execute('InsertLoaiVe');
     return data.recordset;
   } catch (error) {
     throw error;
@@ -516,6 +520,7 @@ const updateTicketType = async (maLoaiVe, payload) => {
       .request()
       .input('MALOAI', sql.Int, +maLoaiVe)
       .input('TENLOAI', sql.NVarChar, payload.TENLOAI)
+      .input('SO_TIEN_GIAM', sql.Int, +payload.SO_TIEN_GIAM)
       .execute('UpdateLoaiVe');
     return data.recordset;
   } catch (error) {
@@ -540,7 +545,7 @@ const findTickerByDonDatTour = async () => {
   try {
     const pool = await sql.connect(config);
     const query = `
-    SELECT 
+    SELECT DISTINCT
       VT.MAVE, 
       VT.MATOUR AS MA_TOUR,
       T.TENTOUR, 
