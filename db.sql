@@ -173,6 +173,7 @@ CREATE TABLE [dbo].[Tour](
 	[DIEMDEN] [nvarchar](50) NULL,
 	[NGAYTAO] [datetime] NULL,
 	[TINH] [nvarchar](50) NULL default '',
+	[TINH_TRANG_TOUR] [nvarchar] (50) NULL default N'Còn hiệu lực',
  CONSTRAINT [PK_Tour] PRIMARY KEY CLUSTERED 
 (
 	[MATOUR] ASC
