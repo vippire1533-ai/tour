@@ -224,17 +224,18 @@ async function getTicketByMaVe(maVe) {
   }
 }
 
-async function addve(listve) {
+async function addve(payload) {
   try {
     let pool = await sql.connect(config);
     let insertvetour = await pool
       .request()
-      .input('MATOUR', sql.Int, listve.MATOUR)
-      .input('NGAYCOHIEULUC', sql.DateTime, new Date(listve.NGAYCOHIEULUC))
-      .input('LOAIVE', sql.Int, listve.LOAIVE)
+      .input('SO_LUONG_VE', payload.SOLUONGVE)
+      .input('MATOUR', sql.Int, payload.MATOUR)
+      .input('NGAYCOHIEULUC', sql.DateTime, new Date(payload.NGAYCOHIEULUC))
+      .input('LOAIVE', sql.Int, payload.LOAIVE)
       .input('NGAYTAO', sql.DateTime, new Date())
-      .input('GIAVE', sql.Int, +listve.GIAVE)
-      .input('TENKH', sql.NVarChar, listve.TENKH)
+      .input('GIAVE', sql.Int, +payload.GIAVE)
+      .input('TENKH', sql.NVarChar, payload.TENKH)
       .execute('InsertVe');
     return insertvetour.recordsets;
   } catch (err) {
@@ -577,7 +578,7 @@ const getAllTours = async () => {
   try {
     const pool = await sql.connect(config);
     const query = `
-      SELECT MATOUR AS MA_TOUR, TENTOUR AS TEN_TOUR FROM Tour
+      SELECT MATOUR AS MA_TOUR, TENTOUR AS TEN_TOUR, GIATOUR AS GIA_TOUR FROM Tour
     `;
     const result = await pool.request().query(query);
     return result.recordset;
