@@ -16,9 +16,7 @@ import classes from './QLdondatve.module.css';
 
 const QLdondatve = () => {
   const dispatch = useDispatch();
-  const { orderList, tickets } = useSelector(
-    (state) => state.quanLyDonDatVeState,
-  );
+  const { orderList, tickets } = useSelector((state) => state.quanLyDonDatVeState);
   const { isLoading, isShowModal } = useSelector((state) => state.appState);
 
   useEffect(() => {
@@ -38,8 +36,7 @@ const QLdondatve = () => {
       title: 'Tên KH',
       dataIndex: 'TEN_KHACH_HANG',
       key: 'TEN_KHACH_HANG',
-      sorter: (item1, item2) =>
-        item1['TEN_KHACH_HANG'].localeCompare(item2['TEN_KHACH_HANG']),
+      sorter: (item1, item2) => item1['TEN_KHACH_HANG'].localeCompare(item2['TEN_KHACH_HANG']),
       align: 'center',
       ellipsis: true,
     },
@@ -47,8 +44,7 @@ const QLdondatve = () => {
       title: 'Tên Tour',
       dataIndex: 'TEN_TOUR',
       key: 'TEN_TOUR',
-      sorter: (item1, item2) =>
-        item1['TEN_TOUR'].localeCompare(item2['TEN_TOUR']),
+      sorter: (item1, item2) => item1['TEN_TOUR'].localeCompare(item2['TEN_TOUR']),
       align: 'center',
       ellipsis: true,
     },
@@ -56,8 +52,7 @@ const QLdondatve = () => {
       title: 'Loại Tour',
       dataIndex: 'LOAI_TOUR',
       key: 'LOAI_TOUR',
-      sorter: (item1, item2) =>
-        item1['LOAI_TOUR'].localeCompare(item2['LOAI_TOUR']),
+      sorter: (item1, item2) => item1['LOAI_TOUR'].localeCompare(item2['LOAI_TOUR']),
       align: 'center',
       ellipsis: true,
     },
@@ -65,8 +60,7 @@ const QLdondatve = () => {
       title: 'Loại Vé',
       dataIndex: 'TEN_LOAI_VE',
       key: 'TEN_LOAI_VE',
-      sorter: (item1, item2) =>
-        item1['TEN_LOAI_VE'].localeCompare(item2['TEN_LOAI_VE']),
+      sorter: (item1, item2) => item1['TEN_LOAI_VE'].localeCompare(item2['TEN_LOAI_VE']),
       align: 'center',
       ellipsis: true,
     },
@@ -84,20 +78,14 @@ const QLdondatve = () => {
       sorter: (item1, item2) => +item1['GIA_TOUR'] - +item2['GIA_TOUR'],
       align: 'center',
       render: (value) => (
-        <NumberFormat
-          thousandSeparator={true}
-          displayType={'text'}
-          thousandsGroupStyle='thousand'
-          value={value}
-        />
+        <NumberFormat thousandSeparator={true} displayType={'text'} thousandsGroupStyle='thousand' value={value} />
       ),
     },
     {
       title: 'Số Vé',
       dataIndex: 'SO_LUONG_VE_DAT',
       key: 'SO_LUONG_VE_DAT',
-      sorter: (item1, item2) =>
-        +item1['SO_LUONG_VE_DAT'] - +item2['SO_LUONG_VE_DAT'],
+      sorter: (item1, item2) => +item1['SO_LUONG_VE_DAT'] - +item2['SO_LUONG_VE_DAT'],
       align: 'center',
     },
     {
@@ -107,12 +95,7 @@ const QLdondatve = () => {
       sorter: (item1, item2) => +item1['TONG_TIEN'] - +item2['TONG_TIEN'],
       align: 'center',
       render: (value) => (
-        <NumberFormat
-          thousandSeparator={true}
-          displayType={'text'}
-          thousandsGroupStyle='thousand'
-          value={value}
-        />
+        <NumberFormat thousandSeparator={true} displayType={'text'} thousandsGroupStyle='thousand' value={value} />
       ),
     },
     {
@@ -212,11 +195,7 @@ const QLdondatve = () => {
                   <thead>
                     <tr>
                       {thItems.map((name, index) => (
-                        <th
-                          key={index}
-                          className={classes.th}
-                          style={{ textAlign: 'center' }}
-                        >
+                        <th key={index} className={classes.th} style={{ textAlign: 'center' }}>
                           {name}
                         </th>
                       ))}
@@ -229,9 +208,7 @@ const QLdondatve = () => {
                           <th className={classes.th}>{item.name}</th>
                           <td className={classes.td}>
                             {item.dataIndex === 'NGAY_DAT'
-                              ? moment(record[item.dataIndex]).format(
-                                  'DD-MM-YYYY',
-                                )
+                              ? moment(record[item.dataIndex]).format('DD-MM-YYYY')
                               : record[item.dataIndex]}
                           </td>
                         </tr>
@@ -297,11 +274,11 @@ const QLdondatve = () => {
               return (
                 item.MA_TOUR === record.MA_TOUR &&
                 item.MA_LOAI_VE == record.MA_LOAI_VE &&
-                moment(item.NGAY_CO_HIEU_LUC).date() ===
-                  moment(record.NGAY_DAT).date() &&
+                moment(item.NGAY_CO_HIEU_LUC).date() === moment(record.NGAY_DAT).date() &&
                 item.GIA_VE === record.TONG_TIEN / record.SO_LUONG_VE_DAT
               );
             })
+            .map((item) => ({ key: item.MAVE, ...item }))
             .slice(0, record.SO_LUONG_VE_DAT);
           Modal.confirm({
             title: 'Duyệt Đơn Đặt',
@@ -326,13 +303,7 @@ const QLdondatve = () => {
               if (!ids.length || ids.length < record.SO_LUONG_VE_DAT) {
                 alert('Vui lòng chọn vé để duyệt đơn');
               } else {
-                dispatch(
-                  quanLyDonDatVeActions.acceptOrder(
-                    record.MA_DON_DAT,
-                    record.MA_KH,
-                    ids,
-                  ),
-                );
+                dispatch(quanLyDonDatVeActions.acceptOrder(record.MA_DON_DAT, record.MA_KH, ids));
               }
             },
           });
@@ -341,9 +312,7 @@ const QLdondatve = () => {
         const handleDeclineOrder = () => {
           Modal.confirm({
             title: 'Xác nhận từ chối đơn',
-            content: (
-              <b>Bạn có chắc chắc muốn từ chối nhận đơn đặt Tour này không?</b>
-            ),
+            content: <b>Bạn có chắc chắc muốn từ chối nhận đơn đặt Tour này không?</b>,
             centered: true,
             okText: 'Xác nhận',
             cancelText: 'Hủy',
@@ -431,13 +400,7 @@ const QLdondatve = () => {
   return (
     <>
       {isLoading && <LoadingSpinner />}
-      {isShowModal && (
-        <AlertPopup
-          title='Thành Công'
-          message='Thao tác thành công'
-          type='success'
-        />
-      )}
+      {isShowModal && <AlertPopup title='Thành Công' message='Thao tác thành công' type='success' />}
       <Menutop />
       <Menuleft />
       <div className={classes.wrapper}>
