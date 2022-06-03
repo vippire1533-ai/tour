@@ -113,10 +113,10 @@ async function addTour(tourInfo) {
   }
 }
 
-async function deleteTour(CategoryMATOUR) {
+async function deleteTour(maTour) {
   try {
     let pool = await sql.connect(config);
-    let deleteTour = await pool.request().input('MATOUR', sql.Int, CategoryMATOUR).execute('DeleteTour');
+    let deleteTour = await pool.request().input('MATOUR', sql.Int, maTour).execute('DeleteTour');
     return deleteTour.recordsets;
   } catch (error) {
     console.log(error);

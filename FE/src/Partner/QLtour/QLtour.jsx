@@ -95,10 +95,7 @@ const QLtour = () => {
                             height='200'
                           />
                         }
-                        actions={[
-                          <EditOutlined key='edit' />,
-                          <DeleteFilled key='setting' onClick={() => onDelete(tour.TENTOUR, tour.MATOUR)} />,
-                        ]}
+                        actions={[<DeleteFilled key='setting' onClick={() => onDelete(tour.TENTOUR, tour.MATOUR)} />]}
                       >
                         <Card.Meta
                           avatar={
