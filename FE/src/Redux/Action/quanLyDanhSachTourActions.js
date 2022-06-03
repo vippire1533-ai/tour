@@ -1,6 +1,8 @@
-import { default as axios } from './../../utils/axios';
-import * as quanLyDanhSachTourActionTypes from './../Constants/quanLyDanhSachTourActionTypes';
 import dotenv from 'dotenv';
+import Swal from 'sweetalert2';
+import { default as axios } from './../../utils/axios';
+import * as appActions from './../Action/appActions';
+import * as quanLyDanhSachTourActionTypes from './../Constants/quanLyDanhSachTourActionTypes';
 
 dotenv.config();
 
@@ -29,7 +31,30 @@ export const layTatCaDanhSachTour = () => {
         },
       });
     } catch (error) {
-      alert(error.message);
+      Swal.fire({
+        title: 'Lỗi',
+        text: `Có lỗi trong quá trình tải danh sách tour. Lỗi: ${ error.message }`,
+        icon: 'error'
+      });
+    }
+  };
+};
+
+
+export const deleteTourById = (maTour) => {
+  return async (dispatch) => {
+    try {
+      dispatch(appActions.showLoading());
+      await axios.delete(`${ BASE_URL }/${ maTour }`);
+      dispatch(layTatCaDanhSachTour());
+      dispatch(appActions.hideLoading());
+    } catch (error) {
+      dispatch(appActions.hideLoading());
+      Swal.fire({
+        title: 'Lỗi',
+        text: `Có lỗi trong quá trình xóa tour. Lỗi: ${ error.message }`,
+        icon: 'error'
+      });
     }
   };
 };

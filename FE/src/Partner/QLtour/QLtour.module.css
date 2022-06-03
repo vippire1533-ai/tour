@@ -36,3 +36,14 @@
   max-width: 100%;
 }
 
+.center-box {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  width: 100%;
+}
+
+.align-row{
+  flex-direction: row;
+}

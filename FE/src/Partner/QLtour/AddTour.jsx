@@ -1,18 +1,18 @@
-import { UploadOutlined, PlusCircleFilled } from '@ant-design/icons';
-import { Button, DatePicker, Input, message, Select, Upload, Typography } from 'antd';
+import { PlusCircleFilled, UploadOutlined } from '@ant-design/icons';
+import { Button, DatePicker, Input, message, Select, Typography, Upload } from 'antd';
 import cx from 'classnames';
+import { useFormik } from 'formik';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import Swal from 'sweetalert2';
+import * as Yup from 'yup';
+import LoadingSpinner from '../../components/LoadingSpinner';
 import { getAllTourTypes } from '../../Redux/Action/quanLyLoaiTourActions';
 import Menuleft from '../Menuleft';
 import Menutop from '../Menutop';
-import classes from './AddTour.module.css';
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
-import { default as axios } from './../../utils/axios';
-import Swal from 'sweetalert2';
-import LoadingSpinner from '../../components/LoadingSpinner';
 import * as appActions from './../../Redux/Action/appActions';
+import { default as axios } from './../../utils/axios';
+import classes from './AddTour.module.css';
 
 const MAX_FILE_LENGTH = 10;
 
@@ -49,16 +49,7 @@ const AddTour = () => {
       tenTour: Yup.string()
         .required('Vui lòng nhập tên tour !!')
         .max(50, 'Tên tour không được dài quá 50 ký tự')
-        .trim()
-        .test('checkDuplicate', 'Tour đã tồn tại !!', async (tourName) => {
-          try {
-            const { data } = await axios.get('/api/products');
-            const tour = data.find((item) => item.TENTOUR.toLowerCase() === tourName.toLowerCase());
-            return !tour;
-          } catch (error) {
-            return true;
-          }
-        }),
+        .trim(),
       loaiTour: Yup.number().required('Vui lòng chọn loại tour !!'),
       tinh: Yup.string().required('Vui lòng chọn tỉnh/thành phố !!'),
       diemDi: Yup.string()
@@ -121,6 +112,24 @@ const AddTour = () => {
     setFileList(newFileList);
   };
 
+  const handleTourNameBlur = () => {
+    axios
+      .get('/api/products')
+      .then((res) => {
+        const tour = res.data.find((item) => item.TENTOUR.toLowerCase() === formik.values.tenTour.trim().toLowerCase());
+        if (tour) {
+          formik.setFieldError('tenTour', 'Tên tour đã tồn tại!!');
+        }
+      })
+      .catch((error) => {
+        Swal.fire({
+          title: 'Lỗi',
+          text: error.message,
+          icon: 'error',
+        });
+      });
+  };
+
   useEffect(() => {
     dispatch(getAllTourTypes());
   }, []);
@@ -139,7 +148,17 @@ const AddTour = () => {
                 <label htmlFor='tenTour' className={classes['form-label']}>
                   Tên Tour
                 </label>
-                <Input placeholder='Nhập tên tour' name='tenTour' id='tenTour' {...formik.getFieldProps('tenTour')} />
+                <Input
+                  placeholder='Nhập tên tour'
+                  name='tenTour'
+                  id='tenTour'
+                  value={formik.values.tenTour}
+                  onChange={formik.handleChange}
+                  onBlur={(e) => {
+                    handleTourNameBlur();
+                    formik.handleBlur(e);
+                  }}
+                />
                 {formik.touched.tenTour && formik.errors.tenTour ? (
                   <Typography.Text type='danger' className={classes['error-message']}>
                     {formik.errors.tenTour}

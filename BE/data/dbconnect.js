@@ -20,7 +20,8 @@ async function GetDatas() {
           DIEMDEN,
           NGAYTAO,
           T_HA.MA_HINH_ANH,
-          TINH
+          TINH,
+          TINH_TRANG_TOUR
     FROM  Tour t LEFT JOIN 
           LoaiTour lt ON t.MALOAI = lt.MALOAI 
           LEFT JOIN Tour_HinhAnh T_HA ON t.MATOUR = T_HA.MA_TOUR`;
@@ -161,13 +162,7 @@ async function getAllTickets() {
         VT.NGAYTAO,
         KH.MAKH, KH.HOTEN, 
         VT.GIAVE,
-        CASE
-          WHEN VT.TRANG_THAI_VE = N'Đã bị xóa' THEN N'Đã bị xóa'
-          WHEN VT.TRANG_THAI_VE = N'Đã bị hủy' THEN N'Đã bị hủy'
-          WHEN KH.MAKH IS NOT NULL THEN N'Đã được đặt'
-          WHEN KH.MAKH IS NULL AND VT.NGAYCOHIEULUC >= GETDATE() THEN N'Còn hiệu lực'
-          ELSE N'Đã quá hạn'
-        END AS TINHTRANG
+        VT.TRANG_THAI_VE AS TINHTRANG
     FROM  
         VeTour VT	LEFT JOIN TOUR T ON  T.MATOUR = VT.MATOUR
         LEFT JOIN LoaiTour LT ON T.MALOAI = LT.MALOAI
@@ -224,17 +219,18 @@ async function getTicketByMaVe(maVe) {
   }
 }
 
-async function addve(listve) {
+async function addve(payload) {
   try {
     let pool = await sql.connect(config);
     let insertvetour = await pool
       .request()
-      .input('MATOUR', sql.Int, listve.MATOUR)
-      .input('NGAYCOHIEULUC', sql.DateTime, new Date(listve.NGAYCOHIEULUC))
-      .input('LOAIVE', sql.Int, listve.LOAIVE)
+      .input('SO_LUONG_VE', payload.SOLUONGVE)
+      .input('MATOUR', sql.Int, payload.MATOUR)
+      .input('NGAYCOHIEULUC', sql.DateTime, new Date(payload.NGAYCOHIEULUC))
+      .input('LOAIVE', sql.Int, payload.LOAIVE)
       .input('NGAYTAO', sql.DateTime, new Date())
-      .input('GIAVE', sql.Int, +listve.GIAVE)
-      .input('TENKH', sql.NVarChar, listve.TENKH)
+      .input('GIAVE', sql.Int, +payload.GIAVE)
+      .input('TENKH', sql.NVarChar, payload.TENKH)
       .execute('InsertVe');
     return insertvetour.recordsets;
   } catch (err) {
@@ -577,7 +573,7 @@ const getAllTours = async () => {
   try {
     const pool = await sql.connect(config);
     const query = `
-      SELECT MATOUR AS MA_TOUR, TENTOUR AS TEN_TOUR FROM Tour
+      SELECT MATOUR AS MA_TOUR, TENTOUR AS TEN_TOUR, GIATOUR AS GIA_TOUR, NGAYDI AS NGAY_DI FROM Tour WHERE TINH_TRANG_TOUR = N'Còn hiệu lực'
     `;
     const result = await pool.request().query(query);
     return result.recordset;
@@ -698,16 +694,20 @@ const uploadTourImages = async (files, maTour) => {
   try {
     const pool = await sql.connect(config);
     const request = pool.request().input('maTour', sql.Int, maTour);
-    files.forEach((file, index) => {
-      request.input(`fileName_${ index }`, sql.NVarChar, file.originalname);
-      request.input(`fileSrc_${ index }`, sql.VarBinary, file.buffer);
-    });
-    const paramsList = files.map((_, index) => {
-      return `(@fileName_${ index }, @fileSrc_${ index }, @maTour)`;
-    });
-    const queryString = `INSERT INTO Tour_HinhAnh(TEN_HINH_ANH, HINH_ANH_DATA, MA_TOUR) VALUES ${ paramsList.join(',') }`;
-    const rs = await request.query(queryString);
-    return rs.recordset;
+    if (files && files.length) {
+      files.forEach((file, index) => {
+        request.input(`fileName_${ index }`, sql.NVarChar, file.originalname);
+        request.input(`fileSrc_${ index }`, sql.VarBinary, file.buffer);
+      });
+      const paramsList = files.map((_, index) => {
+        return `(@fileName_${ index }, @fileSrc_${ index }, @maTour)`;
+      });
+      const queryString = `INSERT INTO Tour_HinhAnh(TEN_HINH_ANH, HINH_ANH_DATA, MA_TOUR) VALUES ${ paramsList.join(
+        ',',
+      ) }`;
+      const rs = await request.query(queryString);
+      return rs.recordset;
+    }
   } catch (error) {
     throw error;
   }
@@ -757,6 +757,16 @@ const createAccountManagement = async (info) => {
   }
 };
 
+const updateApplicaton = async () => {
+  try {
+    const pool = await sql.connect(config);
+    await pool.request().execute('UpdateVeTourAndTour');
+    return 'Successfully';
+  } catch (error) {
+    throw error;
+  }
+};
+
 export default {
   GetData,
   GetDatas,
@@ -788,5 +798,6 @@ export default {
   getTourIimage,
   loginIntoManagement,
   createAccountManagement,
+  updateApplicaton,
   sql,
 };

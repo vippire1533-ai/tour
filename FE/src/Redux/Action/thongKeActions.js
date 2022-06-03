@@ -1,5 +1,6 @@
 import * as thongKeActionTypes from './../Constants/thongKeActionTypes';
 import { default as axios } from './../../utils/axios';
+import Swal from 'sweetalert2';
 
 const BASE_URL = '/api/thongKe';
 
@@ -15,7 +16,11 @@ export const layThongTinThongKe = () => {
       });
       return data;
     } catch (error) {
-      alert(error.message);
+      Swal.fire({
+        title: 'Lỗi',
+        text: error.message,
+        icon: 'error',
+      });
     }
   };
 };

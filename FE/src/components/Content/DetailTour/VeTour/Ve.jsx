@@ -37,17 +37,16 @@ const Ve = () => {
   const [price, setPrice] = useState(0);
   const dispatch = useDispatch();
   const { ticketTypes } = useSelector((state) => state.quanLyLoaiVeState);
-  console.log('tickety', ticketTypes);
+
   useEffect(() => {
     getData(id);
     dispatch(getAllTicketTypes());
   }, [id]);
   const getData = async (id) => {
-    const respone = await axios.get(`/api/products/${id}`).then((res) => {
+    await axios.get(`/api/products/${id}`).then((res) => {
       setSingleproducttour(res.data);
       console.log(res.data);
     });
-    console.log('data =>', singleproducttour);
   };
   const ChangeCountLarge = (value) => {
     setCountLarge(value);

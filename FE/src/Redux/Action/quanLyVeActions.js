@@ -1,6 +1,7 @@
 import * as quanLyVeActionType from '../Constants/quanLyVeActionTypes';
 import * as appActions from './../Action/appActions';
 import { default as axios } from './../../utils/axios';
+import Swal from 'sweetalert2';
 
 const BASE_URL = '/api/veproducts';
 
@@ -27,7 +28,11 @@ export const getAllTickets = () => {
       }, 500);
       return data;
     } catch (error) {
-      alert(error.message);
+      Swal.fire({
+        title: 'Lỗi',
+        text: error.message,
+        icon: 'error',
+      });
       dispatch(appActions.hideLoading());
     }
   };
@@ -41,7 +46,11 @@ export const createTicket = (payload) => {
       fakeProcessing(dispatch);
       return data;
     } catch (error) {
-      alert(error.message);
+      Swal.fire({
+        title: 'Lỗi',
+        text: error.message,
+        icon: 'error',
+      });
       dispatch(appActions.hideLoading());
     }
   };
@@ -70,7 +79,11 @@ export const deleteTicket = (maVe) => {
       fakeProcessing(dispatch);
       return data;
     } catch (error) {
-      alert(error.message);
+      Swal.fire({
+        title: 'Lỗi',
+        text: error.message,
+        icon: 'error',
+      });
       dispatch(appActions.hideLoading());
     }
   };

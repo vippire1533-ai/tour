@@ -1,6 +1,7 @@
 import { default as axios } from './../../utils/axios';
 import * as quanLyLoaiTourActionsType from './../Constants/quanLyLoaiTourActionTypes';
 import * as appActions from './../Action/appActions';
+import Swal from 'sweetalert2';
 
 const BASE_URL = '/api/tourTypes';
 
@@ -11,12 +12,16 @@ export const getAllTourTypes = () => {
       dispatch({
         type: quanLyLoaiTourActionsType.SET_TOUR_TYPES,
         payload: {
-          tourTypes: data
-        }
+          tourTypes: data,
+        },
       });
       return data;
     } catch (error) {
-      alert(error.message);
+      Swal.fire({
+        title: 'Lỗi',
+        text: error.message,
+        icon: 'error',
+      });
     }
   };
 };
@@ -33,7 +38,11 @@ export const createTourType = (payload) => {
       }, 500);
       return data;
     } catch (error) {
-      alert(error.message);
+      Swal.fire({
+        title: 'Lỗi',
+        text: error.message,
+        icon: 'error',
+      });
     }
   };
 };
@@ -42,10 +51,7 @@ export const updateTourType = (payload) => {
   return async (dispatch) => {
     try {
       dispatch(appActions.showLoading());
-      const { data } = await axios.put(
-        `${ BASE_URL }/${ payload.MALOAI }`,
-        payload,
-      );
+      const { data } = await axios.put(`${ BASE_URL }/${ payload.MALOAI }`, payload);
       dispatch(getAllTourTypes());
       dispatch(appActions.showModal());
       setTimeout(() => {
@@ -53,7 +59,11 @@ export const updateTourType = (payload) => {
       }, 500);
       return data;
     } catch (error) {
-      alert(error.message);
+      Swal.fire({
+        title: 'Lỗi',
+        text: error.message,
+        icon: 'error',
+      });
     }
   };
 };
@@ -70,7 +80,11 @@ export const deleteTourType = (maLoaiTour) => {
       }, 500);
       return data;
     } catch (error) {
-      alert(error.message);
+      Swal.fire({
+        title: 'Lỗi',
+        text: error.message,
+        icon: 'error',
+      });
     }
   };
 };
