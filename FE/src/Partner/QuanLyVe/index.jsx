@@ -105,6 +105,10 @@ const QuanLyVe = () => {
     const selectedTour = tours.find((tour) => tour.MA_TOUR === maTour);
     formik.setFieldValue('GIAVE', selectedTour ? selectedTour.GIA_TOUR : undefined);
     formik.setFieldValue('NGAYCOHIEULUC', selectedTour ? moment(selectedTour.NGAY_DI) : undefined);
+    if (formik.values.LOAIVE) {
+      const selectedTicketType = ticketTypes.find((ticketType) => ticketType.MALOAI === formik.values.LOAIVE);
+      formik.setFieldValue('GIAVE', +selectedTour.GIA_TOUR - +selectedTicketType.SO_TIEN_GIAM);
+    }
   };
 
   const handleTicketTypeChange = (maTicket) => {
