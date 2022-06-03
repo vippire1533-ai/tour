@@ -173,6 +173,7 @@ CREATE TABLE [dbo].[Tour](
 	[DIEMDEN] [nvarchar](50) NULL,
 	[NGAYTAO] [datetime] NULL,
 	[TINH] [nvarchar](50) NULL default '',
+	[TINH_TRANG_TOUR] [nvarchar] (50) NULL default N'Còn hiệu lực',
  CONSTRAINT [PK_Tour] PRIMARY KEY CLUSTERED 
 (
 	[MATOUR] ASC
@@ -517,6 +518,13 @@ AS
 BEGIN
 	UPDATE LoaiVe SET TENLOAI = @TENLOAI WHERE MALOAI = @MALOAI
 END
+GO
+-- Update VeTourAndTour
+CREATE PROC UpdateVeTourAndTour 
+AS
+	UPDATE VeTour SET TRANG_THAI_VE = N'ĐÃ QUÁ HẠN' WHERE NGAYCOHIEULUC < GETDATE();
+	GO
+	UPDATE Tour SET TINH_TRANG_TOUR = N'ĐÃ QUÁ HẠN' WHERE NGAYDI < GETDATE();
 GO
 USE [master]
 GO
