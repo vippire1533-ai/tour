@@ -27,6 +27,8 @@ import QuanLyLoaiVe from '../Partner/QuanLyLoaiVe';
 import QuanLyVe from '../Partner/QuanLyVe';
 import Register from '../Partner/register';
 import Auth from './../components/Auth';
+import History from '../views/User/History';
+import MemberMangement from '../Partner/MemberManagement';
 
 const Home = lazy(() => import('../views/Home'));
 const Search = lazy(() => import('../views/Search'));
@@ -58,12 +60,12 @@ const Routers = () => {
           <Route exact path='/' element={<Home />} />
           <Route exact path='/order/:id' element={<Order />} />
           <Route exact path='/user/account' element={<UserAccount />} />
+          <Route exact path='/user/history' element={<History />} />
           <Route exact path='/register' element={<PageRegister />} />
 
           <Route exact path='/list' element={<DStour />} />
           <Route exact path='/' element={<Home />} />
           <Route exact path='/order/:id' element={<Order />} />
-          <Route exact path='/user/account' element={<UserAccount />} />
           <Route exact path='/register' element={<PageRegister />} />
 
           {/* admin */}
@@ -136,8 +138,17 @@ const Routers = () => {
             exact
             path='/admin/quan-ly-loai-ve'
             element={
-              <Auth roles={publicRoles}>
+              <Auth roles={adminRoles}>
                 <QuanLyLoaiVe />
+              </Auth>
+            }
+          />
+          <Route
+            exact
+            path='/admin/quan-ly-thanh-vien'
+            element={
+              <Auth roles={adminRoles}>
+                <MemberMangement />
               </Auth>
             }
           />

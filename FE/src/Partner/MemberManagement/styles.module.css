@@ -1,0 +1,66 @@
+.clearfix::after,
+.clearfix::before {
+  clear: both;
+}
+
+.wrapper {
+  width: 85%;
+  background-color: rgb(242, 247, 247);
+  position: relative;
+  float: right;
+  overflow-y: scroll;
+  height: 1000px;
+  padding: 0px 80px;
+}
+
+.content {
+  padding-top: 18px;
+}
+
+.title {
+  text-transform: uppercase;
+  font-size: 36px;
+}
+
+.tab-item {
+  color: #1890ff;
+  display: inline-block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.tabs-item-content {
+  padding-top: 32px;
+}
+
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  border-radius: 16px;
+  margin-left: auto;
+}
+
+.form-group {
+  padding: 8px 0;
+}
+
+.form-label {
+  display: inline-block;
+  font-size: 14px;
+  font-weight: 600;
+  padding-bottom: 8px;
+}
+
+.form-control {
+  display: block;
+  width: 100%;
+}
+
+.error-message {
+  display: inline-block;
+  padding-top: 8px;
+}

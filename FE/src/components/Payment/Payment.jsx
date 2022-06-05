@@ -48,9 +48,10 @@ function Payment() {
       });
     } else {
       dispatch(appActions.showLoading());
+      const transactionId = uuidv4();
       let objApi = {
         maKH: data.id,
-        maGiaoDich: uuidv4(),
+        maGiaoDich: transactionId,
         maTour: singleOderproducttour[0].MATOUR,
         ngayDat: `'${booking.ngayDate}'`,
         soLuong: booking.soluongtreem + booking.soluongnguoilon,

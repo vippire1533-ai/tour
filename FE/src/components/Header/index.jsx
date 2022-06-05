@@ -206,6 +206,9 @@ const Header = () => {
                     <div className='item-login' onClick={() => navigate('/user/account')}>
                       Chỉnh sửa hồ sơ
                     </div>
+                    <div className='item-login' onClick={() => navigate('/user/history')}>
+                      Lịch Sử Đặt Vé
+                    </div>
                     <div
                       className='item-login'
                       onClick={() => {

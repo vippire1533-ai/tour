@@ -359,11 +359,21 @@ router.get('/thongKe', async (req, res) => {
 
 router.post('/datTour', async (req, res) => {
   try {
-    const result = await Promise.all([dbconnect.taoDonDatTour(req.body), dbconnect.createPaymenentHistory(req.body)]);
+    const result = await dbconnect.taoDonDatTour(req.body);
     return res.status(201).send(result);
   } catch (error) {
     console.log(error);
     res.status(500).send(error);
+  }
+});
+
+router.get('/lich-su-dat-tour', async (req, res) => {
+  try {
+    const histories = await dbconnect.getOrderHistory();
+    return res.status(200).send(histories);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send(error);
   }
 });
 
@@ -433,6 +443,25 @@ router.post('/create-customer', async (req, res) => {
   }
 });
 
+router.get('/get-all-members', async (req, res) => {
+  try {
+    const [adminUsers, partnerUsers] = await Promise.all([dbconnect.getAllAdmins(), dbconnect.getAllPartners()]);
+    return res.status(200).send({ adminUsers, partnerUsers });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send(error);
+  }
+});
+
+router.post('/create-member', async (req, res) => {
+  try {
+    const response = await dbconnect.createMember(req.body);
+    return res.status(201).send(response);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send(error);
+  }
+});
 const sslServer = https.createServer(
   {
     key: fs.readFileSync('cetificate/key.pem'),
