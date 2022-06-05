@@ -223,6 +223,7 @@ CREATE TABLE [dbo].[Thanh_Toan](
 	[MA_LOAI_VE] [int] NOT NULL,
 	[SO_LUONG_VE] [int] NOT NULL, 
 	[TONG_TIEN] [int] NOT NULL,
+	[NGAY_TAO_DON] [datetime] NOT NULL,
 CONSTRAINT [PK_Thanh_Toan] PRIMARY KEY CLUSTERED 
 (
 	[MA_GIAO_DICH] ASC
