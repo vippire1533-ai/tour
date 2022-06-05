@@ -34,7 +34,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[BinhLuan](
 	[MABINHLUAN] [int] NOT NULL IDENTITY(1,1),
-	[MAKH] [int] NULL,
+	[MAKH] [varchar](50) NULL,
 	[MATOUR] [int] NULL,
 	[NOIDUNG] [nvarchar](50) NULL,
 	[VOTE] [int] NULL,
@@ -61,7 +61,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[DonDatTour](
 	[MADONDAT] [int] NOT NULL IDENTITY(1,1),
-	[MAKHACHHANG] [int] NULL,
+	[MAKHACHHANG] [varchar](50) NULL,
 	[MATOUR] [int] NULL,
 	[NGAYDAT] [datetime] NULL,
 	[TINHTRANGTHANHTOAN] [nvarchar](20) NULL,
@@ -81,7 +81,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[KhachHang](
-	[MAKH] [int] NOT NULL IDENTITY(1,1),
+	[MAKH] [varchar](50) NOT NULL,
 	[USERNAME] [nvarchar](50) NOT NULL,
 	[PASSWORD] [nvarchar](50) NOT NULL,
 	[HOTEN] [nvarchar](50) NOT NULL,
@@ -189,7 +189,7 @@ GO
 CREATE TABLE [dbo].[VeTour](
 	[MAVE] [int] NOT NULL IDENTITY(1,1),
 	[MATOUR] [int] NULL,
-	[MAKH] [int] NULL,
+	[MAKH] [varchar](50) NULL,
 	[NGAYCOHIEULUC] [datetime] NULL,
 	[LOAIVE] [int] NULL,
 	[NGAYTAO] [datetime] NULL,
@@ -217,7 +217,7 @@ GO
 
 CREATE TABLE [dbo].[Thanh_Toan](
 	[MA_GIAO_DICH] [varchar](50) NOT NULL, 
-	[MA_KH] [int] NOT NULL, 
+	[MA_KH] [varchar](50) NOT NULL, 
 	[MA_TOUR] [int] NOT NULL,
 	[NGAY_DAT] [datetime] NOT NULL, 
 	[MA_LOAI_VE] [int] NOT NULL,
@@ -239,7 +239,7 @@ INSERT [dbo].[LoaiVe] ([TENLOAI], [SO_TIEN_GIAM]) VALUES (N'Người lớn', 0)
 INSERT [dbo].[LoaiVe] ([TENLOAI], [SO_TIEN_GIAM]) VALUES (N'Trẻ em', 100000)
 GO
 
-INSERT INTO [dbo].[KhachHang] VALUES('admin', '1', 'Admin', 'Nam', 'admin@gmail.com', 'HCM', '1', 0) 
+INSERT INTO [dbo].[KhachHang] VALUES('1', 'admin', '1', 'Admin', 'Nam', 'admin@gmail.com', 'HCM', '1', 0) 
 GO
 
 INSERT INTO [dbo].[Admin](USERNAME, PASSADMIN, STATUS) values('admin', '123456', 'active')
@@ -346,7 +346,7 @@ GO
 ALTER TABLE [dbo].[Thanh_Toan] CHECK CONSTRAINT [FK_Thanh_Toan_Khach_Hang]
 GO
 
-ALTER TABLE [dbo].[Thanh_Toan] WITH CHECK ADD CONSTRAINT [FK_Thanh_Toan_Tour] FOREIGN KEY([MA_KH])
+ALTER TABLE [dbo].[Thanh_Toan] WITH CHECK ADD CONSTRAINT [FK_Thanh_Toan_Tour] FOREIGN KEY([MA_TOUR])
 REFERENCES [dbo].[Tour] ([MATOUR])
 ON DELETE CASCADE
 ON UPDATE CASCADE
@@ -534,7 +534,7 @@ GO
 	-- InsertDonDatVe
 CREATE PROCEDURE InsertDonDatVe
 (
-@MANGUOIDAT int,
+@MANGUOIDAT varchar(50),
 @NGAYDAT datetime,
 @TINHTRANGTHANHTOAN nvarchar(20),
 @SOLUONGVEDAT int
@@ -572,7 +572,7 @@ AS
 GO
 CREATE PROC InsertPaymentHistory (
 	@MA_GIAO_DICH nvarchar(50), 
-	@MA_KH int, 
+	@MA_KH varchar(50), 
 	@MA_TOUR int,
 	@NGAY_DAT datetime, 
 	@MA_LOAI_VE int,
@@ -584,6 +584,20 @@ AS
 	INSERT INTO Thanh_Toan(MA_GIAO_DICH, MA_KH, MA_TOUR, NGAY_DAT, MA_LOAI_VE, SO_LUONG_VE, TONG_TIEN, NGAY_TAO_DON)
 	VALUES(@MA_GIAO_DICH, @MA_KH, @MA_TOUR, @NGAY_DAT, @MA_LOAI_VE, @SO_LUONG_VE, @TONG_TIEN, @NGAY_TAO_DON)
 GO
+
+CREATE PROC CreateCustomerIfNotExists (
+	@MA_KHACH_HANG varchar(50),
+	@TEN_DANG_NHAP nvarchar(50),
+	@EMAIL nvarchar(50)
+)
+AS
+	IF (NOT EXISTS (SELECT * FROM [dbo].[KhachHang] WHERE MAKH = @MA_KHACH_HANG))
+	BEGIN
+		INSERT INTO [dbo].[KhachHang](MAKH, USERNAME, PASSWORD, HOTEN, GIOITINH, EMAIL, DIACHI, SDT, DIEMTHUONG)
+		VALUES(@MA_KHACH_HANG, @TEN_DANG_NHAP, '1', 'ho_ten', 'nam', @EMAIL, 'dia_chi', 0, 0)
+	END 
+GO
+
 USE [master]
 GO
 ALTER DATABASE [Tour] SET  READ_WRITE 
