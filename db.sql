@@ -571,7 +571,7 @@ AS
 	UPDATE Tour SET TINH_TRANG_TOUR = N'ĐÃ QUÁ HẠN' WHERE NGAYDI < GETDATE();
 GO
 CREATE PROC InsertPaymentHistory (
-	@MA_GIAO_DICH nvarchar(50), 
+	@MA_GIAO_DICH varchar(50), 
 	@MA_KH varchar(50), 
 	@MA_TOUR int,
 	@NGAY_DAT datetime, 
