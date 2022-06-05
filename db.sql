@@ -214,9 +214,9 @@ CONSTRAINT [PK_Tour_HinhAnh] PRIMARY KEY CLUSTERED
 )
 )
 GO
-/****** Object:  Table [dbo].[Thanh_Toan]    Script Date: 5/4/2022 1:54:42 PM ******/
+
 CREATE TABLE [dbo].[Thanh_Toan](
-	[MA_GIAO_DICH] [varchar](max) NOT NULL, 
+	[MA_GIAO_DICH] [varchar](50) NOT NULL, 
 	[MA_KH] [int] NOT NULL, 
 	[MA_TOUR] [int] NOT NULL,
 	[NGAY_DAT] [datetime] NOT NULL, 
@@ -226,7 +226,7 @@ CREATE TABLE [dbo].[Thanh_Toan](
 	[NGAY_TAO_DON] [datetime] NOT NULL,
 CONSTRAINT [PK_Thanh_Toan] PRIMARY KEY CLUSTERED 
 (
-	[MA_GIAO_DICH] ASC
+	[MA_GIAO_DICH]
 )	 
 )
 GO
@@ -338,7 +338,7 @@ GO
 ALTER TABLE [dbo].[Tour_HinhAnh] CHECK CONSTRAINT [FK_Tour_HinhAnh_Tour]
 GO
 
-ALTER TABLE [dbo].[Thanh_Toan] CHECK CONSTRAINT [FK_Thanh_Toan_Tour] FOREIGN KEY([MA_KH])
+ALTER TABLE [dbo].[Thanh_Toan] WITH CHECK ADD CONSTRAINT [FK_Thanh_Toan_Khach_Hang] FOREIGN KEY([MA_KH])
 REFERENCES [dbo].[KhachHang] ([MAKH])
 ON DELETE CASCADE
 ON UPDATE CASCADE
@@ -346,7 +346,7 @@ GO
 ALTER TABLE [dbo].[Thanh_Toan] CHECK CONSTRAINT [FK_Thanh_Toan_Khach_Hang]
 GO
 
-ALTER TABLE [dbo].[Thanh_Toan] CHECK CONSTRAINT [FK_Thanh_Toan_Tour] FOREIGN KEY([MA_KH])
+ALTER TABLE [dbo].[Thanh_Toan] WITH CHECK ADD CONSTRAINT [FK_Thanh_Toan_Tour] FOREIGN KEY([MA_KH])
 REFERENCES [dbo].[Tour] ([MATOUR])
 ON DELETE CASCADE
 ON UPDATE CASCADE
@@ -354,7 +354,7 @@ GO
 ALTER TABLE [dbo].[Thanh_Toan] CHECK CONSTRAINT [FK_Thanh_Toan_Tour]
 GO
 
-ALTER TABLE [dbo].[Thanh_Toan] CHECK CONSTRAINT [FK_Thanh_Toan_Loai_Ve] FOREIGN KEY([MA_LOAI_VE])
+ALTER TABLE [dbo].[Thanh_Toan]  WITH CHECK ADD CONSTRAINT [FK_Thanh_Toan_Loai_Ve] FOREIGN KEY([MA_LOAI_VE])
 REFERENCES [dbo].[LoaiVe] ([MALOAI])
 ON DELETE CASCADE
 ON UPDATE CASCADE
@@ -577,7 +577,7 @@ CREATE PROC InsertPaymentHistory (
 	@NGAY_DAT datetime, 
 	@MA_LOAI_VE int,
 	@SO_LUONG_VE int, 
-	@TONG_TIEN int,
+	@TONG_TIEN int
 )
 AS
 	INSERT INTO Thanh_Toan(MA_GIAO_DICH, MA_KH, MA_TOUR, NGAY_DAT, MA_LOAI_VE, SO_LUONG_VE, TONG_TIEN)
