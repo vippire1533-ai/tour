@@ -220,7 +220,7 @@ CREATE TABLE [dbo].[Thanh_Toan](
 	[MA_KH] [varchar](50) NOT NULL, 
 	[MA_TOUR] [int] NOT NULL,
 	[NGAY_DAT] [datetime] NOT NULL, 
-	[MA_LOAI_VE] [int] NOT NULL,
+	[MA_VE] [int] NULL,
 	[SO_LUONG_VE] [int] NOT NULL, 
 	[TONG_TIEN] [int] NOT NULL,
 	[NGAY_TAO_DON] [datetime] NOT NULL,
@@ -354,12 +354,10 @@ GO
 ALTER TABLE [dbo].[Thanh_Toan] CHECK CONSTRAINT [FK_Thanh_Toan_Tour]
 GO
 
-ALTER TABLE [dbo].[Thanh_Toan]  WITH CHECK ADD CONSTRAINT [FK_Thanh_Toan_Loai_Ve] FOREIGN KEY([MA_LOAI_VE])
-REFERENCES [dbo].[LoaiVe] ([MaLoai])
-ON DELETE CASCADE
-ON UPDATE CASCADE
+ALTER TABLE [dbo].[Thanh_Toan]  WITH CHECK ADD CONSTRAINT [FK_Thanh_Toan_VeTour] FOREIGN KEY([MA_VE])
+REFERENCES [dbo].[VeTour] ([MAVE])
 GO
-ALTER TABLE [dbo].[Thanh_Toan] CHECK CONSTRAINT [FK_Thanh_Toan_Loai_Ve]
+ALTER TABLE [dbo].[Thanh_Toan] CHECK CONSTRAINT [FK_Thanh_Toan_VeTour]
 GO
 /****** Object:  StoredProcedure [dbo].[DeleteTour]    Script Date: 5/4/2022 1:54:42 PM ******/
 SET ANSI_NULLS ON
@@ -575,14 +573,14 @@ CREATE PROC InsertPaymentHistory (
 	@MA_KH varchar(50), 
 	@MA_TOUR int,
 	@NGAY_DAT datetime, 
-	@MA_LOAI_VE int,
+	@MA_VE int,
 	@SO_LUONG_VE int, 
 	@TONG_TIEN int,
 	@NGAY_TAO_DON int
 )
 AS
-	INSERT INTO Thanh_Toan(MA_GIAO_DICH, MA_KH, MA_TOUR, NGAY_DAT, MA_LOAI_VE, SO_LUONG_VE, TONG_TIEN, NGAY_TAO_DON)
-	VALUES(@MA_GIAO_DICH, @MA_KH, @MA_TOUR, @NGAY_DAT, @MA_LOAI_VE, @SO_LUONG_VE, @TONG_TIEN, @NGAY_TAO_DON)
+	INSERT INTO Thanh_Toan(MA_GIAO_DICH, MA_KH, MA_TOUR, NGAY_DAT, MA_VE, SO_LUONG_VE, TONG_TIEN, NGAY_TAO_DON)
+	VALUES(@MA_GIAO_DICH, @MA_KH, @MA_TOUR, @NGAY_DAT, @MA_VE, @SO_LUONG_VE, @TONG_TIEN, @NGAY_TAO_DON)
 GO
 
 CREATE PROC CreateCustomerIfNotExists (
