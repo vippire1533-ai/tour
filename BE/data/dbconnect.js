@@ -678,8 +678,8 @@ const taoDonDatTour = async (payload) => {
     const pool = await sql.connect(config);
     const { maKH, maTour, ngayDat, soLuong, tongTien, maLoaiVe, email } = payload;
     const query = `
-    INSERT INTO DonDatTour(MAKHACHHANG, MATOUR, NGAYDAT, TINHTRANGTHANHTOAN,SOLUONGVEDAT,TONGTIEN,MA_LOAI_VE, TINH_TRANG_DON)
-    VALUES(${ maKH }, ${ maTour }, ${ ngayDat }, N'Đã thanh toán', ${ soLuong }, ${ tongTien }, ${ maLoaiVe }, N'Đang xử lý');
+    INSERT INTO DonDatTour(MAKHACHHANG, MATOUR, NGAYDAT, TINHTRANGTHANHTOAN, SOLUONGVEDAT, TONGTIEN, MA_LOAI_VE, TINH_TRANG_DON)
+    VALUES('${ maKH }', ${ maTour }, ${ ngayDat }, N'Đã thanh toán', ${ soLuong }, ${ tongTien }, ${ maLoaiVe }, N'Đang xử lý');
     SELECT SCOPE_IDENTITY() AS id;
     `;
     const record = await pool.request().query(query);
@@ -772,6 +772,55 @@ const updateApplicaton = async () => {
   }
 };
 
+const createPaymenentHistory = async (payload) => {
+  try {
+    console.log(payload);
+    const pool = await sql.connect(config);
+    const query = `
+    INSERT INTO Thanh_Toan(
+      MA_GIAO_DICH, 
+      MA_KH, 
+      MA_TOUR, 
+      NGAY_DAT, 
+      MA_LOAI_VE, 
+      SO_LUONG_VE, 
+      TONG_TIEN, 
+      NGAY_TAO_DON
+    )
+    VALUES(
+      '${ payload.maGiaoDich }',
+      '${ payload.maKH }',
+      ${ payload.maTour },
+      ${ payload.ngayDat },
+      ${ payload.maLoaiVe },
+      ${ payload.soLuong },
+      ${ payload.tongTien },
+      GETDATE()
+    )
+    `;
+    console.log(query);
+    const request = await pool.request().query(query);
+    return request.recordset;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const createCustomerIfNotExists = async (payload) => {
+  try {
+    const pool = await sql.connect(config);
+    const request = await pool
+      .request()
+      .input('MA_KHACH_HANG', sql.VarChar, payload.id)
+      .input('TEN_DANG_NHAP', sql.NVarChar, payload.username)
+      .input('EMAIL', sql.NVarChar, payload.email)
+      .execute('CreateCustomerIfNotExists');
+    return request.recordset;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export default {
   GetData,
   GetDatas,
@@ -804,5 +853,7 @@ export default {
   loginIntoManagement,
   createAccountManagement,
   updateApplicaton,
+  createPaymenentHistory,
+  createCustomerIfNotExists,
   sql,
 };

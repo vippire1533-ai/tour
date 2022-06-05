@@ -4,8 +4,8 @@ import express from 'express';
 import fs from 'fs';
 import https from 'https';
 import dbconnect from './data/dbconnect.js';
-import router from './routes/route.js';
 import uploadFiles from './data/uploadFiles';
+import router from './routes/route.js';
 import connectDatabase from './utils/testConnection.js';
 
 const app = express();
@@ -359,7 +359,7 @@ router.get('/thongKe', async (req, res) => {
 
 router.post('/datTour', async (req, res) => {
   try {
-    const result = await dbconnect.taoDonDatTour(req.body);
+    const result = await Promise.all([dbconnect.taoDonDatTour(req.body), dbconnect.createPaymenentHistory(req.body)]);
     return res.status(201).send(result);
   } catch (error) {
     console.log(error);
@@ -417,6 +417,16 @@ router.post('/update-application', async (req, res) => {
   try {
     await dbconnect.updateApplicaton();
     return res.status(200).send('Update successfully!');
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send(error);
+  }
+});
+
+router.post('/create-customer', async (req, res) => {
+  try {
+    const request = await dbconnect.createCustomerIfNotExists(req.body);
+    return res.status(201).send(request);
   } catch (error) {
     console.log(error);
     return res.status(500).send(error);

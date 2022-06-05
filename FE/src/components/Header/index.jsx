@@ -35,6 +35,7 @@ const Header = () => {
           confirmButtonText: 'OK',
         });
         dispatch(appActions.hideLoading());
+        dispatch(appActions.createUserIfNoExists(res.data));
         setData(res.data);
         localStorage.setItem('dataUser', JSON.stringify(res.data));
         setTimeout(() => {
@@ -53,7 +54,7 @@ const Header = () => {
   useEffect(() => {
     setData(JSON.parse(localStorage.getItem('dataUser')));
   }, []);
-  console.log(data);
+
   return (
     <div className='hd-main'>
       {isLoading && <LoadingSpinner />}

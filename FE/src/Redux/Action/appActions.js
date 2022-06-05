@@ -34,3 +34,20 @@ export const updateApplicaton = () => {
     }
   };
 };
+
+export const createUserIfNoExists = (data) => {
+  return async (dispatch) => {
+    try {
+      dispatch(showLoading());
+      await axios.post('/api/create-customer', data);
+      dispatch(hideLoading());
+    } catch (error) {
+      dispatch(hideLoading());
+      Swal.fire({
+        title: 'Lỗi',
+        icon: 'error',
+        text: `Có lỗi trong quá trình cập nhật người dùng. Lỗi: ${ error.message }`,
+      });
+    }
+  };
+};
