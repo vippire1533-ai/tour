@@ -1,11 +1,12 @@
 import PunchClockIcon from '@mui/icons-material/PunchClock';
 import { Box } from '@mui/material';
 import Switch from '@mui/material/Switch';
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useRef, useState } from 'react';
 import NumberFormat from 'react-number-format';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import { v4 as uuidv4 } from 'uuid';
 import Footer from '../Footer';
 import Header from '../Header';
 import * as appActions from './../../Redux/Action/appActions';
@@ -20,6 +21,7 @@ function Payment() {
   const [singleOderproducttour, setSingleOderproducttour] = useState([]);
   const booking = useSelector((state) => state.tourlist.booking);
   const [nameInput, setNameInput] = useState('');
+  const creditNumberRef = useRef();
   const [data, setData] = useState();
   const dispatch = useDispatch();
   const { isLoading } = useSelector((state) => state.appState);
@@ -30,11 +32,13 @@ function Payment() {
     getData(id);
     setData(JSON.parse(localStorage.getItem('dataUser')));
   }, [id]);
+
   const getData = async (id) => {
     const respone = await axios.get(`/api/products/${id}`).then((res) => {
       setSingleOderproducttour(res.data);
     });
   };
+
   const hanlePayment = () => {
     if (!data) {
       Swal.fire({
@@ -44,8 +48,10 @@ function Payment() {
       });
     } else {
       dispatch(appActions.showLoading());
+      const transactionId = uuidv4();
       let objApi = {
-        maKH: '1',
+        maKH: data.id,
+        maGiaoDich: transactionId,
         maTour: singleOderproducttour[0].MATOUR,
         ngayDat: `'${booking.ngayDate}'`,
         soLuong: booking.soluongtreem + booking.soluongnguoilon,
@@ -207,6 +213,7 @@ function Payment() {
                           format='#### #### #### ####'
                           className={classes.input}
                           placeholder='16 chữ số trên mặt thẻ'
+                          ref={creditNumberRef}
                         />
                       </div>
                       <div

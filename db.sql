@@ -34,7 +34,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[BinhLuan](
 	[MABINHLUAN] [int] NOT NULL IDENTITY(1,1),
-	[MAKH] [int] NULL,
+	[MAKH] [varchar](50) NULL,
 	[MATOUR] [int] NULL,
 	[NOIDUNG] [nvarchar](50) NULL,
 	[VOTE] [int] NULL,
@@ -61,7 +61,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[DonDatTour](
 	[MADONDAT] [int] NOT NULL IDENTITY(1,1),
-	[MAKHACHHANG] [int] NULL,
+	[MAKHACHHANG] [varchar](50) NULL,
 	[MATOUR] [int] NULL,
 	[NGAYDAT] [datetime] NULL,
 	[TINHTRANGTHANHTOAN] [nvarchar](20) NULL,
@@ -69,6 +69,8 @@ CREATE TABLE [dbo].[DonDatTour](
 	[TONGTIEN] [int] NULL,
 	[MA_LOAI_VE] [int] NULL,
 	[TINH_TRANG_DON] nvarchar(50) default null,
+	[MA_PHIEN_GIAO_DICH] varchar(50),
+	[NGAY_TAO_DON] datetime default getdate()
  CONSTRAINT [PK_DonDatVe_1] PRIMARY KEY CLUSTERED 
 (
 	[MADONDAT] ASC
@@ -81,7 +83,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[KhachHang](
-	[MAKH] [int] NOT NULL IDENTITY(1,1),
+	[MAKH] [varchar](50) NOT NULL,
 	[USERNAME] [nvarchar](50) NOT NULL,
 	[PASSWORD] [nvarchar](50) NOT NULL,
 	[HOTEN] [nvarchar](50) NOT NULL,
@@ -189,7 +191,7 @@ GO
 CREATE TABLE [dbo].[VeTour](
 	[MAVE] [int] NOT NULL IDENTITY(1,1),
 	[MATOUR] [int] NULL,
-	[MAKH] [int] NULL,
+	[MAKH] [varchar](50) NULL,
 	[NGAYCOHIEULUC] [datetime] NULL,
 	[LOAIVE] [int] NULL,
 	[NGAYTAO] [datetime] NULL,
@@ -214,6 +216,7 @@ CONSTRAINT [PK_Tour_HinhAnh] PRIMARY KEY CLUSTERED
 )
 )
 GO
+
 -- Insert
 INSERT [dbo].[LoaiTour] ([TENLOAI]) VALUES ( N'Du lịch')
 INSERT [dbo].[LoaiTour] ([TENLOAI]) VALUES (N'Thể thao')
@@ -223,7 +226,7 @@ INSERT [dbo].[LoaiVe] ([TENLOAI], [SO_TIEN_GIAM]) VALUES (N'Người lớn', 0)
 INSERT [dbo].[LoaiVe] ([TENLOAI], [SO_TIEN_GIAM]) VALUES (N'Trẻ em', 100000)
 GO
 
-INSERT INTO [dbo].[KhachHang] VALUES('admin', '1', 'Admin', 'Nam', 'admin@gmail.com', 'HCM', '1', 0) 
+INSERT INTO [dbo].[KhachHang] VALUES('1', 'admin', '1', 'Admin', 'Nam', 'admin@gmail.com', 'HCM', '1', 0) 
 GO
 
 INSERT INTO [dbo].[Admin](USERNAME, PASSADMIN, STATUS) values('admin', '123456', 'active')
@@ -321,6 +324,7 @@ ON DELETE CASCADE
 GO
 ALTER TABLE [dbo].[Tour_HinhAnh] CHECK CONSTRAINT [FK_Tour_HinhAnh_Tour]
 GO
+
 /****** Object:  StoredProcedure [dbo].[DeleteTour]    Script Date: 5/4/2022 1:54:42 PM ******/
 SET ANSI_NULLS ON
 GO
@@ -494,7 +498,7 @@ GO
 	-- InsertDonDatVe
 CREATE PROCEDURE InsertDonDatVe
 (
-@MANGUOIDAT int,
+@MANGUOIDAT varchar(50),
 @NGAYDAT datetime,
 @TINHTRANGTHANHTOAN nvarchar(20),
 @SOLUONGVEDAT int
@@ -526,10 +530,24 @@ GO
 -- Update VeTourAndTour
 CREATE PROC UpdateVeTourAndTour 
 AS
-	UPDATE VeTour SET TRANG_THAI_VE = N'ĐÃ QUÁ HẠN' WHERE NGAYCOHIEULUC < GETDATE();
+	UPDATE VeTour SET TRANG_THAI_VE = N'Đã quá hạn' WHERE NGAYCOHIEULUC < GETDATE();
 	GO
-	UPDATE Tour SET TINH_TRANG_TOUR = N'ĐÃ QUÁ HẠN' WHERE NGAYDI < GETDATE();
+	UPDATE Tour SET TINH_TRANG_TOUR = N'Đã quá hạn' WHERE NGAYDI < GETDATE();
 GO
+
+CREATE PROC CreateCustomerIfNotExists (
+	@MA_KHACH_HANG varchar(50),
+	@TEN_DANG_NHAP nvarchar(50),
+	@EMAIL nvarchar(50)
+)
+AS
+	IF (NOT EXISTS (SELECT * FROM [dbo].[KhachHang] WHERE MAKH = @MA_KHACH_HANG))
+	BEGIN
+		INSERT INTO [dbo].[KhachHang](MAKH, USERNAME, PASSWORD, HOTEN, GIOITINH, EMAIL, DIACHI, SDT, DIEMTHUONG)
+		VALUES(@MA_KHACH_HANG, @TEN_DANG_NHAP, '1', 'ho_ten', 'nam', @EMAIL, 'dia_chi', 0, 0)
+	END 
+GO
+
 USE [master]
 GO
 ALTER DATABASE [Tour] SET  READ_WRITE 

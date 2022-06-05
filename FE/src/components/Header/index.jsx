@@ -35,6 +35,7 @@ const Header = () => {
           confirmButtonText: 'OK',
         });
         dispatch(appActions.hideLoading());
+        dispatch(appActions.createUserIfNoExists(res.data));
         setData(res.data);
         localStorage.setItem('dataUser', JSON.stringify(res.data));
         setTimeout(() => {
@@ -53,7 +54,7 @@ const Header = () => {
   useEffect(() => {
     setData(JSON.parse(localStorage.getItem('dataUser')));
   }, []);
-  console.log(data);
+
   return (
     <div className='hd-main'>
       {isLoading && <LoadingSpinner />}
@@ -204,6 +205,9 @@ const Header = () => {
                   <div className='hd-login-sub dropdown-list'>
                     <div className='item-login' onClick={() => navigate('/user/account')}>
                       Chỉnh sửa hồ sơ
+                    </div>
+                    <div className='item-login' onClick={() => navigate('/user/history')}>
+                      Lịch Sử Đặt Vé
                     </div>
                     <div
                       className='item-login'

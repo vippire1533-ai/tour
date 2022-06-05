@@ -7,6 +7,7 @@ import { FaEye, FaTimes, FaTrashAlt } from 'react-icons/fa';
 import NumberFormat from 'react-number-format';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 import Menuleft from '../Menuleft';
 import Menutop from '../Menutop';
 import AlertPopup from './../../components/AlertPopup';
@@ -301,7 +302,10 @@ const QLdondatve = () => {
             width: 1000,
             onOk: () => {
               if (!ids.length || ids.length < record.SO_LUONG_VE_DAT) {
-                alert('Vui lòng chọn vé để duyệt đơn');
+                Swal.fire({
+                  title: 'Thống Báo',
+                  text: 'Vui lòng chọn đúng số lượng vé',
+                });
               } else {
                 dispatch(quanLyDonDatVeActions.acceptOrder(record.MA_DON_DAT, record.MA_KH, ids));
               }

@@ -477,7 +477,7 @@ const acceptOrder = async (maDonDat, maKH, danhSachCacVe) => {
       VeTour
     SET
       TRANG_THAI_VE = N'Đã được đặt',
-      MAKH = ${ maKH },
+      MAKH = '${ maKH }',
       MA_DON_DAT = ${ maDonDat }
     WHERE 
       MAVE IN (${ danhSachCacVe.join(',') })`;
@@ -676,10 +676,30 @@ const constructEmailTemplate = (info) => {
 const taoDonDatTour = async (payload) => {
   try {
     const pool = await sql.connect(config);
-    const { maKH, maTour, ngayDat, soLuong, tongTien, maLoaiVe, email } = payload;
+    const { maKH, maTour, ngayDat, soLuong, tongTien, maLoaiVe, email, maGiaoDich } = payload;
     const query = `
-    INSERT INTO DonDatTour(MAKHACHHANG, MATOUR, NGAYDAT, TINHTRANGTHANHTOAN,SOLUONGVEDAT,TONGTIEN,MA_LOAI_VE, TINH_TRANG_DON)
-    VALUES(${ maKH }, ${ maTour }, ${ ngayDat }, N'Đã thanh toán', ${ soLuong }, ${ tongTien }, ${ maLoaiVe }, N'Đang xử lý');
+    INSERT INTO DonDatTour (
+      MAKHACHHANG, 
+      MATOUR, 
+      NGAYDAT, 
+      TINHTRANGTHANHTOAN, 
+      SOLUONGVEDAT, 
+      TONGTIEN, 
+      MA_LOAI_VE, 
+      TINH_TRANG_DON,
+      MA_PHIEN_GIAO_DICH
+    )
+    VALUES(
+      '${ maKH }', 
+      ${ maTour }, 
+      ${ ngayDat }, 
+      N'Đã thanh toán', 
+      ${ soLuong }, 
+      ${ tongTien }, 
+      ${ maLoaiVe }, 
+      N'Đang xử lý', 
+      '${ maGiaoDich }'
+    );
     SELECT SCOPE_IDENTITY() AS id;
     `;
     const record = await pool.request().query(query);
@@ -690,6 +710,37 @@ const taoDonDatTour = async (payload) => {
       await sendMail(email, 'Đặt Vé Thành Công', htmlTemplate);
     }
     return newOrder;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const getOrderHistory = async () => {
+  try {
+    const pool = await sql.connect(config);
+    const query = `
+    SELECT 
+      DDT.MADONDAT AS MA_DON_DAT, 
+      DDT.MA_PHIEN_GIAO_DICH AS MA_PHIEN_GIAO_DICH, 
+      T.TENTOUR AS TEN_TOUR,
+      LV.TENLOAI AS LOAI_VE,
+      T.DIEMDEN AS DIEM_DEN, 
+      T.DIEMDI AS DIEM_XUAT_PHAT, 
+      DDT.NGAYDAT AS NGAY_DI, 
+      DDT.SOLUONGVEDAT AS SO_LUONG_VE,
+      DDT.TONGTIEN AS TONG_TIEN,
+      DDT.TINHTRANGTHANHTOAN AS TINH_TRANG_THANH_TOAN, 
+      DDT.TINH_TRANG_DON, 
+      DDT.NGAY_TAO_DON
+    FROM 
+      DonDatTour DDT  INNER JOIN KhachHang KH ON DDT.MAKHACHHANG = KH.MAKH
+                      INNER JOIN Tour T ON DDT.MATOUR = T.MATOUR
+                      INNER JOIN LoaiVe LV ON DDT.MA_LOAI_VE = LV.MALOAI
+    ORDER BY 
+      DDT.NGAYDAT
+    `;
+    const request = await pool.request().query(query);
+    return request.recordset;
   } catch (error) {
     throw error;
   }
@@ -772,6 +823,54 @@ const updateApplicaton = async () => {
   }
 };
 
+const createCustomerIfNotExists = async (payload) => {
+  try {
+    const pool = await sql.connect(config);
+    const request = await pool
+      .request()
+      .input('MA_KHACH_HANG', sql.VarChar, payload.id)
+      .input('TEN_DANG_NHAP', sql.NVarChar, payload.username)
+      .input('EMAIL', sql.NVarChar, payload.email)
+      .execute('CreateCustomerIfNotExists');
+    return request.recordset;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const getAllAdmins = async () => {
+  try {
+    const pool = await sql.connect(config);
+    const request = await pool.request().query('SELECT MAADMIN AS MA_USER, USERNAME FROM Admin');
+    return request.recordset;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const getAllPartners = async () => {
+  try {
+    const pool = await sql.connect(config);
+    const request = await pool.request().query('SELECT MAPARTNER AS MA_USER, USERNAME FROM PARTNER');
+    return request.recordset;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const createMember = async (payload) => {
+  try {
+    const pool = await sql.connect(config);
+    const query = `
+    INSERT INTO ${ +payload.userRole ? 'Admin' : 'PARTNER' } 
+    VALUES('${ payload.username }', '${ payload.password }', 'active', ${ payload.userRole })`;
+    const request = await pool.request().query(query);
+    return request.recordset;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export default {
   GetData,
   GetDatas,
@@ -804,5 +903,10 @@ export default {
   loginIntoManagement,
   createAccountManagement,
   updateApplicaton,
+  createCustomerIfNotExists,
+  getOrderHistory,
+  getAllAdmins,
+  getAllPartners,
+  createMember,
   sql,
 };

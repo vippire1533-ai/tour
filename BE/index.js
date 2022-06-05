@@ -4,8 +4,8 @@ import express from 'express';
 import fs from 'fs';
 import https from 'https';
 import dbconnect from './data/dbconnect.js';
-import router from './routes/route.js';
 import uploadFiles from './data/uploadFiles';
+import router from './routes/route.js';
 import connectDatabase from './utils/testConnection.js';
 
 const app = express();
@@ -367,6 +367,16 @@ router.post('/datTour', async (req, res) => {
   }
 });
 
+router.get('/lich-su-dat-tour', async (req, res) => {
+  try {
+    const histories = await dbconnect.getOrderHistory();
+    return res.status(200).send(histories);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send(error);
+  }
+});
+
 router.get('/tour/images/:id', async (req, res) => {
   try {
     const id = req.params.id;
@@ -423,6 +433,35 @@ router.post('/update-application', async (req, res) => {
   }
 });
 
+router.post('/create-customer', async (req, res) => {
+  try {
+    const request = await dbconnect.createCustomerIfNotExists(req.body);
+    return res.status(201).send(request);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send(error);
+  }
+});
+
+router.get('/get-all-members', async (req, res) => {
+  try {
+    const [adminUsers, partnerUsers] = await Promise.all([dbconnect.getAllAdmins(), dbconnect.getAllPartners()]);
+    return res.status(200).send({ adminUsers, partnerUsers });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send(error);
+  }
+});
+
+router.post('/create-member', async (req, res) => {
+  try {
+    const response = await dbconnect.createMember(req.body);
+    return res.status(201).send(response);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send(error);
+  }
+});
 const sslServer = https.createServer(
   {
     key: fs.readFileSync('cetificate/key.pem'),

@@ -26,6 +26,11 @@ const Menuleft = () => {
             </li>
           )}
           {isAdmin && (
+            <li>
+              <Link to='/admin/quan-ly-thanh-vien'>Thành Viên</Link>
+            </li>
+          )}
+          {isAdmin && (
             <li
               onClick={() => setOpen(!open)}
               style={{ display: 'flex', justifyContent: 'space-between', cursor: 'pointer' }}
