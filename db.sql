@@ -69,6 +69,8 @@ CREATE TABLE [dbo].[DonDatTour](
 	[TONGTIEN] [int] NULL,
 	[MA_LOAI_VE] [int] NULL,
 	[TINH_TRANG_DON] nvarchar(50) default null,
+	[MA_PHIEN_GIAO_DICH] varchar(50),
+	[NGAY_TAO_DON] datetime default getdate()
  CONSTRAINT [PK_DonDatVe_1] PRIMARY KEY CLUSTERED 
 (
 	[MADONDAT] ASC
@@ -215,21 +217,6 @@ CONSTRAINT [PK_Tour_HinhAnh] PRIMARY KEY CLUSTERED
 )
 GO
 
-CREATE TABLE [dbo].[Thanh_Toan](
-	[MA_GIAO_DICH] [varchar](50) NOT NULL, 
-	[MA_KH] [varchar](50) NOT NULL, 
-	[MA_TOUR] [int] NOT NULL,
-	[NGAY_DAT] [datetime] NOT NULL, 
-	[MA_VE] [int] NULL,
-	[SO_LUONG_VE] [int] NOT NULL, 
-	[TONG_TIEN] [int] NOT NULL,
-	[NGAY_TAO_DON] [datetime] NOT NULL,
-CONSTRAINT [PK_Thanh_Toan] PRIMARY KEY CLUSTERED 
-(
-	[MA_GIAO_DICH]
-)	 
-)
-GO
 -- Insert
 INSERT [dbo].[LoaiTour] ([TENLOAI]) VALUES ( N'Du lịch')
 INSERT [dbo].[LoaiTour] ([TENLOAI]) VALUES (N'Thể thao')
@@ -338,27 +325,6 @@ GO
 ALTER TABLE [dbo].[Tour_HinhAnh] CHECK CONSTRAINT [FK_Tour_HinhAnh_Tour]
 GO
 
-ALTER TABLE [dbo].[Thanh_Toan] WITH CHECK ADD CONSTRAINT [FK_Thanh_Toan_Khach_Hang] FOREIGN KEY([MA_KH])
-REFERENCES [dbo].[KhachHang] ([MAKH])
-ON DELETE CASCADE
-ON UPDATE CASCADE
-GO
-ALTER TABLE [dbo].[Thanh_Toan] CHECK CONSTRAINT [FK_Thanh_Toan_Khach_Hang]
-GO
-
-ALTER TABLE [dbo].[Thanh_Toan] WITH CHECK ADD CONSTRAINT [FK_Thanh_Toan_Tour] FOREIGN KEY([MA_TOUR])
-REFERENCES [dbo].[Tour] ([MATOUR])
-ON DELETE CASCADE
-ON UPDATE CASCADE
-GO
-ALTER TABLE [dbo].[Thanh_Toan] CHECK CONSTRAINT [FK_Thanh_Toan_Tour]
-GO
-
-ALTER TABLE [dbo].[Thanh_Toan]  WITH CHECK ADD CONSTRAINT [FK_Thanh_Toan_VeTour] FOREIGN KEY([MA_VE])
-REFERENCES [dbo].[VeTour] ([MAVE])
-GO
-ALTER TABLE [dbo].[Thanh_Toan] CHECK CONSTRAINT [FK_Thanh_Toan_VeTour]
-GO
 /****** Object:  StoredProcedure [dbo].[DeleteTour]    Script Date: 5/4/2022 1:54:42 PM ******/
 SET ANSI_NULLS ON
 GO
@@ -567,19 +533,6 @@ AS
 	UPDATE VeTour SET TRANG_THAI_VE = N'Đã quá hạn' WHERE NGAYCOHIEULUC < GETDATE();
 	GO
 	UPDATE Tour SET TINH_TRANG_TOUR = N'Đã quá hạn' WHERE NGAYDI < GETDATE();
-GO
-CREATE PROC InsertPaymentHistory (
-	@MA_GIAO_DICH varchar(50), 
-	@MA_KH varchar(50), 
-	@MA_TOUR int,
-	@NGAY_DAT datetime, 
-	@SO_LUONG_VE int, 
-	@TONG_TIEN int,
-	@NGAY_TAO_DON datetime
-)
-AS
-	INSERT INTO Thanh_Toan(MA_GIAO_DICH, MA_KH, MA_TOUR, NGAY_DAT, MA_VE, SO_LUONG_VE, TONG_TIEN, NGAY_TAO_DON)
-	VALUES(@MA_GIAO_DICH, @MA_KH, @MA_TOUR, @NGAY_DAT, null, @SO_LUONG_VE, @TONG_TIEN, @NGAY_TAO_DON)
 GO
 
 CREATE PROC CreateCustomerIfNotExists (
