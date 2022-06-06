@@ -13,6 +13,7 @@ import * as appActions from './../../Redux/Action/appActions';
 import { default as axios } from './../../utils/axios';
 import LoadingSpinner from './../LoadingSpinner';
 import classes from './Payment.module.css';
+import Stripe from '../Stripe/Stripe';
 
 function Payment() {
   const label = { inputProps: { 'aria-label': 'Switch demo' } };
@@ -156,136 +157,6 @@ function Payment() {
                     minWidth: '446px',
                   }}
                 >
-                  <div
-                    style={{
-                      padding: '16px 24px',
-                      width: '100%',
-                      textAlign: 'center',
-                      backgroundColor: '#f1f8fc',
-                    }}
-                  >
-                    Tiến thành đặt vé trong 01:00:00
-                  </div>
-                  <div style={{ padding: '0 24px' }}>
-                    <div
-                      style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                      }}
-                    >
-                      <p
-                        style={{
-                          fontSize: '18px',
-                          lineHeight: '27px',
-                          fontWeight: 500,
-                        }}
-                      >
-                        Thẻ thanh toán
-                      </p>
-                      <div>
-                        <img
-                          src='https://ik.imagekit.io/tvlk/image/imageResource/2017/01/17/1484655630637-0dcca3761eb5910f1835f438f153bfae.png?tr=q-75'
-                          alt=''
-                          style={{ height: '24px', paddingLeft: '10px' }}
-                        />
-                        <img
-                          src='https://ik.imagekit.io/tvlk/image/imageResource/2017/01/06/1483707776912-1abb188266f6d5b3f2e27f4733ca32e9.png?tr=q-75'
-                          alt=''
-                          style={{ height: '24px', paddingLeft: '10px' }}
-                        />
-                        <img
-                          src='https://ik.imagekit.io/tvlk/image/imageResource/2017/01/06/1483707787206-abc175b224ab92a6967e24bc17c30f45.png?tr=q-75'
-                          alt=''
-                          style={{ height: '24px', paddingLeft: '10px' }}
-                        />
-                        <img
-                          src='https://ik.imagekit.io/tvlk/image/imageResource/2017/07/10/1499673365437-1e1522e5cc323e7e8a7b57b90e81dbc9.png?tr=q-75'
-                          alt=''
-                          style={{ height: '24px', paddingLeft: '10px' }}
-                        />
-                      </div>
-                    </div>
-                    <div>
-                      <div>
-                        <p className={classes.label}>Số thẻ tín dụng</p>
-                        <NumberFormat
-                          format='#### #### #### ####'
-                          className={classes.input}
-                          placeholder='16 chữ số trên mặt thẻ'
-                          ref={creditNumberRef}
-                        />
-                      </div>
-                      <div
-                        style={{
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                        }}
-                      >
-                        <div>
-                          <p className={classes.label}>Hiệu lực đến</p>
-                          <NumberFormat
-                            format='##/##'
-                            placeholder='MM/YY'
-                            mask={['M', 'M', 'Y', 'Y']}
-                            className={classes.input}
-                          />
-                        </div>
-                        <div>
-                          <p className={classes.label}>CVV</p>
-
-                          <NumberFormat className={classes.input} placeholder='3 chữ số CVV' format='###' />
-                        </div>
-                      </div>
-
-                      <div>
-                        <p className={classes.label}>Tên trên thẻ</p>
-                        <input
-                          className={classes.input}
-                          placeholder='Tên trên thẻ'
-                          style={{ marginBottom: '5px' }}
-                          value={nameInput}
-                          onChange={(e) => {
-                            setNameInput(e.target.value.toLocaleUpperCase());
-                          }}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <hr />
-                  <div style={{ padding: '0 24px', marginBottom: '20px' }}>
-                    <p style={{ color: '#0000ee' }}>Chọn trả góp</p>
-                    <a href='' style={{ color: '#0000ee' }}>
-                      Learn more
-                    </a>
-                  </div>
-                  <hr />
-                  <div style={{ padding: '18px 24px' }}>
-                    <Switch
-                      {...label}
-                      checked={checked}
-                      onChange={() => {
-                        setChecked(!checked);
-                      }}
-                      size='small'
-                    />
-                    <span>Nhập mã giảm giá</span>
-                    {checked && (
-                      <div>
-                        <input
-                          placeholder='VD: CHEAPTRAVEL'
-                          style={{
-                            padding: '8px 16px',
-                            border: '1px solid #dadada',
-                            outline: 'none',
-                            fontSize: '14px',
-                            margin: '16px 20px 0 0',
-                          }}
-                        />
-                        <button className={classes.apdung}>Áp dụng mã</button>
-                      </div>
-                    )}
-                  </div>
                   <div className={classes.chitiet}>
                     <div>
                       <h3>Chi tiết giá</h3>
@@ -331,6 +202,34 @@ function Payment() {
                         </p>
                       </div>
                     </div>
+                  </div>
+                  <Stripe amount={booking.price} />
+                  <hr />
+                  <div style={{ padding: '18px 24px' }}>
+                    <Switch
+                      {...label}
+                      checked={checked}
+                      onChange={() => {
+                        setChecked(!checked);
+                      }}
+                      size='small'
+                    />
+                    <span>Nhập mã giảm giá</span>
+                    {checked && (
+                      <div>
+                        <input
+                          placeholder='VD: CHEAPTRAVEL'
+                          style={{
+                            padding: '8px 16px',
+                            border: '1px solid #dadada',
+                            outline: 'none',
+                            fontSize: '14px',
+                            margin: '16px 20px 0 0',
+                          }}
+                        />
+                        <button className={classes.apdung}>Áp dụng mã</button>
+                      </div>
+                    )}
                   </div>
                   <div className={classes.dieukhoan}>
                     <p>
