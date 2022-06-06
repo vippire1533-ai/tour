@@ -57,7 +57,7 @@ const columnConfigs = [
     title: 'Ngày Đi',
     dataIndex: 'NGAY_DI',
     key: 'NGAY_DI',
-    render: (value) => moment(value).format('HH/MM/YYYY'),
+    render: (value) => moment(value).format('DD/MM/YYYY'),
     sorter: (item1, item2) => new Date(item1['NGAY_DI']).getTime() - new Date(item2['NGAY_DI']).getTime(),
   },
   {
@@ -74,7 +74,7 @@ const columnConfigs = [
     title: 'Ngày Đặt Đơn',
     dataIndex: 'NGAY_TAO_DON',
     key: 'NGAY_TAO_DON',
-    render: (value) => moment(value).format('HH/MM/YYYY'),
+    render: (value) => moment.utc(value).format('HH:mm - DD/MM/YYYY'),
     sorter: (item1, item2) => new Date(item1['NGAY_TAO_DON']).getTime() - new Date(item2['NGAY_TAO_DON']).getTime(),
   },
 ];
