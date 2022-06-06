@@ -13,9 +13,7 @@ const stripeHandler = async (req, res, next) => {
       currency: 'vnd',
       payment_method_types: ['card'],
     });
-    return res.send({
-      clientSecret: paymentIntent.client_secret,
-    });
+    return res.send(paymentIntent);
   } catch (error) {
     console.log(error);
     return res.status(500).send(error);

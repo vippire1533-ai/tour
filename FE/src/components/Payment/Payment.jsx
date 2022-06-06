@@ -1,4 +1,3 @@
-import PunchClockIcon from '@mui/icons-material/PunchClock';
 import { Box } from '@mui/material';
 import Switch from '@mui/material/Switch';
 import React, { Fragment, useEffect, useRef, useState } from 'react';
@@ -40,7 +39,7 @@ function Payment() {
     });
   };
 
-  const hanlePayment = () => {
+  const handlePayment = async () => {
     if (!data) {
       Swal.fire({
         icon: 'error',
@@ -64,26 +63,19 @@ function Payment() {
         url: '/api/datTour',
         method: 'POST',
         data: objApi,
-      })
-        .then(() => {
-          Swal.fire({
-            title: 'Đặt vé thành công',
-            icon: 'success',
-            confirmButtonText: 'OK',
-          });
-          dispatch(appActions.hideLoading());
-          setTimeout(() => {
-            window.location.href = '/';
-          }, 500);
+      }).then(() => {
+        dispatch(appActions.hideLoading());
+        Swal.fire({
+          title: 'Đặt vé thành công',
+          icon: 'success',
         })
-        .catch((err) => {
-          Swal.fire({
-            title: `Đặt vé không thành công. Lỗi: ${err.message}`,
-            icon: 'error',
-            confirmButtonText: 'OK',
+          .then(() => {
+            navigate('/tour');
+          })
+          .catch((err) => {
+            throw err;
           });
-          dispatch(appActions.hideLoading());
-        });
+      });
     }
   };
   return (
@@ -203,46 +195,7 @@ function Payment() {
                       </div>
                     </div>
                   </div>
-                  <Stripe amount={booking.price} />
-                  <hr />
-                  <div style={{ padding: '18px 24px' }}>
-                    <Switch
-                      {...label}
-                      checked={checked}
-                      onChange={() => {
-                        setChecked(!checked);
-                      }}
-                      size='small'
-                    />
-                    <span>Nhập mã giảm giá</span>
-                    {checked && (
-                      <div>
-                        <input
-                          placeholder='VD: CHEAPTRAVEL'
-                          style={{
-                            padding: '8px 16px',
-                            border: '1px solid #dadada',
-                            outline: 'none',
-                            fontSize: '14px',
-                            margin: '16px 20px 0 0',
-                          }}
-                        />
-                        <button className={classes.apdung}>Áp dụng mã</button>
-                      </div>
-                    )}
-                  </div>
-                  <div className={classes.dieukhoan}>
-                    <p>
-                      Bằng việc nhấn thanh toán, bạn đồng ý<span>Điều khoản & điều kiện</span> và
-                      <span>Chính sách quyền riêng tư.</span>
-                    </p>
-                  </div>
-                  <div className={classes.thanhtoan}>
-                    <button onClick={hanlePayment}>
-                      <PunchClockIcon style={{ fontSize: '16px', marginRight: '20px' }} />
-                      <span>Thanh toán Thẻ thanh toán</span>
-                    </button>
-                  </div>
+                  <Stripe amount={booking.price} onPayment={handlePayment} />
                 </Box>
               </Box>
               <Box
@@ -290,7 +243,6 @@ function Payment() {
           </Box>
         </Box>
       ))}
-
       <Footer />
     </Fragment>
   );
