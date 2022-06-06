@@ -7,6 +7,7 @@ import dbconnect from './data/dbconnect.js';
 import uploadFiles from './data/uploadFiles';
 import router from './routes/route.js';
 import connectDatabase from './utils/testConnection.js';
+import stripeHandler from './data/stripe.js';
 
 const app = express();
 const PORT = process.env.PORT || 8000;
@@ -462,6 +463,9 @@ router.post('/create-member', async (req, res) => {
     return res.status(500).send(error);
   }
 });
+
+router.post('/payment_intents', stripeHandler);
+
 const sslServer = https.createServer(
   {
     key: fs.readFileSync('cetificate/key.pem'),

@@ -29,6 +29,7 @@ import Register from '../Partner/register';
 import Auth from './../components/Auth';
 import History from '../views/User/History';
 import MemberMangement from '../Partner/MemberManagement';
+import Stripe from '../components/Stripe/Stripe';
 
 const Home = lazy(() => import('../views/Home'));
 const Search = lazy(() => import('../views/Search'));
@@ -62,6 +63,7 @@ const Routers = () => {
           <Route exact path='/user/account' element={<UserAccount />} />
           <Route exact path='/user/history' element={<History />} />
           <Route exact path='/register' element={<PageRegister />} />
+          {/* <Route path='/stripe' element={<Stripe />} /> */}
 
           <Route exact path='/list' element={<DStour />} />
           <Route exact path='/' element={<Home />} />
