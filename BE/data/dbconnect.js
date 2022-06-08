@@ -125,8 +125,8 @@ async function deleteTour(maTour) {
 
 async function updateTour(CategoryMATOUR, Category) {
   try {
-    let pool = await sql.connect(config);
-    let updateproduct = await pool
+    const pool = await sql.connect(config);
+    const updateproduct = await pool
       .request()
       .input('MATOUR', sql.Int, CategoryMATOUR)
       .input('MALOAI', sql.Int, Category.MALOAI)
@@ -703,13 +703,7 @@ const taoDonDatTour = async (payload) => {
     SELECT SCOPE_IDENTITY() AS id;
     `;
     const record = await pool.request().query(query);
-    const [newOrder] = record.recordset;
-    const info = await GetDonDatVeTheoMaDonDat(newOrder.id);
-    if (info.length) {
-      const htmlTemplate = constructEmailTemplate(info[0]);
-      await sendMail(email, 'Đặt Vé Thành Công', htmlTemplate);
-    }
-    return newOrder;
+    return record.recordset;
   } catch (error) {
     throw error;
   }
@@ -737,7 +731,7 @@ const getOrderHistory = async () => {
                       INNER JOIN Tour T ON DDT.MATOUR = T.MATOUR
                       INNER JOIN LoaiVe LV ON DDT.MA_LOAI_VE = LV.MALOAI
     ORDER BY 
-      DDT.NGAYDAT DESC
+      DDT.NGAY_TAO_DON DESC
     `;
     const request = await pool.request().query(query);
     return request.recordset;
@@ -841,7 +835,7 @@ const createCustomerIfNotExists = async (payload) => {
 const getAllAdmins = async () => {
   try {
     const pool = await sql.connect(config);
-    const request = await pool.request().query('SELECT MAADMIN AS MA_USER, USERNAME FROM Admin');
+    const request = await pool.request().query('SELECT MAADMIN AS MA_USER, USERNAME, IS_ADMIN FROM Admin');
     return request.recordset;
   } catch (error) {
     throw error;
@@ -851,7 +845,7 @@ const getAllAdmins = async () => {
 const getAllPartners = async () => {
   try {
     const pool = await sql.connect(config);
-    const request = await pool.request().query('SELECT MAPARTNER AS MA_USER, USERNAME FROM PARTNER');
+    const request = await pool.request().query('SELECT MAPARTNER AS MA_USER, USERNAME, IS_ADMIN FROM PARTNER');
     return request.recordset;
   } catch (error) {
     throw error;
@@ -865,6 +859,35 @@ const createMember = async (payload) => {
     INSERT INTO ${ +payload.userRole ? 'Admin' : 'PARTNER' } 
     VALUES('${ payload.username }', '${ payload.password }', 'active', ${ payload.userRole })`;
     const request = await pool.request().query(query);
+    return request.recordset;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const deleteMember = async (userRole, memberId) => {
+  try {
+    const pool = await sql.connect(config);
+    const request = await pool
+      .request()
+      .input('LOAI_THANH_VIEN', sql.VarChar, userRole)
+      .input('MA_THANH_VIEN', sql.Int, +memberId)
+      .execute('DeleteMember');
+    return request.recordset;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const updateMember = async (userRole, memberId, password) => {
+  try {
+    const pool = await sql.connect(config);
+    const request = await pool
+      .request()
+      .input('LOAI_THANH_VIEN', sql.VarChar, userRole)
+      .input('MA_THANH_VIEN', sql.Int, +memberId)
+      .input('MAT_KHAU', sql.VarChar, password)
+      .execute('UpdateMember');
     return request.recordset;
   } catch (error) {
     throw error;
@@ -908,5 +931,7 @@ export default {
   getAllAdmins,
   getAllPartners,
   createMember,
+  deleteMember,
+  updateMember,
   sql,
 };

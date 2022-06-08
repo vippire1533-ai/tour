@@ -64,3 +64,15 @@
   display: inline-block;
   padding-top: 8px;
 }
+
+.btn-action{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.actions{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

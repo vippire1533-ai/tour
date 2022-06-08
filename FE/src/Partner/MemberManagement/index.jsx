@@ -2,7 +2,8 @@ import { Button, Input, Modal, Select, Table, Tabs, Typography } from 'antd';
 import cx from 'classnames';
 import { useFormik } from 'formik';
 import React, { useEffect, useMemo, useState } from 'react';
-import { AiOutlineTeam } from 'react-icons/ai';
+import { AiFillDelete, AiOutlineTeam } from 'react-icons/ai';
+import { BsFillPencilFill } from 'react-icons/bs';
 import { FaPlus } from 'react-icons/fa';
 import { GrUserAdmin } from 'react-icons/gr';
 import { useDispatch, useSelector } from 'react-redux';
@@ -11,41 +12,22 @@ import * as Yup from 'yup';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import Menuleft from '../Menuleft';
 import Menutop from '../Menutop';
+import * as appActions from './../../Redux/Action/appActions';
 import { default as axios } from './../../utils/axios';
 import classes from './styles.module.css';
-import * as appActions from './../../Redux/Action/appActions';
+import UpdateMemberPopup from './UpdateMemberPopup';
 
 const MemberMangement = () => {
   //#region Initialize state
   const [adminUsers, setAdminUsers] = useState([]);
   const [partnerUsers, setPartnerUsers] = useState([]);
   const [isShowModal, setIsShowModal] = useState(false);
+  const [memberInfo, setMemberInfo] = useState(null);
+  const [isVisible, setIsVisible] = useState(false);
   //#endregion
 
   //#region Initialize hook
   const { isLoading } = useSelector((state) => state.appState);
-  const columnConfigs = useMemo(() => {
-    return [
-      {
-        title: 'Mã Thành Viên',
-        dataIndex: 'MA_USER',
-        key: 'MA_USER',
-        align: 'center',
-      },
-      {
-        title: 'Tên Tài Khoản',
-        dataIndex: 'USERNAME',
-        key: 'USERNAME',
-        align: 'center',
-      },
-      {
-        title: 'Thao Tác',
-        render: (_, record) => {
-          return <div className={classes.actions}></div>;
-        },
-      },
-    ];
-  }, []);
   const dispatch = useDispatch();
   const formik = useFormik({
     initialValues: {
@@ -70,6 +52,76 @@ const MemberMangement = () => {
         }),
     }),
   });
+  const columnConfigs = [
+    {
+      title: 'Mã Thành Viên',
+      dataIndex: 'MA_USER',
+      key: 'MA_USER',
+      align: 'center',
+    },
+    {
+      title: 'Tên Tài Khoản',
+      dataIndex: 'USERNAME',
+      key: 'USERNAME',
+      align: 'center',
+    },
+    {
+      title: 'Thao Tác',
+      render: (_, record) => {
+        const handleDeleteMember = () => {
+          Swal.fire({
+            title: 'Bạn có chắc muốn xóa thành viên này?',
+            icon: 'question',
+            showCancelButton: true,
+            cancelButtonText: 'Hủy',
+          }).then((res) => {
+            if (res.isConfirmed) {
+              dispatch(appActions.showLoading());
+              const deleleteAdminMember = `/api/delete-member/admin/${record.MA_USER}`;
+              const deleletePartnerMember = `/api/delete-member/partner/${record.MA_USER}`;
+              axios
+                .delete(record.IS_ADMIN ? deleleteAdminMember : deleletePartnerMember)
+                .then(() => loadMembers())
+                .then(() => {
+                  dispatch(appActions.hideLoading());
+                  Swal.fire({
+                    title: 'Xóa thành viên thành công',
+                    icon: 'success',
+                  });
+                })
+                .catch((err) => {
+                  dispatch(appActions.hideLoading());
+                  Swal.fire({
+                    title: 'Lỗi',
+                    icon: 'error',
+                    text: `Có lỗi trong quá trình xóa thành viên. Vui lòng liên hệ quản trị viên. Lỗi: ${err.message}`,
+                  });
+                });
+            }
+          });
+        };
+        return (
+          <div className={classes.actions}>
+            <Button
+              type='danger'
+              icon={<AiFillDelete />}
+              className={classes['btn-action']}
+              onClick={handleDeleteMember}
+            ></Button>
+            <Button
+              type='primary'
+              icon={<BsFillPencilFill />}
+              className={classes['btn-action']}
+              onClick={() => {
+                setMemberInfo(record);
+                setIsVisible(true);
+              }}
+            ></Button>
+          </div>
+        );
+      },
+    },
+  ];
   //#endregion
 
   //#region handle Event
@@ -127,7 +179,6 @@ const MemberMangement = () => {
         });
     }
   };
-
   //#endregion
 
   //#region Get All Members
@@ -274,6 +325,7 @@ const MemberMangement = () => {
           </div>
         </form>
       </Modal>
+      {isVisible && <UpdateMemberPopup onHideModal={setIsVisible} memberInfo={memberInfo} />}
     </>
   );
 };

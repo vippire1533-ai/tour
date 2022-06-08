@@ -464,6 +464,34 @@ router.post('/create-member', async (req, res) => {
   }
 });
 
+router.delete('/delete-member/:userRole/:memberId', async (req, res) => {
+  try {
+    const { userRole, memberId } = req.params;
+    if (!userRole || !memberId) {
+      return res.status(400).send({ message: 'Vui lòng truyền vai trò và mã của người dùng để thực hiện thao tác' });
+    }
+    const request = await dbconnect.deleteMember(userRole, memberId);
+    return res.status(204).send(request);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send(error.message);
+  }
+});
+
+router.put('/update-member/:userRole/:memberId', async (req, res) => {
+  try {
+    const { userRole, memberId } = req.params;
+    if (!userRole || !memberId || !req.body.password || req.body.password.length < 6) {
+      return res.status(400).send({ message: 'Vui lòng truyền vai trò và mã của người dùng để thực hiện thao tác' });
+    }
+    const request = await dbconnect.updateMember(userRole, memberId, req.body.password);
+    return res.status(200).send(request);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send(error.message);
+  }
+});
+
 router.post('/payment_intents', stripeHandler);
 
 const sslServer = https.createServer(
