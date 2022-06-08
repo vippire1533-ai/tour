@@ -703,13 +703,7 @@ const taoDonDatTour = async (payload) => {
     SELECT SCOPE_IDENTITY() AS id;
     `;
     const record = await pool.request().query(query);
-    const [newOrder] = record.recordset;
-    const info = await GetDonDatVeTheoMaDonDat(newOrder.id);
-    if (info.length) {
-      const htmlTemplate = constructEmailTemplate(info[0]);
-      await sendMail(email, 'Đặt Vé Thành Công', htmlTemplate);
-    }
-    return newOrder;
+    return record.recordset;
   } catch (error) {
     throw error;
   }
@@ -841,7 +835,7 @@ const createCustomerIfNotExists = async (payload) => {
 const getAllAdmins = async () => {
   try {
     const pool = await sql.connect(config);
-    const request = await pool.request().query('SELECT MAADMIN AS MA_USER, USERNAME FROM Admin');
+    const request = await pool.request().query('SELECT MAADMIN AS MA_USER, USERNAME, IS_ADMIN FROM Admin');
     return request.recordset;
   } catch (error) {
     throw error;
@@ -851,7 +845,7 @@ const getAllAdmins = async () => {
 const getAllPartners = async () => {
   try {
     const pool = await sql.connect(config);
-    const request = await pool.request().query('SELECT MAPARTNER AS MA_USER, USERNAME FROM PARTNER');
+    const request = await pool.request().query('SELECT MAPARTNER AS MA_USER, USERNAME, IS_ADMIN FROM PARTNER');
     return request.recordset;
   } catch (error) {
     throw error;

@@ -1,0 +1,20 @@
+.form-group {
+  padding: 8px 0;
+}
+
+.form-label {
+  display: inline-block;
+  font-size: 14px;
+  font-weight: 600;
+  padding-bottom: 8px;
+}
+
+.form-control {
+  display: block;
+  width: 100%;
+}
+
+.error-message {
+  display: inline-block;
+  padding-top: 8px;
+}
