@@ -125,8 +125,8 @@ async function deleteTour(maTour) {
 
 async function updateTour(CategoryMATOUR, Category) {
   try {
-    let pool = await sql.connect(config);
-    let updateproduct = await pool
+    const pool = await sql.connect(config);
+    const updateproduct = await pool
       .request()
       .input('MATOUR', sql.Int, CategoryMATOUR)
       .input('MALOAI', sql.Int, Category.MALOAI)
@@ -871,6 +871,35 @@ const createMember = async (payload) => {
   }
 };
 
+const deleteMember = async (userRole, memberId) => {
+  try {
+    const pool = await sql.connect(config);
+    const request = await pool
+      .request()
+      .input('LOAI_THANH_VIEN', sql.VarChar, userRole)
+      .input('MA_THANH_VIEN', sql.Int, +memberId)
+      .execute('DeleteMember');
+    return request.recordset;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const updateMember = async (userRole, memberId, password) => {
+  try {
+    const pool = await sql.connect(config);
+    const request = await pool
+      .request()
+      .input('LOAI_THANH_VIEN', sql.VarChar, userRole)
+      .input('MA_THANH_VIEN', sql.Int, +memberId)
+      .input('MAT_KHAU', sql.VarChar, password)
+      .execute('UpdateMember');
+    return request.recordset;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export default {
   GetData,
   GetDatas,
@@ -908,5 +937,7 @@ export default {
   getAllAdmins,
   getAllPartners,
   createMember,
+  deleteMember,
+  updateMember,
   sql,
 };
