@@ -731,7 +731,7 @@ const getOrderHistory = async () => {
                       INNER JOIN Tour T ON DDT.MATOUR = T.MATOUR
                       INNER JOIN LoaiVe LV ON DDT.MA_LOAI_VE = LV.MALOAI
     ORDER BY 
-      DDT.NGAYDAT DESC
+      DDT.NGAY_TAO_DON DESC
     `;
     const request = await pool.request().query(query);
     return request.recordset;
