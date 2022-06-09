@@ -1,9 +1,9 @@
 import { DeleteFilled, EditOutlined, ReloadOutlined } from '@ant-design/icons';
 import { Grid } from '@mui/material';
-import { Avatar, Button, Card, Empty, Badge } from 'antd';
+import { Avatar, Badge, Button, Card, Empty } from 'antd';
 import cx from 'classnames';
 import moment from 'moment';
-import React, { Fragment, useEffect } from 'react';
+import { Fragment, useEffect } from 'react';
 import { FaPlus } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -11,8 +11,8 @@ import Swal from 'sweetalert2';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import Menuleft from '../Menuleft';
 import Menutop from '../Menutop';
-import * as quanLyDanhSachTourActions from './../../Redux/Action/quanLyDanhSachTourActions';
 import * as appActions from './../../Redux/Action/appActions';
+import * as quanLyDanhSachTourActions from './../../Redux/Action/quanLyDanhSachTourActions';
 import classes from './QLtour.module.css';
 
 const QLtour = () => {
@@ -95,7 +95,17 @@ const QLtour = () => {
                             height='200'
                           />
                         }
-                        actions={[<DeleteFilled key='setting' onClick={() => onDelete(tour.TENTOUR, tour.MATOUR)} />]}
+                        actions={[
+                          tour.TINH_TRANG_TOUR === 'Còn hiệu lực' && (
+                            <EditOutlined
+                              key='editting'
+                              onClick={() => {
+                                navigate(`/admin/tour/${tour.MATOUR}`);
+                              }}
+                            />
+                          ),
+                          <DeleteFilled key='setting' onClick={() => onDelete(tour.TENTOUR, tour.MATOUR)} />,
+                        ].filter(Boolean)}
                       >
                         <Card.Meta
                           avatar={
@@ -104,6 +114,7 @@ const QLtour = () => {
                           title={tour.TENTOUR}
                           description={moment(tour.NGAYDI).format('DD/MM/YYYY')}
                         />
+                        <span className={classes.desc}>{tour.GTTOUR}</span>
                       </Card>
                     </Badge.Ribbon>
                   </Grid>

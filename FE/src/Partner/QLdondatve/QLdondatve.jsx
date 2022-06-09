@@ -71,6 +71,7 @@ const QLdondatve = () => {
       key: 'NGAY_DAT',
       align: 'center',
       render: (value) => moment(value).format('DD-MM-YYYY'),
+      sorter: (item1, item2) => new Date(item1['NGAY_DAT']) - new Date(item2['NGAY_DAT']),
     },
     {
       title: 'Giá Tour',
@@ -104,6 +105,11 @@ const QLdondatve = () => {
       dataIndex: 'TINH_TRANG_THANH_TOAN',
       key: 'TINH_TRANG_THANH_TOAN',
       align: 'center',
+      filters: [
+        { text: 'Đã thanh toán', value: 'Đã thanh toán' },
+        { text: 'Đã hoàn tiền', value: 'Đã hoàn tiền' },
+      ],
+      onFilter: (value, record) => record['TINH_TRANG_THANH_TOAN'] === value,
       render: (value) => (
         <>
           {value === 'Đã thanh toán' && <Tag color='green'>{value}</Tag>}
@@ -116,6 +122,12 @@ const QLdondatve = () => {
       dataIndex: 'TINH_TRANG_DON',
       key: 'TINH_TRANG_DON',
       align: 'center',
+      filters: [
+        { text: 'Đã duyệt đơn', value: 'Đã duyệt đơn' },
+        { text: 'Đã hủy đơn', value: 'Đã hủy đơn' },
+        { text: 'Đang xử lý', value: 'Đang xử lý' },
+      ],
+      onFilter: (value, record) => record['TINH_TRANG_DON'] === value,
       render: (value) => (
         <>
           {value === 'Đã duyệt đơn' && <Tag color='green'>{value}</Tag>}

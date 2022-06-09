@@ -30,6 +30,7 @@ import Auth from './../components/Auth';
 import History from '../views/User/History';
 import MemberMangement from '../Partner/MemberManagement';
 import Stripe from '../components/Stripe/Stripe';
+import EditTour from '../Partner/EditTour';
 
 const Home = lazy(() => import('../views/Home'));
 const Search = lazy(() => import('../views/Search'));
@@ -63,7 +64,6 @@ const Routers = () => {
           <Route exact path='/user/account' element={<UserAccount />} />
           <Route exact path='/user/history' element={<History />} />
           <Route exact path='/register' element={<PageRegister />} />
-          {/* <Route path='/stripe' element={<Stripe />} /> */}
 
           <Route exact path='/list' element={<DStour />} />
           <Route exact path='/' element={<Home />} />
@@ -88,6 +88,15 @@ const Routers = () => {
             element={
               <Auth roles={adminRoles}>
                 <QLtour />
+              </Auth>
+            }
+          />
+          <Route
+            exact
+            path='/admin/tour/:tourId'
+            element={
+              <Auth roles={adminRoles}>
+                <EditTour />
               </Auth>
             }
           />
