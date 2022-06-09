@@ -15,6 +15,7 @@ import Menuleft from './../Menuleft';
 import Menutop from './../Menutop';
 import ButtonAction from './../QuanLyVe/ButtonAction';
 import classes from './styles.module.css';
+import Swal from 'sweetalert2';
 
 const QuanLyLoaiVe = () => {
   const [isShowTicketModal, setIsShowTicketModal] = useState(false);
@@ -26,21 +27,13 @@ const QuanLyLoaiVe = () => {
   const formik = useFormik({
     initialValues: {
       TENLOAI: '',
-      SO_TIEN_GIAM: 0,
+      SO_TIEN_GIAM: '',
     },
     validationSchema: Yup.object({
       TENLOAI: Yup.string()
         .required('Tên loại vé không được để trống')
         .max(20, 'Tên loại vé không dài hơn quá 20 ký tự')
-        .trim()
-        .test('checkDuplicate', 'Tên loại vé đã tồn tại', async (value) => {
-          try {
-            const { data } = await axios.get('/api/ticketTypes');
-            return !data.find((item) => item.TENLOAI.toLowerCase() === value.toLowerCase());
-          } catch (error) {
-            return true;
-          }
-        }),
+        .trim(),
       SO_TIEN_GIAM: Yup.number()
         .required('Vui lòng nhập số tiền giảm!')
         .typeError('Số tiền giảm không hợp lệ')
@@ -155,6 +148,19 @@ const QuanLyLoaiVe = () => {
     },
   ];
 
+  const handleTenLoaiBlur = async () => {
+    try {
+      const { data } = await axios.get('/api/ticketTypes');
+      const ticketType = data.find((item) => item.TENLOAI.toLowerCase() === formik.values.TENLOAI.toLowerCase());
+      ticketType && formik.setFieldError('TENLOAI', 'Tên loại vé đã tồn tại');
+    } catch (error) {
+      Swal.fire({
+        title: `Có lỗi trong quá trình kiểm tra tên của loại vé. Lỗi ${error.message}`,
+        icon: 'error',
+      });
+    }
+  };
+
   useEffect(() => {
     dispatch(quanLyLoaiVeActions.getAllTicketTypes());
   }, []);
@@ -206,7 +212,13 @@ const QuanLyLoaiVe = () => {
                 addonBefore='Tên Loại Vé'
                 placeholder='Nhập Tên Loại Vé'
                 className={classes['form-control']}
-                {...formik.getFieldProps('TENLOAI')}
+                value={formik.values.TENLOAI}
+                onChange={formik.handleChange}
+                onBlur={(e) => {
+                  formik.handleBlur(e);
+                  handleTenLoaiBlur();
+                }}
+                disabled={isUpdateTicket}
               />
               {formik.touched.TENLOAI && formik.errors.TENLOAI ? (
                 <Typography.Text type='danger' className={classes['error-message']}>

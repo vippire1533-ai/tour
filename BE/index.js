@@ -74,16 +74,19 @@ router.route('/products').post(
 );
 
 router.route('/products/:id').put((request, response) => {
-  let eventid = request.params.id;
-  let data = request.body[0];
-
+  const tourId = request.params.id;
+  const tourPayload = request.body;
+  if (!tourId || !tourPayload) {
+    return response.status(400).send(new Error('Vui lòng nhập thông tin tour để chỉnh sửa'));
+  }
   dbconnect
-    .updateTour(eventid, data)
+    .updateTour(tourId, tourPayload)
     .then((result) => {
-      response.status(202).send(result);
+      response.status(200).send(result);
     })
     .catch((err) => {
       console.log(err);
+      response.status(500).send(err);
     });
 });
 

@@ -123,26 +123,18 @@ async function deleteTour(maTour) {
   }
 }
 
-async function updateTour(CategoryMATOUR, Category) {
+async function updateTour(tourId, tourPayload) {
   try {
     const pool = await sql.connect(config);
-    const updateproduct = await pool
+    const query = `UPDATE Tour SET GTTOUR = @tourDesc, NOIDUNGTOUR = @tourContent WHERE MATOUR = @tourId`;
+    const request = await pool
       .request()
-      .input('MATOUR', sql.Int, CategoryMATOUR)
-      .input('MALOAI', sql.Int, Category.MALOAI)
-      .input('TENTOUR', sql.NVarChar, Category.TENTOUR)
-      .input('GTTOUR', sql.NVarChar, Category.GTTOUR)
-      .input('GIATOUR', sql.Int, Category.GIATOUR)
-      .input('NOIDUNGTOUR', sql.NVarChar, Category.NOIDUNGTOUR)
-      .input('HINHANH', sql.NVarChar, Category.HINHANH)
-      .input('NGAYDI', sql.DateTime, Category.NGAYDI)
-      .input('DIEMDI', sql.NVarChar, Category.DIEMDI)
-      .input('DIEMDEN', sql.NVarChar, Category.DIEMDEN)
-      .input('NGAYTAO', sql.DateTime, Category.NGAYTAO)
-      .execute('UpdateTour');
-    return updateproduct.recordsets;
+      .input('tourDesc', sql.NVarChar, tourPayload.tourDesc)
+      .input('tourContent', sql.NVarChar, tourPayload.tourContent)
+      .input('tourId', sql.Int, +tourId)
+      .query(query);
+    return request.recordset;
   } catch (error) {
-    console.log(error);
     throw error;
   }
 }
@@ -359,7 +351,7 @@ async function GetDonDatVe() {
       INNER JOIN LoaiTour LT ON T.MALOAI = LT.MALOAI
       INNER JOIN LoaiVe LV ON LV.MALOAI = DDT.MA_LOAI_VE
   ORDER BY 
-      DDT.MADONDAT
+      DDT.MADONDAT DESC
     `;
     const products = await pool.request().query(query);
     return products.recordset;
