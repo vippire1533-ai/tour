@@ -59,14 +59,29 @@ function Payment() {
         maLoaiVe: booking.maLoaiVe,
         email: data.email,
       };
-      axios({
-        url: '/api/datTour',
-        method: 'POST',
-        data: objApi,
-      }).then(() => {
+      Promise.all([
+        axios({
+          url: '/api/datTour',
+          method: 'POST',
+          data: objApi,
+        }),
+        axios({
+          url: 'https://be-profile-app.herokuapp.com/api/transaction/pushTransaction',
+          method: 'POST',
+          data: {
+            AppID: 'traveloka',
+            ServiceID: 'Đặt Tour',
+            UserID: data.id,
+            totalBill: objApi.tongTien,
+            date: new Date(),
+            status: 'đã thanh toán',
+          },
+        }),
+      ]).then(([_, profileResponse]) => {
         dispatch(appActions.hideLoading());
         Swal.fire({
           title: 'Đặt vé thành công',
+          text: `Profile: [Service]: ${profileResponse.data.transaction.ServiceID} - [Mã GD]: ${profileResponse.data.transaction['_id']}`,
           icon: 'success',
         })
           .then(() => {
